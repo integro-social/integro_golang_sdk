@@ -3,8 +3,8 @@
 package event_webhook
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	event "integro_sdk/types/event"
 )
@@ -12,25 +12,25 @@ import (
 // Delete Remove the group's outbound webhook, dropping its pending deliveries.
 //
 // Requires `ManageWebhook` in the webhook's group.
-func Delete(c *client.Client, webhookUid string) (struct{}, error) {
+func Delete(__c *__client.Client, webhookUid string) (struct{}, error) {
 	__path := "/event/webhook/{webhook_uid}"
-	__path = strings.Replace(__path, "{webhook_uid}", client.EncodePath(webhookUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{webhook_uid}", __client.EncodePath(webhookUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Get Fetch the group's outbound webhook configuration (the secret is never
 // returned here).
 //
 // Requires `ViewWebhook` in the target group; group-scoped API keys read their own group, others must name it.
-func Get(c *client.Client, query event.GetWebhookQuery) (*database.Webhook, error) {
+func Get(__c *__client.Client, __query event.GetWebhookQuery) (*database.Webhook, error) {
 	__path := "/event/webhook"
-	return client.Request[*database.Webhook](c, "GET", __path, query, nil)
+	return __client.Request[*database.Webhook](__c, "GET", __path, __query, nil)
 }
 // Set Configure (create or replace) the group's outbound webhook: the group's
 // events (optionally narrowed by kind/channel filters) are POSTed to the
 // URL in signed batches.
 //
 // Requires `ManageWebhook` in the target group; group-scoped API keys configure their own group, others must name it.
-func Set(c *client.Client, body event.SetWebhookRequest) (event.SetWebhookResponse, error) {
+func Set(__c *__client.Client, __body event.SetWebhookRequest) (event.SetWebhookResponse, error) {
 	__path := "/event/webhook"
-	return client.Request[event.SetWebhookResponse](c, "PUT", __path, nil, body)
+	return __client.Request[event.SetWebhookResponse](__c, "PUT", __path, nil, __body)
 }

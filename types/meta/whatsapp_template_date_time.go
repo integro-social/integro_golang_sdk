@@ -4,6 +4,6 @@ package meta
 
 type WhatsappTemplateDateTime struct {
 	// Meta localizes only what it can parse; everything else renders verbatim,
-	// so the hub always supplies the text it wants shown.
+	// so the caller always supplies the text it wants shown.
 	FallbackValue string `json:"fallback_value"`
 }

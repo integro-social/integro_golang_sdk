@@ -3,42 +3,42 @@
 package group_member
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	group "integro_sdk/types/group"
 )
 
 // Add Add an existing user to the group with a role.
 //
 // Requires `AddMembers` in the group itself, and the caller's role there must be able to manage the role being assigned; a user already in the group is a conflict, and a user who does not exist yet is invited, not added.
-func Add(c *client.Client, groupUid string, body group.AddGroupMemberRequest) (struct{}, error) {
+func Add(__c *__client.Client, groupUid string, __body group.AddGroupMemberRequest) (struct{}, error) {
 	__path := "/group/{group_uid}/member"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
 // List List the group's members, each carrying the identity fields that name the person behind the membership.
 //
 // Requires `ViewMembers` in the group itself.
-func List(c *client.Client, groupUid string) ([]group.GroupMemberResponse, error) {
+func List(__c *__client.Client, groupUid string) ([]group.GroupMemberResponse, error) {
 	__path := "/group/{group_uid}/member"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[[]group.GroupMemberResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[[]group.GroupMemberResponse](__c, "GET", __path, nil, nil)
 }
 // Remove Remove a member from the group; the user itself and every other membership they hold are untouched.
 //
 // Requires `RemoveMembers` in the group itself, and the caller's role there must be able to manage the member's current role; the caller can never remove their own membership, and a user who is not a member of this group reads as not found.
-func Remove(c *client.Client, groupUid string, userUid string) (struct{}, error) {
+func Remove(__c *__client.Client, groupUid string, userUid string) (struct{}, error) {
 	__path := "/group/{group_uid}/member/{user_uid}"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	__path = strings.Replace(__path, "{user_uid}", client.EncodePath(userUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // SetRole Replace a member's role in the group.
 //
 // Requires `SetMemberRole` in the group itself, and the caller's role there must be able to manage both the role being replaced and the one replacing it; the caller can never re-role their own membership, and a user who is not a member of this group reads as not found.
-func SetRole(c *client.Client, groupUid string, userUid string, body group.SetGroupMemberRoleRequest) (struct{}, error) {
+func SetRole(__c *__client.Client, groupUid string, userUid string, __body group.SetGroupMemberRoleRequest) (struct{}, error) {
 	__path := "/group/{group_uid}/member/{user_uid}"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	__path = strings.Replace(__path, "{user_uid}", client.EncodePath(userUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

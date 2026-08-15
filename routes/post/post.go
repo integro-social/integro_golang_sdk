@@ -3,8 +3,8 @@
 package post
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	insight "integro_sdk/types/insight"
 	meta "integro_sdk/types/meta"
@@ -15,9 +15,9 @@ import (
 // content must match the account's channel.
 //
 // Requires `PublishPosts` in the account's group.
-func Create(c *client.Client, body post.CreatePostRequest) (database.Post, error) {
+func Create(__c *__client.Client, __body post.CreatePostRequest) (database.Post, error) {
 	__path := "/post"
-	return client.Request[database.Post](c, "POST", __path, nil, body)
+	return __client.Request[database.Post](__c, "POST", __path, nil, __body)
 }
 // Delete Delete a post: published posts are removed from the platform (Instagram
 // carousels are deleted as a whole). A scheduled or pending post is
@@ -26,27 +26,27 @@ func Create(c *client.Client, body post.CreatePostRequest) (database.Post, error
 // kept with a `deleted` status.
 //
 // Requires `DeletePosts` in the post's group.
-func Delete(c *client.Client, postUid string) (struct{}, error) {
+func Delete(__c *__client.Client, postUid string) (struct{}, error) {
 	__path := "/post/{post_uid}"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Get Fetch a single post by uid.
 //
 // Requires `ViewPosts` in the post's group.
-func Get(c *client.Client, postUid string) (database.Post, error) {
+func Get(__c *__client.Client, postUid string) (database.Post, error) {
 	__path := "/post/{post_uid}"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[database.Post](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[database.Post](__c, "GET", __path, nil, nil)
 }
 // Insights Fetch platform metrics for a published post (impressions, reach, clicks,
 // reactions, views, … — overridable via `metrics`).
 //
 // Requires `ViewInsights` in the post's group.
-func Insights(c *client.Client, postUid string, query post.PostInsightsQuery) ([]meta.Insight, error) {
+func Insights(__c *__client.Client, postUid string, __query post.PostInsightsQuery) ([]meta.Insight, error) {
 	__path := "/post/{post_uid}/insight"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[[]meta.Insight](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[[]meta.Insight](__c, "GET", __path, __query, nil)
 }
 // InsightsHistory Day-by-day history of a post's collected metrics, grouped per metric —
 // the charting companion to the live `post.insights` passthrough. Posts are
@@ -54,51 +54,58 @@ func Insights(c *client.Client, postUid string, query post.PostInsightsQuery) ([
 // insights stop resolving), so the series flatlines after that window.
 //
 // Requires `ViewInsights` in the post's group.
-func InsightsHistory(c *client.Client, postUid string, query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
+func InsightsHistory(__c *__client.Client, postUid string, __query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
 	__path := "/post/{post_uid}/insight/history"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[[]insight.InsightSeries](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[[]insight.InsightSeries](__c, "GET", __path, __query, nil)
 }
 // List List posts, newest first, optionally filtered by group or social account.
 //
 // Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
-func List(c *client.Client, query post.ListPostsQuery) ([]database.Post, error) {
+func List(__c *__client.Client, __query post.ListPostsQuery) ([]database.Post, error) {
 	__path := "/post"
-	return client.Request[[]database.Post](c, "GET", __path, query, nil)
+	return __client.Request[[]database.Post](__c, "GET", __path, __query, nil)
 }
-// SetComments Enable or disable comments on a published post (Instagram only — Facebook
-// has no per-post comment toggle in the API).
+// SetComments Enable or disable comments on a published post. The payload is
+// channel-tagged and must match the post's channel — instagram only
+// (Facebook has no per-post comment toggle in the API), so no other
+// channel's shape deserializes.
 //
 // Requires `UpdatePosts` in the post's group.
-func SetComments(c *client.Client, postUid string, body post.SetPostCommentsRequest) (struct{}, error) {
+func SetComments(__c *__client.Client, postUid string, __body post.SetPostCommentsRequest) (struct{}, error) {
 	__path := "/post/{post_uid}/comment"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
 // SetHidden Hide or unhide a published post from the Page timeline — it stays
-// reachable by direct link (Facebook only, non-video posts).
+// reachable by direct link. The payload is channel-tagged and must match
+// the post's channel — facebook only, non-video posts — so no other
+// channel's shape deserializes.
 //
 // Requires `UpdatePosts` in the post's group.
-func SetHidden(c *client.Client, postUid string, body post.SetPostHiddenRequest) (struct{}, error) {
+func SetHidden(__c *__client.Client, postUid string, __body post.SetPostHiddenRequest) (struct{}, error) {
 	__path := "/post/{post_uid}/hidden"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
-// SetPinned Pin or unpin a published post to the top of the Page timeline (Facebook
-// only, non-video posts).
+// SetPinned Pin or unpin a published post to the top of the Page timeline. The
+// payload is channel-tagged and must match the post's channel — facebook
+// only, non-video posts — so no other channel's shape deserializes.
 //
 // Requires `UpdatePosts` in the post's group.
-func SetPinned(c *client.Client, postUid string, body post.SetPostPinnedRequest) (struct{}, error) {
+func SetPinned(__c *__client.Client, postUid string, __body post.SetPostPinnedRequest) (struct{}, error) {
 	__path := "/post/{post_uid}/pinned"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
-// Update Edit a published post's text on the platform (Facebook only — the
-// Instagram API cannot edit captions; stories carry no text).
+// Update Edit a published post's text on the platform. The payload is
+// channel-tagged and must match the post's channel — only facebook can edit
+// (the Instagram API cannot edit captions; stories carry no text), so no
+// other channel's shape deserializes.
 //
 // Requires `UpdatePosts` in the post's group.
-func Update(c *client.Client, postUid string, body post.UpdatePostRequest) (database.Post, error) {
+func Update(__c *__client.Client, postUid string, __body post.UpdatePostRequest) (database.Post, error) {
 	__path := "/post/{post_uid}"
-	__path = strings.Replace(__path, "{post_uid}", client.EncodePath(postUid), 1)
-	return client.Request[database.Post](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
+	return __client.Request[database.Post](__c, "PUT", __path, nil, __body)
 }

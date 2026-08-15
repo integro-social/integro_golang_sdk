@@ -10,4 +10,5 @@ const (
 	WhatsappTemplateCategoryUtility WhatsappTemplateCategory = "utility"
 	WhatsappTemplateCategoryMarketing WhatsappTemplateCategory = "marketing"
 	WhatsappTemplateCategoryAuthentication WhatsappTemplateCategory = "authentication"
+	WhatsappTemplateCategoryUnknown WhatsappTemplateCategory = "unknown"
 )

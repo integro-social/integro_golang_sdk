@@ -3,8 +3,8 @@
 package user_invite
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	user_invite "integro_sdk/types/user_invite"
 )
@@ -13,46 +13,46 @@ import (
 // password and, in the same transaction, the membership the invitation carries.
 //
 // Public — no authentication required; authorization comes from the invitation token in the request body.
-func Accept(c *client.Client, body user_invite.UserInviteAcceptRequest) (user_invite.UserInviteAcceptResponse, error) {
+func Accept(__c *__client.Client, __body user_invite.UserInviteAcceptRequest) (user_invite.UserInviteAcceptResponse, error) {
 	__path := "/user-invite/accept"
-	return client.Request[user_invite.UserInviteAcceptResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_invite.UserInviteAcceptResponse](__c, "POST", __path, nil, __body)
 }
 // Count Count pending (unaccepted) user invitations.
 //
 // Requires `ViewInvites`; the count covers only invites into groups where the caller holds it, and platform invites only for platform staff.
-func Count(c *client.Client) (uint64, error) {
+func Count(__c *__client.Client) (uint64, error) {
 	__path := "/user-invite/count"
-	return client.Request[uint64](c, "GET", __path, nil, nil)
+	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }
 // List List pending (unaccepted) user invitations.
 //
 // Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff.
-func List(c *client.Client) ([]database.UserInvite, error) {
+func List(__c *__client.Client) ([]database.UserInvite, error) {
 	__path := "/user-invite"
-	return client.Request[[]database.UserInvite](c, "GET", __path, nil, nil)
+	return __client.Request[[]database.UserInvite](__c, "GET", __path, nil, nil)
 }
 // Resend Refresh a pending user invitation's expiry and re-send its email.
 //
 // Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `OperatePlatformScope` for an invitation naming no group.
-func Resend(c *client.Client, inviteUid string) (struct{}, error) {
+func Resend(__c *__client.Client, inviteUid string) (struct{}, error) {
 	__path := "/user-invite/{invite_uid}/resend"
-	__path = strings.Replace(__path, "{invite_uid}", client.EncodePath(inviteUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{invite_uid}", __client.EncodePath(inviteUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // Revoke Revoke a pending user invitation so its registration link can no longer be used.
 //
 // Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `OperatePlatformScope` for an invitation naming no group.
-func Revoke(c *client.Client, inviteUid string) (struct{}, error) {
+func Revoke(__c *__client.Client, inviteUid string) (struct{}, error) {
 	__path := "/user-invite/{invite_uid}"
-	__path = strings.Replace(__path, "{invite_uid}", client.EncodePath(inviteUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{invite_uid}", __client.EncodePath(inviteUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Send Send an invitation that lets the recipient register a user account, joining
 // the named group with the named role once accepted. Naming neither invites to
 // the platform alone; naming only one of the two is refused.
 //
 // Requires `InviteUsers` in the named group plus a role there that may hand out the named one, or `OperatePlatformScope` when no group is named.
-func Send(c *client.Client, body user_invite.UserInviteSendRequest) (user_invite.UserInviteSendResponse, error) {
+func Send(__c *__client.Client, __body user_invite.UserInviteSendRequest) (user_invite.UserInviteSendResponse, error) {
 	__path := "/user-invite"
-	return client.Request[user_invite.UserInviteSendResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_invite.UserInviteSendResponse](__c, "POST", __path, nil, __body)
 }

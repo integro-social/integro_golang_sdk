@@ -7,8 +7,8 @@ type PulseCpuSnapshot struct {
 	PerCoreUsage []float32 `json:"per_core_usage"`
 	FrequencyMhz uint64 `json:"frequency_mhz"`
 	PerCoreFrequencyMhz []uint64 `json:"per_core_frequency_mhz"`
-	PhysicalCores uint `json:"physical_cores"`
-	LogicalCores uint `json:"logical_cores"`
+	PhysicalCores uint64 `json:"physical_cores"`
+	LogicalCores uint64 `json:"logical_cores"`
 	LoadAvgOne float64 `json:"load_avg_one"`
 	LoadAvgFive float64 `json:"load_avg_five"`
 	LoadAvgFifteen float64 `json:"load_avg_fifteen"`

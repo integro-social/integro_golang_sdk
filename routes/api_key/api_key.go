@@ -3,8 +3,8 @@
 package api_key
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	api_key "integro_sdk/types/api_key"
 	database "integro_sdk/types/database"
 )
@@ -12,9 +12,9 @@ import (
 // Count Count API keys, optionally filtered by group.
 //
 // Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff.
-func Count(c *client.Client, query api_key.ListApiKeysQuery) (uint64, error) {
+func Count(__c *__client.Client, __query api_key.ListApiKeysQuery) (uint64, error) {
 	__path := "/api-key/count"
-	return client.Request[uint64](c, "GET", __path, query, nil)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Create Create an API key bound to a group or to the platform. A platform key (no
 // group) automatically carries `operate_platform_scope`; a group-bound key may
@@ -22,48 +22,48 @@ func Count(c *client.Client, query api_key.ListApiKeysQuery) (uint64, error) {
 // in the key's scope, and must bring along whatever that permission requires.
 //
 // Requires `CreateApiKeys` and `GrantApiKeyPermissions` in the named group, or `OperatePlatformScope` plus both when no group is named.
-func Create(c *client.Client, body api_key.CreateApiKeyRequest) (api_key.CreateApiKeyResponse, error) {
+func Create(__c *__client.Client, __body api_key.CreateApiKeyRequest) (api_key.CreateApiKeyResponse, error) {
 	__path := "/api-key"
-	return client.Request[api_key.CreateApiKeyResponse](c, "POST", __path, nil, body)
+	return __client.Request[api_key.CreateApiKeyResponse](__c, "POST", __path, nil, __body)
 }
 // Get Fetch a single API key by uid.
 //
 // Requires `ViewApiKeys` in the key's group, or `OperatePlatformScope` plus `ViewApiKeys` for a platform key.
-func Get(c *client.Client, apiKeyUid string) (database.ApiKey, error) {
+func Get(__c *__client.Client, apiKeyUid string) (database.ApiKey, error) {
 	__path := "/api-key/{api_key_uid}"
-	__path = strings.Replace(__path, "{api_key_uid}", client.EncodePath(apiKeyUid), 1)
-	return client.Request[database.ApiKey](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
+	return __client.Request[database.ApiKey](__c, "GET", __path, nil, nil)
 }
 // List List API keys, optionally filtered by group.
 //
 // Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff.
-func List(c *client.Client, query api_key.ListApiKeysQuery) ([]database.ApiKey, error) {
+func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]database.ApiKey, error) {
 	__path := "/api-key"
-	return client.Request[[]database.ApiKey](c, "GET", __path, query, nil)
+	return __client.Request[[]database.ApiKey](__c, "GET", __path, __query, nil)
 }
 // Revoke Revoke an API key, permanently disabling it.
 //
 // Requires `RevokeApiKeys` in the key's group, or `OperatePlatformScope` plus `RevokeApiKeys` for a platform key.
-func Revoke(c *client.Client, apiKeyUid string) (struct{}, error) {
+func Revoke(__c *__client.Client, apiKeyUid string) (struct{}, error) {
 	__path := "/api-key/{api_key_uid}/revoke"
-	__path = strings.Replace(__path, "{api_key_uid}", client.EncodePath(apiKeyUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // Rotate Rotate an API key's secret, returning the new key.
 //
 // Requires `RotateApiKeys` in the key's group, or `OperatePlatformScope` plus `RotateApiKeys` for a platform key.
-func Rotate(c *client.Client, apiKeyUid string) (api_key.RotateApiKeyResponse, error) {
+func Rotate(__c *__client.Client, apiKeyUid string) (api_key.RotateApiKeyResponse, error) {
 	__path := "/api-key/{api_key_uid}/rotate"
-	__path = strings.Replace(__path, "{api_key_uid}", client.EncodePath(apiKeyUid), 1)
-	return client.Request[api_key.RotateApiKeyResponse](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
+	return __client.Request[api_key.RotateApiKeyResponse](__c, "POST", __path, nil, nil)
 }
 // Update Update an API key's name or enabled flag.
 //
 // Requires `UpdateApiKeys` in the key's group, or `OperatePlatformScope` plus `UpdateApiKeys` for a platform key.
-func Update(c *client.Client, apiKeyUid string, body api_key.UpdateApiKeyRequest) (struct{}, error) {
+func Update(__c *__client.Client, apiKeyUid string, __body api_key.UpdateApiKeyRequest) (struct{}, error) {
 	__path := "/api-key/{api_key_uid}"
-	__path = strings.Replace(__path, "{api_key_uid}", client.EncodePath(apiKeyUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
 // UpdatePermissions Replace the granted permission set of an API key. `operate_platform_scope`
 // stays bound to the key's group binding and cannot be granted to a group key;
@@ -71,8 +71,8 @@ func Update(c *client.Client, apiKeyUid string, body api_key.UpdateApiKeyRequest
 // key's scope, and must bring along whatever that permission requires.
 //
 // Requires `GrantApiKeyPermissions` in the key's group, or `OperatePlatformScope` plus `GrantApiKeyPermissions` for a platform key.
-func UpdatePermissions(c *client.Client, apiKeyUid string, body api_key.UpdateApiKeyPermissionsRequest) (struct{}, error) {
+func UpdatePermissions(__c *__client.Client, apiKeyUid string, __body api_key.UpdateApiKeyPermissionsRequest) (struct{}, error) {
 	__path := "/api-key/{api_key_uid}/permission"
-	__path = strings.Replace(__path, "{api_key_uid}", client.EncodePath(apiKeyUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

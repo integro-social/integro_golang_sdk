@@ -3,5 +3,5 @@
 package meta
 
 // One placeholder value. Media parameters carry a public URL, matching the
-// rest of the send surface (the hub never sends media ids).
+// rest of the send surface (this crate never sends media ids).
 type WhatsappTemplateParameter = interface{}

@@ -3,16 +3,16 @@
 package user_membership
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	user "integro_sdk/types/user"
 )
 
 // List List the groups another user belongs to, each carrying the role that membership holds there.
 //
 // Requires `ViewUsers`, which only platform staff hold.
-func List(c *client.Client, userUid string) ([]user.UserMembershipResponse, error) {
+func List(__c *__client.Client, userUid string) ([]user.UserMembershipResponse, error) {
 	__path := "/user/{user_uid}/membership"
-	__path = strings.Replace(__path, "{user_uid}", client.EncodePath(userUid), 1)
-	return client.Request[[]user.UserMembershipResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
+	return __client.Request[[]user.UserMembershipResponse](__c, "GET", __path, nil, nil)
 }

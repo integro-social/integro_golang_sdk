@@ -2,6 +2,7 @@
 
 package post
 
-type SetPostHiddenRequest struct {
-	Hidden bool `json:"hidden"`
-}
+// Channel-tagged hide toggle — only facebook Page timelines have a hide
+// surface, so no other channel's shape deserializes. The `channel` must
+// match the post's.
+type SetPostHiddenRequest = interface{}

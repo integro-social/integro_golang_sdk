@@ -3,8 +3,8 @@
 package issue
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	issue "integro_sdk/types/issue"
 )
@@ -12,46 +12,46 @@ import (
 // Count Count issues.
 //
 // Requires `ViewIssues`, which only platform staff hold.
-func Count(c *client.Client) (uint64, error) {
+func Count(__c *__client.Client) (uint64, error) {
 	__path := "/issue/count"
-	return client.Request[uint64](c, "GET", __path, nil, nil)
+	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }
 // Create Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user.
 //
 // Any authenticated user. Rejected when the platform is at its open-issue cap, and — when screenshots are attached — when the caller trips the per-user file-upload throttle.
-func Create(c *client.Client, form *client.MultipartForm) (issue.CreateIssueResponse, error) {
+func Create(__c *__client.Client, __form *__client.MultipartForm) (issue.CreateIssueResponse, error) {
 	__path := "/issue"
-	return client.RequestMultipart[issue.CreateIssueResponse](c, "POST", __path, nil, form)
+	return __client.RequestMultipart[issue.CreateIssueResponse](__c, "POST", __path, nil, __form)
 }
 // Get Fetch a single issue by uid.
 //
 // Requires `ViewIssues`, which only platform staff hold.
-func Get(c *client.Client, issueUid string) (database.Issue, error) {
+func Get(__c *__client.Client, issueUid string) (database.Issue, error) {
 	__path := "/issue/{issue_uid}"
-	__path = strings.Replace(__path, "{issue_uid}", client.EncodePath(issueUid), 1)
-	return client.Request[database.Issue](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
+	return __client.Request[database.Issue](__c, "GET", __path, nil, nil)
 }
 // List List issues.
 //
 // Requires `ViewIssues`, which only platform staff hold.
-func List(c *client.Client) ([]database.Issue, error) {
+func List(__c *__client.Client) ([]database.Issue, error) {
 	__path := "/issue"
-	return client.Request[[]database.Issue](c, "GET", __path, nil, nil)
+	return __client.Request[[]database.Issue](__c, "GET", __path, nil, nil)
 }
 // Screenshot Serve a screenshot file attached to an issue.
 //
 // Requires `ViewIssues`, which only platform staff hold.
-func Screenshot(c *client.Client, issueUid string, screenshotUid string) ([]byte, error) {
+func Screenshot(__c *__client.Client, issueUid string, screenshotUid string) ([]byte, error) {
 	__path := "/issue/{issue_uid}/screenshot/{screenshot_uid}"
-	__path = strings.Replace(__path, "{issue_uid}", client.EncodePath(issueUid), 1)
-	__path = strings.Replace(__path, "{screenshot_uid}", client.EncodePath(screenshotUid), 1)
-	return client.RequestBytes(c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
+	__path = __strings.Replace(__path, "{screenshot_uid}", __client.EncodePath(screenshotUid), 1)
+	return __client.RequestBytes(__c, "GET", __path, nil, nil)
 }
 // SetStatus Update the status of an issue.
 //
 // Requires `ManageIssues`, which only platform staff hold.
-func SetStatus(c *client.Client, issueUid string, body issue.SetIssueStatusRequest) (struct{}, error) {
+func SetStatus(__c *__client.Client, issueUid string, __body issue.SetIssueStatusRequest) (struct{}, error) {
 	__path := "/issue/{issue_uid}/status"
-	__path = strings.Replace(__path, "{issue_uid}", client.EncodePath(issueUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

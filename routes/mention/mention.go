@@ -3,8 +3,8 @@
 package mention
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	engagement "integro_sdk/types/engagement"
 )
@@ -13,16 +13,18 @@ import (
 // first (Instagram only — the account mentioned in captions or comments).
 //
 // Requires `ViewComments`; the feed covers only mentions of groups where the caller holds it.
-func List(c *client.Client, query engagement.ListMentionsQuery) ([]database.Mention, error) {
+func List(__c *__client.Client, __query engagement.ListMentionsQuery) ([]database.Mention, error) {
 	__path := "/mention"
-	return client.Request[[]database.Mention](c, "GET", __path, query, nil)
+	return __client.Request[[]database.Mention](__c, "GET", __path, __query, nil)
 }
-// Reply Reply to an Instagram mention (in the mentioned media's comments).
+// Reply Reply to an Instagram mention (in the mentioned media's comments). The
+// payload is channel-tagged and must match the account's channel — mentions
+// are an instagram surface, so no other channel's shape deserializes.
 //
 // Requires `ReplyComments` in the account's group.
-func Reply(c *client.Client, socialAccountUid string, mentionUid string, body engagement.CommentMessageRequest) (struct{}, error) {
+func Reply(__c *__client.Client, socialAccountUid string, mentionUid string, __body engagement.MentionReplyRequest) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/mention/{mention_uid}/reply"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	__path = strings.Replace(__path, "{mention_uid}", client.EncodePath(mentionUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	__path = __strings.Replace(__path, "{mention_uid}", __client.EncodePath(mentionUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }

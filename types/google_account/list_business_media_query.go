@@ -2,10 +2,14 @@
 
 package google_account
 
+import (
+	primitives "integro_sdk/types/primitives"
+)
+
 type ListBusinessMediaQuery struct {
 	// The location's v4 name, `accounts/{id}/locations/{id}`.
 	Location string `json:"location"`
-	// Page size; capped at 100, default 50.
-	PageSize *uint32 `json:"page_size"`
+	// Page size; capped at 100 (Google's limit), default 50.
+	PageSize *primitives.Number1_100 `json:"page_size"`
 	PageToken *string `json:"page_token"`
 }

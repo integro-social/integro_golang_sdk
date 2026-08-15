@@ -2,6 +2,7 @@
 
 package post
 
-type SetPostPinnedRequest struct {
-	Pinned bool `json:"pinned"`
-}
+// Channel-tagged pin toggle — only facebook Page timelines have a pin
+// surface, so no other channel's shape deserializes. The `channel` must
+// match the post's.
+type SetPostPinnedRequest = interface{}

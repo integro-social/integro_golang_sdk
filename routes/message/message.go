@@ -3,22 +3,24 @@
 package message
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	message "integro_sdk/types/message"
 	primitives "integro_sdk/types/primitives"
 )
 
 // Backfill Import conversation history from Meta's Conversations API for an account
-// — DMs that predate the account's connection (facebook/instagram only;
-// whatsapp exposes no history). Runs only when explicitly invoked;
-// already-imported messages dedup by platform mid.
+// — DMs that predate the account's connection. The payload is
+// channel-tagged and must match the account's channel — only facebook and
+// instagram expose history, so no other channel's shape deserializes. Runs
+// only when explicitly invoked; already-imported messages dedup by platform
+// mid.
 //
 // Requires `ManageMessages` in the account's group.
-func Backfill(c *client.Client, body message.BackfillRequest) (message.BackfillResponse, error) {
+func Backfill(__c *__client.Client, __body message.BackfillRequest) (message.BackfillResponse, error) {
 	__path := "/message/backfill"
-	return client.Request[message.BackfillResponse](c, "POST", __path, nil, body)
+	return __client.Request[message.BackfillResponse](__c, "POST", __path, nil, __body)
 }
 // Cancel Cancel a queued (`pending`) message before it reaches the platform, and
 // with it **every message queued after it in the same conversation** —
@@ -41,52 +43,54 @@ func Backfill(c *client.Client, body message.BackfillRequest) (message.BackfillR
 // one, true for the messages that went with it).
 //
 // Requires `ManageMessages` in the conversation's group.
-func Cancel(c *client.Client, conversationUid string, messageUid string) ([]primitives.Uid, error) {
+func Cancel(__c *__client.Client, conversationUid string, messageUid string) ([]primitives.Uid, error) {
 	__path := "/conversation/{conversation_uid}/message/{message_uid}/cancel"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	__path = strings.Replace(__path, "{message_uid}", client.EncodePath(messageUid), 1)
-	return client.Request[[]primitives.Uid](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[[]primitives.Uid](__c, "POST", __path, nil, nil)
 }
 // Delete Revoke an own sent message for everyone ("apagar para todos") —
 // whatsapp_stevo and whatsapp_native only; the row stays with `deleted_at`
 // set.
 //
 // Requires `ManageMessages` in the conversation's group.
-func Delete(c *client.Client, conversationUid string, messageUid string) (struct{}, error) {
+func Delete(__c *__client.Client, conversationUid string, messageUid string) (struct{}, error) {
 	__path := "/conversation/{conversation_uid}/message/{message_uid}"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	__path = strings.Replace(__path, "{message_uid}", client.EncodePath(messageUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// Edit Edit an own sent message's text (or media caption) on the platform —
-// whatsapp_stevo and whatsapp_native only; the platform enforces its
-// ~15 minute edit window.
+// Edit Edit an own sent message's text (or media caption) on the platform. The
+// payload is channel-tagged and must match the message's channel — only
+// whatsapp_stevo and whatsapp_native expose an edit call, so no other
+// channel's shape deserializes; the platform enforces its ~15 minute edit
+// window.
 //
 // Requires `ManageMessages` in the conversation's group.
-func Edit(c *client.Client, conversationUid string, messageUid string, body message.EditMessageRequest) (database.Message, error) {
+func Edit(__c *__client.Client, conversationUid string, messageUid string, __body message.EditMessageRequest) (database.Message, error) {
 	__path := "/conversation/{conversation_uid}/message/{message_uid}"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	__path = strings.Replace(__path, "{message_uid}", client.EncodePath(messageUid), 1)
-	return client.Request[database.Message](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[database.Message](__c, "PUT", __path, nil, __body)
 }
 // List Poll the unified message feed across channels: messages with `id` greater
 // than `since_id`, oldest first, optionally filtered by group or account.
 //
 // Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
-func List(c *client.Client, query message.ListMessagesQuery) ([]message.MessageWithContext, error) {
+func List(__c *__client.Client, __query message.ListMessagesQuery) ([]message.MessageWithContext, error) {
 	__path := "/message"
-	return client.Request[[]message.MessageWithContext](c, "GET", __path, query, nil)
+	return __client.Request[[]message.MessageWithContext](__c, "GET", __path, __query, nil)
 }
 // React React to a message through the platform. The payload is channel-tagged
 // and must match the message's channel; Messenger has no reaction API and
 // no payload variant.
 //
 // Requires `SendMessages` in the conversation's group.
-func React(c *client.Client, conversationUid string, messageUid string, body message.ReactToMessageRequest) (struct{}, error) {
+func React(__c *__client.Client, conversationUid string, messageUid string, __body message.ReactToMessageRequest) (struct{}, error) {
 	__path := "/conversation/{conversation_uid}/message/{message_uid}/reaction"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	__path = strings.Replace(__path, "{message_uid}", client.EncodePath(messageUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
 // Send Send a message into a conversation. The payload is channel-tagged and
 // must match the conversation's channel — each variant accepts exactly the
@@ -107,17 +111,18 @@ func React(c *client.Client, conversationUid string, messageUid string, body mes
 // without a new send.
 //
 // Requires `SendMessages` in the conversation's group.
-func Send(c *client.Client, body message.SendMessageRequest) (message.MessageWithContext, error) {
-	__path := "/message"
-	return client.Request[message.MessageWithContext](c, "POST", __path, nil, body)
+func Send(__c *__client.Client, conversationUid string, __body message.SendMessageRequest) (message.MessageWithContext, error) {
+	__path := "/conversation/{conversation_uid}/message"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.MessageWithContext](__c, "POST", __path, nil, __body)
 }
 // Unreact Remove the account's reaction from a message (Instagram and the WhatsApp
 // flavors — Messenger has no reaction API).
 //
 // Requires `SendMessages` in the conversation's group.
-func Unreact(c *client.Client, conversationUid string, messageUid string) (struct{}, error) {
+func Unreact(__c *__client.Client, conversationUid string, messageUid string) (struct{}, error) {
 	__path := "/conversation/{conversation_uid}/message/{message_uid}/reaction"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	__path = strings.Replace(__path, "{message_uid}", client.EncodePath(messageUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }

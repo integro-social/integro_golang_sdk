@@ -3,8 +3,8 @@
 package action
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	rate_limit "integro_sdk/types/rate_limit"
 )
@@ -12,38 +12,38 @@ import (
 // Create Create a platform-wide action rate-limit rule for a given limited action.
 //
 // Requires `CreateRateLimits`, which only platform staff hold.
-func Create(c *client.Client, body rate_limit.CreateActionRateLimitRequest) (rate_limit.CreateActionRateLimitResponse, error) {
+func Create(__c *__client.Client, __body rate_limit.CreateActionRateLimitRequest) (rate_limit.CreateActionRateLimitResponse, error) {
 	__path := "/rate-limit/action"
-	return client.Request[rate_limit.CreateActionRateLimitResponse](c, "POST", __path, nil, body)
+	return __client.Request[rate_limit.CreateActionRateLimitResponse](__c, "POST", __path, nil, __body)
 }
 // Delete Delete an action rate-limit rule by uid.
 //
 // Requires `DeleteRateLimits`, which only platform staff hold.
-func Delete(c *client.Client, ruleUid string) (struct{}, error) {
+func Delete(__c *__client.Client, ruleUid string) (struct{}, error) {
 	__path := "/rate-limit/action/{rule_uid}"
-	__path = strings.Replace(__path, "{rule_uid}", client.EncodePath(ruleUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Get Fetch a single action rate-limit rule by uid.
 //
 // Requires `ViewRateLimits`, which only platform staff hold.
-func Get(c *client.Client, ruleUid string) (database.ActionRateLimitRule, error) {
+func Get(__c *__client.Client, ruleUid string) (database.ActionRateLimitRule, error) {
 	__path := "/rate-limit/action/{rule_uid}"
-	__path = strings.Replace(__path, "{rule_uid}", client.EncodePath(ruleUid), 1)
-	return client.Request[database.ActionRateLimitRule](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)
+	return __client.Request[database.ActionRateLimitRule](__c, "GET", __path, nil, nil)
 }
 // List List all action rate-limit rules.
 //
 // Requires `ViewRateLimits`, which only platform staff hold.
-func List(c *client.Client) ([]database.ActionRateLimitRule, error) {
+func List(__c *__client.Client) ([]database.ActionRateLimitRule, error) {
 	__path := "/rate-limit/action"
-	return client.Request[[]database.ActionRateLimitRule](c, "GET", __path, nil, nil)
+	return __client.Request[[]database.ActionRateLimitRule](__c, "GET", __path, nil, nil)
 }
 // Update Update the limits of an existing action rate-limit rule.
 //
 // Requires `UpdateRateLimits`, which only platform staff hold.
-func Update(c *client.Client, ruleUid string, body rate_limit.UpdateActionRateLimitRequest) (struct{}, error) {
+func Update(__c *__client.Client, ruleUid string, __body rate_limit.UpdateActionRateLimitRequest) (struct{}, error) {
 	__path := "/rate-limit/action/{rule_uid}"
-	__path = strings.Replace(__path, "{rule_uid}", client.EncodePath(ruleUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

@@ -3,21 +3,21 @@
 package email
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	user_mfa "integro_sdk/types/user_mfa"
 )
 
 // Confirm Confirm self-service email-factor enrollment with a code.
 //
 // Authenticated user acting on their own factors; no permission required.
-func Confirm(c *client.Client, body user_mfa.UserMfaEnrollConfirmRequest) (struct{}, error) {
+func Confirm(__c *__client.Client, __body user_mfa.UserMfaEnrollConfirmRequest) (struct{}, error) {
 	__path := "/user-mfa/factor/email/confirm"
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
 // Start Begin self-service email-factor enrollment, emailing a one-time code and returning an enrollment token.
 //
 // Authenticated user acting on their own factors; no permission required.
-func Start(c *client.Client) (user_mfa.UserMfaMgmtEmailStartResponse, error) {
+func Start(__c *__client.Client) (user_mfa.UserMfaMgmtEmailStartResponse, error) {
 	__path := "/user-mfa/factor/email/start"
-	return client.Request[user_mfa.UserMfaMgmtEmailStartResponse](c, "POST", __path, nil, nil)
+	return __client.Request[user_mfa.UserMfaMgmtEmailStartResponse](__c, "POST", __path, nil, nil)
 }

@@ -3,8 +3,8 @@
 package media
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	media "integro_sdk/types/media"
 )
 
@@ -15,26 +15,26 @@ import (
 // the URL will fail.
 //
 // Requires `DeleteMedia` in the media's group.
-func Delete(c *client.Client, mediaUid string) (struct{}, error) {
+func Delete(__c *__client.Client, mediaUid string) (struct{}, error) {
 	__path := "/media/{media_uid}"
-	__path = strings.Replace(__path, "{media_uid}", client.EncodePath(mediaUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Serve Serve a hub-hosted media file. The uid may carry a cosmetic extension
 // suffix (`{uid}.m4a`) — generated URLs include one as a format signal for
 // external fetchers; it is stripped before lookup.
 //
 // Public — no authentication required; the unguessable uid is the capability.
-func Serve(c *client.Client, mediaUid string) ([]byte, error) {
+func Serve(__c *__client.Client, mediaUid string) ([]byte, error) {
 	__path := "/media/{media_uid}"
-	__path = strings.Replace(__path, "{media_uid}", client.EncodePath(mediaUid), 1)
-	return client.RequestBytes(c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
+	return __client.RequestBytes(__c, "GET", __path, nil, nil)
 }
 // Upload Upload a media file to the hub; the returned public URL can be used in any
 // message or post payload (Meta fetches it from the hub).
 //
 // Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it.
-func Upload(c *client.Client, form *client.MultipartForm) (media.UploadMediaResponse, error) {
+func Upload(__c *__client.Client, __form *__client.MultipartForm) (media.UploadMediaResponse, error) {
 	__path := "/media"
-	return client.RequestMultipart[media.UploadMediaResponse](c, "POST", __path, nil, form)
+	return __client.RequestMultipart[media.UploadMediaResponse](__c, "POST", __path, nil, __form)
 }

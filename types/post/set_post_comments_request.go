@@ -2,6 +2,7 @@
 
 package post
 
-type SetPostCommentsRequest struct {
-	Enabled bool `json:"enabled"`
-}
+// Channel-tagged comment toggle — the one edit Instagram's API supports;
+// facebook has no per-post comment toggle, so its shape does not
+// deserialize. The `channel` must match the post's.
+type SetPostCommentsRequest = interface{}

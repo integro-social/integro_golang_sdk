@@ -3,69 +3,69 @@
 package test
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 )
 
 // BadRequest Return a 400 — probe for the client's bad-request handling.
 //
 // Public — no authentication required.
-func BadRequest(c *client.Client) (struct{}, error) {
+func BadRequest(__c *__client.Client) (struct{}, error) {
 	__path := "/test/bad-request"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // Conflict Return a 409 — probe for the client's conflict handling.
 //
 // Public — no authentication required.
-func Conflict(c *client.Client) (struct{}, error) {
+func Conflict(__c *__client.Client) (struct{}, error) {
 	__path := "/test/conflict"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // Forbidden Return a 403 — probe for the client's permission-denied handling.
 //
 // Public — no authentication required.
-func Forbidden(c *client.Client) (struct{}, error) {
+func Forbidden(__c *__client.Client) (struct{}, error) {
 	__path := "/test/forbidden"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // Internal Return a 500 — probe for the client's server-error handling.
 //
 // Public — no authentication required.
-func Internal(c *client.Client) (struct{}, error) {
+func Internal(__c *__client.Client) (struct{}, error) {
 	__path := "/test/internal"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // NotFound Return a 404 — probe for the client's missing-resource handling.
 //
 // Public — no authentication required.
-func NotFound(c *client.Client) (struct{}, error) {
+func NotFound(__c *__client.Client) (struct{}, error) {
 	__path := "/test/not-found"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // Ok Return a success envelope — the happy-path probe for client error handling.
 //
 // Public — no authentication required.
-func Ok(c *client.Client) (string, error) {
+func Ok(__c *__client.Client) (string, error) {
 	__path := "/test/ok"
-	return client.Request[string](c, "GET", __path, nil, nil)
+	return __client.Request[string](__c, "GET", __path, nil, nil)
 }
 // Panic Panic — probe that the panic layer answers 500 instead of dropping the connection.
 //
 // Public — no authentication required.
-func Panic(c *client.Client) (struct{}, error) {
+func Panic(__c *__client.Client) (struct{}, error) {
 	__path := "/test/panic"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // Unauthorized Return a 401 — probe for the client's session-expiry handling.
 //
 // Public — no authentication required.
-func Unauthorized(c *client.Client) (struct{}, error) {
+func Unauthorized(__c *__client.Client) (struct{}, error) {
 	__path := "/test/unauthorized"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }
 // Unavailable Return a 503 — probe for the client's outage handling.
 //
 // Public — no authentication required.
-func Unavailable(c *client.Client) (struct{}, error) {
+func Unavailable(__c *__client.Client) (struct{}, error) {
 	__path := "/test/unavailable"
-	return client.Request[struct{}](c, "GET", __path, nil, nil)
+	return __client.Request[struct{}](__c, "GET", __path, nil, nil)
 }

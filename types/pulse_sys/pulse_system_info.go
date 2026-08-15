@@ -8,6 +8,6 @@ type PulseSystemInfo struct {
 	OsVersion string `json:"os_version"`
 	KernelVersion string `json:"kernel_version"`
 	CpuModel string `json:"cpu_model"`
-	PhysicalCores uint `json:"physical_cores"`
-	LogicalCores uint `json:"logical_cores"`
+	PhysicalCores uint64 `json:"physical_cores"`
+	LogicalCores uint64 `json:"logical_cores"`
 }

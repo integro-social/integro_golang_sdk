@@ -3,7 +3,7 @@
 package whatsapp_template
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	message "integro_sdk/types/message"
 )
 
@@ -11,23 +11,23 @@ import (
 // sendable as `template` content.
 //
 // Requires `ManageTemplates` in the account's group.
-func Create(c *client.Client, body message.CreateTemplateRequest) (message.CreateTemplateResponse, error) {
+func Create(__c *__client.Client, __body message.CreateTemplateRequest) (message.CreateTemplateResponse, error) {
 	__path := "/whatsapp/template"
-	return client.Request[message.CreateTemplateResponse](c, "POST", __path, nil, body)
+	return __client.Request[message.CreateTemplateResponse](__c, "POST", __path, nil, __body)
 }
 // Delete Delete a whatsapp message template by name (all languages, or one specific
 // `hsm_id`).
 //
 // Requires `ManageTemplates` in the account's group.
-func Delete(c *client.Client, query message.DeleteTemplateQuery) (struct{}, error) {
+func Delete(__c *__client.Client, __query message.DeleteTemplateQuery) (struct{}, error) {
 	__path := "/whatsapp/template"
-	return client.Request[struct{}](c, "DELETE", __path, query, nil)
+	return __client.Request[struct{}](__c, "DELETE", __path, __query, nil)
 }
 // List List the WABA's whatsapp message templates, all statuses (only APPROVED
 // ones are sendable).
 //
 // Requires `ViewTemplates` in the account's group.
-func List(c *client.Client, query message.ListTemplatesQuery) ([]message.TemplateResponse, error) {
+func List(__c *__client.Client, __query message.ListTemplatesQuery) ([]message.TemplateResponse, error) {
 	__path := "/whatsapp/template"
-	return client.Request[[]message.TemplateResponse](c, "GET", __path, query, nil)
+	return __client.Request[[]message.TemplateResponse](__c, "GET", __path, __query, nil)
 }

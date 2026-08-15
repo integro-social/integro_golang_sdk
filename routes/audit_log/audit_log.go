@@ -3,7 +3,7 @@
 package audit_log
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	audit_log "integro_sdk/types/audit_log"
 	database "integro_sdk/types/database"
 )
@@ -11,21 +11,21 @@ import (
 // Count Count audit log entries matching the given filters and time window.
 //
 // Requires `ViewAuditLogs`; platform staff count every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-func Count(c *client.Client, query audit_log.AuditLogQuery) (uint64, error) {
+func Count(__c *__client.Client, __query audit_log.AuditLogQuery) (uint64, error) {
 	__path := "/audit-log/count"
-	return client.Request[uint64](c, "GET", __path, query, nil)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // List List audit log entries matching the given filters and time window.
 //
 // Requires `ViewAuditLogs`; platform staff read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-func List(c *client.Client, query audit_log.AuditLogQuery) ([]database.AuditLog, error) {
+func List(__c *__client.Client, __query audit_log.AuditLogQuery) ([]database.AuditLog, error) {
 	__path := "/audit-log"
-	return client.Request[[]database.AuditLog](c, "GET", __path, query, nil)
+	return __client.Request[[]database.AuditLog](__c, "GET", __path, __query, nil)
 }
 // Stats Aggregate audit log statistics for the given filters and time window.
 //
 // Requires `ViewAuditLogs`; platform staff aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-func Stats(c *client.Client, query audit_log.AuditLogQuery) (database.AuditLogStats, error) {
-	__path := "/audit-log/stats"
-	return client.Request[database.AuditLogStats](c, "GET", __path, query, nil)
+func Stats(__c *__client.Client, __query audit_log.AuditLogQuery) (database.AuditLogStats, error) {
+	__path := "/audit-log/stat"
+	return __client.Request[database.AuditLogStats](__c, "GET", __path, __query, nil)
 }

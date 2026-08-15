@@ -11,5 +11,12 @@ const (
 	PulseProcessStatusZombie PulseProcessStatus = "zombie"
 	PulseProcessStatusIdle PulseProcessStatus = "idle"
 	PulseProcessStatusDead PulseProcessStatus = "dead"
+	PulseProcessStatusTracing PulseProcessStatus = "tracing"
+	PulseProcessStatusWakekill PulseProcessStatus = "wakekill"
+	PulseProcessStatusWaking PulseProcessStatus = "waking"
+	PulseProcessStatusParked PulseProcessStatus = "parked"
+	PulseProcessStatusLockBlocked PulseProcessStatus = "lock_blocked"
+	PulseProcessStatusUninterruptibleDiskSleep PulseProcessStatus = "uninterruptible_disk_sleep"
+	PulseProcessStatusSuspended PulseProcessStatus = "suspended"
 	PulseProcessStatusUnknown PulseProcessStatus = "unknown"
 )

@@ -3,8 +3,9 @@
 package conversation
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
+	call "integro_sdk/types/call"
 	database "integro_sdk/types/database"
 	message "integro_sdk/types/message"
 )
@@ -17,20 +18,28 @@ import (
 // seen_up_to` = unread).
 //
 // Requires `SendMessages` in the conversation's group.
-func Action(c *client.Client, conversationUid string, body message.ConversationActionRequest) (struct{}, error) {
+func Action(__c *__client.Client, conversationUid string, __body message.ConversationActionRequest) (struct{}, error) {
 	__path := "/conversation/{conversation_uid}/action"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
+}
+// Calls List a conversation's calls, newest first; `before_id` pages older history.
+//
+// Requires `ViewMessages` in the conversation's group.
+func Calls(__c *__client.Client, conversationUid string, __query call.ConversationCallsQuery) ([]database.Call, error) {
+	__path := "/conversation/{conversation_uid}/call"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[[]database.Call](__c, "GET", __path, __query, nil)
 }
 // Clear Erase the conversation's stored history on the hub, keeping the
 // conversation: its messages go, the preview and unread badge reset, and the
 // 24h-window watermarks stay. Nothing is deleted on the platform.
 //
 // Requires `ManageMessages` in the conversation's group.
-func Clear(c *client.Client, conversationUid string) (database.Conversation, error) {
+func Clear(__c *__client.Client, conversationUid string) (database.Conversation, error) {
 	__path := "/conversation/{conversation_uid}/message"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	return client.Request[database.Conversation](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[database.Conversation](__c, "DELETE", __path, nil, nil)
 }
 // Create Open (or return) a conversation with a phone number — a channel-tagged
 // request whose declared channel must match the account's; only
@@ -41,19 +50,19 @@ func Clear(c *client.Client, conversationUid string) (database.Conversation, err
 // picture) is stored best-effort.
 //
 // Requires `SendMessages` in the account's group.
-func Create(c *client.Client, body message.CreateConversationRequest) (database.Conversation, error) {
+func Create(__c *__client.Client, __body message.CreateConversationRequest) (database.Conversation, error) {
 	__path := "/conversation"
-	return client.Request[database.Conversation](c, "POST", __path, nil, body)
+	return __client.Request[database.Conversation](__c, "POST", __path, nil, __body)
 }
 // Delete Delete the conversation and its whole stored history from the hub.
 // Nothing is deleted on the platform: a later inbound message from the same
 // participant opens a fresh conversation.
 //
 // Requires `ManageMessages` in the conversation's group.
-func Delete(c *client.Client, conversationUid string) (struct{}, error) {
+func Delete(__c *__client.Client, conversationUid string) (struct{}, error) {
 	__path := "/conversation/{conversation_uid}"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // List List conversations, newest activity first, optionally filtered by group or
 // social account; `before_activity_at`+`before_uid` page older activity
@@ -61,26 +70,26 @@ func Delete(c *client.Client, conversationUid string) (struct{}, error) {
 // badge + last-message preview).
 //
 // Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
-func List(c *client.Client, query message.ListConversationsQuery) ([]database.Conversation, error) {
+func List(__c *__client.Client, __query message.ListConversationsQuery) ([]database.Conversation, error) {
 	__path := "/conversation"
-	return client.Request[[]database.Conversation](c, "GET", __path, query, nil)
+	return __client.Request[[]database.Conversation](__c, "GET", __path, __query, nil)
 }
 // Messages List a conversation's messages, newest first; `before_id` pages older
 // history.
 //
 // Requires `ViewMessages` in the conversation's group.
-func Messages(c *client.Client, conversationUid string, query message.ConversationMessagesQuery) ([]database.Message, error) {
+func Messages(__c *__client.Client, conversationUid string, __query message.ConversationMessagesQuery) ([]database.Message, error) {
 	__path := "/conversation/{conversation_uid}/message"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	return client.Request[[]database.Message](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[[]database.Message](__c, "GET", __path, __query, nil)
 }
 // Read Clear the conversation's unread badge (hub-local read state, shared by
 // every operator). Never sends a platform read receipt — that stays the
 // explicit `mark_seen` conversation action.
 //
 // Requires `ViewMessages` in the conversation's group.
-func Read(c *client.Client, conversationUid string) (database.Conversation, error) {
+func Read(__c *__client.Client, conversationUid string) (database.Conversation, error) {
 	__path := "/conversation/{conversation_uid}/read"
-	__path = strings.Replace(__path, "{conversation_uid}", client.EncodePath(conversationUid), 1)
-	return client.Request[database.Conversation](c, "PUT", __path, nil, nil)
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[database.Conversation](__c, "PUT", __path, nil, nil)
 }

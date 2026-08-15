@@ -26,5 +26,7 @@ const (
 	AuditResourceConversation AuditResource = "conversation"
 	AuditResourceGoogleAccount AuditResource = "google_account"
 	AuditResourceUserGroup AuditResource = "user_group"
+	AuditResourceCall AuditResource = "call"
+	AuditResourceGhlLocation AuditResource = "ghl_location"
 	AuditResourceUnknown AuditResource = "unknown"
 )

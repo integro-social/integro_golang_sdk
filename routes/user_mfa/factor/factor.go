@@ -3,23 +3,23 @@
 package factor
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	user_mfa "integro_sdk/types/user_mfa"
 )
 
 // Delete Delete one of the caller's own MFA factors, refusing to remove their last confirmed factor.
 //
 // Authenticated user acting on their own factors; no permission required.
-func Delete(c *client.Client, kind string) (struct{}, error) {
+func Delete(__c *__client.Client, kind string) (struct{}, error) {
 	__path := "/user-mfa/factor/{kind}"
-	__path = strings.Replace(__path, "{kind}", client.EncodePath(kind), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{kind}", __client.EncodePath(kind), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // List List the caller's own enrolled MFA factors.
 //
 // Authenticated user acting on their own factors; no permission required.
-func List(c *client.Client) ([]user_mfa.UserMfaFactorRow, error) {
+func List(__c *__client.Client) ([]user_mfa.UserMfaFactorRow, error) {
 	__path := "/user-mfa/factor"
-	return client.Request[[]user_mfa.UserMfaFactorRow](c, "GET", __path, nil, nil)
+	return __client.Request[[]user_mfa.UserMfaFactorRow](__c, "GET", __path, nil, nil)
 }

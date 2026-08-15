@@ -2,8 +2,7 @@
 
 package message
 
-type EditMessageRequest struct {
-	// The new text: replaces the body of text messages, the caption of media
-	// messages.
-	Text string `json:"text"`
-}
+// Channel-tagged edit payload — only the unofficial WhatsApp flavors expose
+// a platform edit call, so no other channel's shape deserializes. The
+// `channel` must match the message's.
+type EditMessageRequest = interface{}

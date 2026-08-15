@@ -3,7 +3,8 @@
 package event
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
+	event "integro_sdk/types/event"
 )
 
 // Ws Live event stream over WebSocket, typed both ways: the client opens with
@@ -16,7 +17,7 @@ import (
 // session expiry close the connection mid-stream.
 //
 // Requires `ViewMessages` anywhere to connect; every event is then delivered only to a caller — human or API key alike — holding that family's permission in the event's own group: `ViewMessages` for message, presence and conversation events, `ViewComments` for comment and mention events, `ViewPosts` for post events, `ViewSocialAccounts` for account events, `ViewBusiness` for review events (events failing that check are silently absent).
-func Ws(c *client.Client, handlers client.WsHandlers) *client.WsConnection {
+func Ws(__c *__client.Client, __handlers __client.WsHandlers[event.ServerMsg]) *__client.WsConnection[event.ClientMsg] {
 	__path := "/event/ws"
-	return client.Ws(c, __path, handlers)
+	return __client.Ws[event.ClientMsg, event.ServerMsg](__c, __path, nil, __handlers)
 }

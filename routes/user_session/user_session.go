@@ -3,44 +3,44 @@
 package user_session
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	user_session "integro_sdk/types/user_session"
 )
 
 // List List active sessions for the caller or, when a user is specified, for another user.
 //
 // Any authenticated user for their own sessions; naming another user requires `ViewUserSessions`, which only platform staff hold.
-func List(c *client.Client, query user_session.ListUserSessionsQuery) ([]user_session.UserSessionRow, error) {
+func List(__c *__client.Client, __query user_session.ListUserSessionsQuery) ([]user_session.UserSessionRow, error) {
 	__path := "/user-session"
-	return client.Request[[]user_session.UserSessionRow](c, "GET", __path, query, nil)
+	return __client.Request[[]user_session.UserSessionRow](__c, "GET", __path, __query, nil)
 }
 // Login Authenticate with email and password, returning a session token or an MFA/enrollment challenge.
 //
 // Public — no authentication required; the caller proves identity with the supplied email and password.
-func Login(c *client.Client, body user_session.UserSessionLoginRequest) (user_session.UserSessionLoginResponse, error) {
+func Login(__c *__client.Client, __body user_session.UserSessionLoginRequest) (user_session.UserSessionLoginResponse, error) {
 	__path := "/user-session/login"
-	return client.Request[user_session.UserSessionLoginResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_session.UserSessionLoginResponse](__c, "POST", __path, nil, __body)
 }
 // Logout Invalidate the caller's current session and clear the session cookie.
 //
 // Authenticated user acting on their own session; no permission required.
-func Logout(c *client.Client) (struct{}, error) {
+func Logout(__c *__client.Client) (struct{}, error) {
 	__path := "/user-session/logout"
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // LogoutAll Invalidate all of the caller's sessions and clear the session cookie.
 //
 // Authenticated user acting on their own sessions; no permission required.
-func LogoutAll(c *client.Client) (user_session.UserSessionLogoutAllResponse, error) {
+func LogoutAll(__c *__client.Client) (user_session.UserSessionLogoutAllResponse, error) {
 	__path := "/user-session/logout-all"
-	return client.Request[user_session.UserSessionLogoutAllResponse](c, "POST", __path, nil, nil)
+	return __client.Request[user_session.UserSessionLogoutAllResponse](__c, "POST", __path, nil, nil)
 }
 // Revoke Revoke a single session by its identifier.
 //
 // Any authenticated user for their own sessions; revoking another user's session requires `RevokeUserSessions`, which only platform staff hold.
-func Revoke(c *client.Client, sessionUid string) (struct{}, error) {
+func Revoke(__c *__client.Client, sessionUid string) (struct{}, error) {
 	__path := "/user-session/{session_uid}"
-	__path = strings.Replace(__path, "{session_uid}", client.EncodePath(sessionUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{session_uid}", __client.EncodePath(sessionUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }

@@ -3,8 +3,8 @@
 package social_account
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	insight "integro_sdk/types/insight"
 	meta "integro_sdk/types/meta"
 	social_account "integro_sdk/types/social_account"
@@ -16,27 +16,27 @@ import (
 // success.
 //
 // Public — no authentication required; authorization comes from the one-shot state token issued by `socialAccount.connect`.
-func Callback(c *client.Client, query social_account.ConnectCallbackQuery) (struct{}, error) {
+func Callback(__c *__client.Client, __query social_account.ConnectCallbackQuery) (struct{}, error) {
 	__path := "/social-account/callback"
-	return client.Request[struct{}](c, "GET", __path, query, nil)
+	return __client.Request[struct{}](__c, "GET", __path, __query, nil)
 }
 // Connect Start the Meta OAuth flow for a group, returning the login dialog URL. The
 // callback stashes the granted pages (and linked Instagram accounts) for
 // review; `socialAccount.connectConfirm` is what registers the selection.
 //
 // Requires `ConnectSocialAccounts` in the named group.
-func Connect(c *client.Client, body social_account.ConnectSocialAccountRequest) (social_account.ConnectSocialAccountResponse, error) {
+func Connect(__c *__client.Client, __body social_account.ConnectSocialAccountRequest) (social_account.ConnectSocialAccountResponse, error) {
 	__path := "/social-account/connect"
-	return client.Request[social_account.ConnectSocialAccountResponse](c, "POST", __path, nil, body)
+	return __client.Request[social_account.ConnectSocialAccountResponse](__c, "POST", __path, nil, __body)
 }
 // ConnectConfirm Register the selected accounts from a stashed grant (one-shot). Pages and
 // instagram accounts are selected independently; unselected accounts stay in
 // the Meta grant but out of the hub.
 //
 // Requires `ConnectSocialAccounts` in the group the stashed grant targets.
-func ConnectConfirm(c *client.Client, body social_account.ConnectConfirmRequest) (social_account.ConnectSocialAccountsConnected, error) {
+func ConnectConfirm(__c *__client.Client, __body social_account.ConnectConfirmRequest) (social_account.ConnectSocialAccountsConnected, error) {
 	__path := "/social-account/connect/confirm"
-	return client.Request[social_account.ConnectSocialAccountsConnected](c, "POST", __path, nil, body)
+	return __client.Request[social_account.ConnectSocialAccountsConnected](__c, "POST", __path, nil, __body)
 }
 // ConnectReview Load a stashed Meta grant for the selection screen: every account it
 // covers, plus group accounts whose stored token died on the Meta side
@@ -44,9 +44,9 @@ func ConnectConfirm(c *client.Client, body social_account.ConnectConfirmRequest)
 // only confirm consumes the stash.
 //
 // Requires `ConnectSocialAccounts` in the group the stashed grant targets.
-func ConnectReview(c *client.Client, query social_account.ConnectReviewQuery) (social_account.ConnectReviewResponse, error) {
+func ConnectReview(__c *__client.Client, __query social_account.ConnectReviewQuery) (social_account.ConnectReviewResponse, error) {
 	__path := "/social-account/connect/review"
-	return client.Request[social_account.ConnectReviewResponse](c, "GET", __path, query, nil)
+	return __client.Request[social_account.ConnectReviewResponse](__c, "GET", __path, __query, nil)
 }
 // ConnectStevo Connect a Stevo instance (unofficial WhatsApp gateway) to a group: the hub
 // validates the server + apikey and registers the account. The webhook must
@@ -54,54 +54,54 @@ func ConnectReview(c *client.Client, query social_account.ConnectReviewQuery) (s
 // `stevo/qr` or `stevo/pair` sub-routes.
 //
 // Requires `ConnectSocialAccounts` in the named group.
-func ConnectStevo(c *client.Client, body social_account.ConnectStevoRequest) (social_account.ConnectStevoResponse, error) {
+func ConnectStevo(__c *__client.Client, __body social_account.ConnectStevoRequest) (social_account.ConnectStevoResponse, error) {
 	__path := "/social-account/stevo"
-	return client.Request[social_account.ConnectStevoResponse](c, "POST", __path, nil, body)
+	return __client.Request[social_account.ConnectStevoResponse](__c, "POST", __path, nil, __body)
 }
 // ConnectWhatsapp Connect a WhatsApp Business Account to a group by manual provisioning: the
 // hub discovers the WABA's phone numbers with the supplied permanent token,
 // subscribes webhooks, and registers one social account per number.
 //
 // Requires `ConnectSocialAccounts` in the named group.
-func ConnectWhatsapp(c *client.Client, body social_account.ConnectWhatsappRequest) (social_account.ConnectWhatsappResponse, error) {
+func ConnectWhatsapp(__c *__client.Client, __body social_account.ConnectWhatsappRequest) (social_account.ConnectWhatsappResponse, error) {
 	__path := "/social-account/whatsapp"
-	return client.Request[social_account.ConnectWhatsappResponse](c, "POST", __path, nil, body)
+	return __client.Request[social_account.ConnectWhatsappResponse](__c, "POST", __path, nil, __body)
 }
 // Count Count connected social accounts, optionally filtered by group.
 //
 // Requires `ViewSocialAccounts`; the count covers only accounts of groups where the caller holds it.
-func Count(c *client.Client, query social_account.ListSocialAccountsQuery) (uint64, error) {
+func Count(__c *__client.Client, __query social_account.ListSocialAccountsQuery) (uint64, error) {
 	__path := "/social-account/count"
-	return client.Request[uint64](c, "GET", __path, query, nil)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Delete Disconnect a social account, deleting its conversations, messages, and
 // posts with it. Native whatsapp accounts also unpair the phone
 // (best-effort, in the background).
 //
 // Requires `DeleteSocialAccounts` in the account's group.
-func Delete(c *client.Client, socialAccountUid string) (struct{}, error) {
+func Delete(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Get Fetch a single connected social account by uid, with the live session
 // status of its whatsapp session when applicable.
 //
 // Requires `ViewSocialAccounts` in the account's group.
-func Get(c *client.Client, socialAccountUid string) (social_account.SocialAccountResponse, error) {
+func Get(__c *__client.Client, socialAccountUid string) (social_account.SocialAccountResponse, error) {
 	__path := "/social-account/{social_account_uid}"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[social_account.SocialAccountResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[social_account.SocialAccountResponse](__c, "GET", __path, nil, nil)
 }
 // Insights Fetch platform metrics for a facebook page or instagram professional
 // account (the per-channel defaults, or a caller-supplied
 // `metrics`/`period`/`metric_type`). No whatsapp flavor exposes insights.
 //
 // Requires `ViewInsights` in the account's group.
-func Insights(c *client.Client, socialAccountUid string, query social_account.AccountInsightsQuery) ([]meta.Insight, error) {
+func Insights(__c *__client.Client, socialAccountUid string, __query social_account.AccountInsightsQuery) ([]meta.Insight, error) {
 	__path := "/social-account/{social_account_uid}/insight"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[[]meta.Insight](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[[]meta.Insight](__c, "GET", __path, __query, nil)
 }
 // InsightsHistory Day-by-day history of the account's collected metrics (reach, views,
 // follower counts, …), grouped per metric — the charting companion to the
@@ -110,70 +110,70 @@ func Insights(c *client.Client, socialAccountUid string, query social_account.Ac
 // refused here exactly as the live endpoint refuses it.
 //
 // Requires `ViewInsights` in the account's group.
-func InsightsHistory(c *client.Client, socialAccountUid string, query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
+func InsightsHistory(__c *__client.Client, socialAccountUid string, __query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
 	__path := "/social-account/{social_account_uid}/insight/history"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[[]insight.InsightSeries](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[[]insight.InsightSeries](__c, "GET", __path, __query, nil)
 }
 // List List connected social accounts, optionally filtered by group, each with the
 // live session status of its whatsapp session when applicable.
 //
 // Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.
-func List(c *client.Client, query social_account.ListSocialAccountsQuery) ([]social_account.SocialAccountResponse, error) {
+func List(__c *__client.Client, __query social_account.ListSocialAccountsQuery) ([]social_account.SocialAccountResponse, error) {
 	__path := "/social-account"
-	return client.Request[[]social_account.SocialAccountResponse](c, "GET", __path, query, nil)
+	return __client.Request[[]social_account.SocialAccountResponse](__c, "GET", __path, __query, nil)
 }
 // NativeDisconnect Close the account's session without unpairing the phone; conflicts if the
 // phone already unpaired.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func NativeDisconnect(c *client.Client, socialAccountUid string) (struct{}, error) {
+func NativeDisconnect(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/native/disconnect"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // NativeLogout Unpair the phone entirely (logout); re-pairing needs a new QR scan;
 // conflicts if the phone already unpaired.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func NativeLogout(c *client.Client, socialAccountUid string) (struct{}, error) {
+func NativeLogout(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/native/session"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // NativePairingStatus Poll a pairing's outcome; stop polling once `status` leaves `pairing`.
 //
 // Requires `ConnectSocialAccounts` in the group the pairing targets.
-func NativePairingStatus(c *client.Client, pairingHandle string) (social_account.NativePairingStatusResponse, error) {
+func NativePairingStatus(__c *__client.Client, pairingHandle string) (social_account.NativePairingStatusResponse, error) {
 	__path := "/social-account-pairing/{pairing_handle}/status"
-	__path = strings.Replace(__path, "{pairing_handle}", client.EncodePath(pairingHandle), 1)
-	return client.Request[social_account.NativePairingStatusResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{pairing_handle}", __client.EncodePath(pairingHandle), 1)
+	return __client.Request[social_account.NativePairingStatusResponse](__c, "GET", __path, nil, nil)
 }
 // NativeQr The current pairing QR to render (null until the first code arrives).
 //
 // Requires `ConnectSocialAccounts` in the group the pairing targets.
-func NativeQr(c *client.Client, pairingHandle string) (social_account.NativeQrResponse, error) {
+func NativeQr(__c *__client.Client, pairingHandle string) (social_account.NativeQrResponse, error) {
 	__path := "/social-account-pairing/{pairing_handle}/qr"
-	__path = strings.Replace(__path, "{pairing_handle}", client.EncodePath(pairingHandle), 1)
-	return client.Request[social_account.NativeQrResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{pairing_handle}", __client.EncodePath(pairingHandle), 1)
+	return __client.Request[social_account.NativeQrResponse](__c, "GET", __path, nil, nil)
 }
 // NativeReconnect Re-establish the account's session after a drop; conflicts if the phone
 // unpaired (re-pair with a new QR instead).
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func NativeReconnect(c *client.Client, socialAccountUid string) (struct{}, error) {
+func NativeReconnect(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/native/reconnect"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // NativeStatus Live session status of a native account; a phone-side unpair reports
 // `unpaired` instead of an error.
 //
 // Requires `ViewSocialAccounts` in the account's group.
-func NativeStatus(c *client.Client, socialAccountUid string) (social_account.SessionStatus, error) {
+func NativeStatus(__c *__client.Client, socialAccountUid string) (social_account.SessionStatus, error) {
 	__path := "/social-account/{social_account_uid}/native/status"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[social_account.SessionStatus](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[social_account.SessionStatus](__c, "GET", __path, nil, nil)
 }
 // RefreshProfile Re-read this account's name and picture from its platform now, rather than
 // waiting for the daily sweep. Answers `true` when something actually changed.
@@ -182,10 +182,10 @@ func NativeStatus(c *client.Client, socialAccountUid string) (social_account.Ses
 // what it is meant to survive.
 //
 // Requires `UpdateSocialAccounts` in the account's group.
-func RefreshProfile(c *client.Client, socialAccountUid string) (social_account.RefreshProfileResponse, error) {
+func RefreshProfile(__c *__client.Client, socialAccountUid string) (social_account.RefreshProfileResponse, error) {
 	__path := "/social-account/{social_account_uid}/profile/refresh"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[social_account.RefreshProfileResponse](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[social_account.RefreshProfileResponse](__c, "POST", __path, nil, nil)
 }
 // SetAlias Set or clear an operator's own label for a connected account, on any
 // channel. The account's `name` is the platform's and is refreshed from it —
@@ -193,73 +193,73 @@ func RefreshProfile(c *client.Client, socialAccountUid string) (social_account.R
 // the platform names alike. Clearing it leaves the platform name alone.
 //
 // Requires `UpdateSocialAccounts` in the account's group.
-func SetAlias(c *client.Client, socialAccountUid string, body social_account.SetSocialAccountAliasRequest) (struct{}, error) {
+func SetAlias(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountAliasRequest) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/alias"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
 // SetEnabled Enable or disable a connected social account; disabled accounts stop
 // ingesting webhooks and reject sends/publishes.
 //
 // Requires `UpdateSocialAccounts` in the account's group.
-func SetEnabled(c *client.Client, socialAccountUid string, body social_account.SetSocialAccountEnabledRequest) (struct{}, error) {
+func SetEnabled(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountEnabledRequest) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/enabled"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
 // StartNativePairing Start a native (whatsmeow) pairing; returns a handle to poll for the QR and
 // the paired account. The account row is created only when the scan succeeds.
 //
 // Requires `ConnectSocialAccounts` in the named group.
-func StartNativePairing(c *client.Client, body social_account.ConnectNativeRequest) (social_account.StartNativePairingResponse, error) {
+func StartNativePairing(__c *__client.Client, __body social_account.ConnectNativeRequest) (social_account.StartNativePairingResponse, error) {
 	__path := "/social-account/native"
-	return client.Request[social_account.StartNativePairingResponse](c, "POST", __path, nil, body)
+	return __client.Request[social_account.StartNativePairingResponse](__c, "POST", __path, nil, __body)
 }
 // StevoDisconnect Close the instance's session without unpairing the phone. Temporarily
 // disabled — always fails with 503.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func StevoDisconnect(c *client.Client, socialAccountUid string) (struct{}, error) {
+func StevoDisconnect(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/stevo/disconnect"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // StevoLogout Unpair the phone entirely (logout); re-pairing needs a new QR scan.
 // Temporarily disabled — always fails with 503.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func StevoLogout(c *client.Client, socialAccountUid string) (struct{}, error) {
+func StevoLogout(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/stevo/session"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // StevoPair Start QR-less pairing: returns the code the user types under "link with
 // phone number" on the device. Temporarily disabled — always fails with 503.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func StevoPair(c *client.Client, socialAccountUid string, body social_account.StevoPairRequest) (social_account.StevoPairResponse, error) {
+func StevoPair(__c *__client.Client, socialAccountUid string, __body social_account.StevoPairRequest) (social_account.StevoPairResponse, error) {
 	__path := "/social-account/{social_account_uid}/stevo/pair"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[social_account.StevoPairResponse](c, "POST", __path, nil, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[social_account.StevoPairResponse](__c, "POST", __path, nil, __body)
 }
 // StevoQr Fetch the instance's pairing QR code to render for the admin (valid while
 // the instance is connected but not yet logged in). Temporarily disabled —
 // always fails with 503.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func StevoQr(c *client.Client, socialAccountUid string) (social_account.StevoQrResponse, error) {
+func StevoQr(__c *__client.Client, socialAccountUid string) (social_account.StevoQrResponse, error) {
 	__path := "/social-account/{social_account_uid}/stevo/qr"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[social_account.StevoQrResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[social_account.StevoQrResponse](__c, "GET", __path, nil, nil)
 }
 // StevoReconnect Re-establish the instance's session after a drop. Temporarily disabled —
 // always fails with 503.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
-func StevoReconnect(c *client.Client, socialAccountUid string) (struct{}, error) {
+func StevoReconnect(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/stevo/reconnect"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // StevoStatus Live connection status of the instance (connected = session up; logged_in
 // = phone paired). Reading it also refreshes the account's stored name and
@@ -268,8 +268,8 @@ func StevoReconnect(c *client.Client, socialAccountUid string) (struct{}, error)
 // runs whenever the panel is open.
 //
 // Requires `ViewSocialAccounts` in the account's group.
-func StevoStatus(c *client.Client, socialAccountUid string) (social_account.StevoStatusResponse, error) {
+func StevoStatus(__c *__client.Client, socialAccountUid string) (social_account.StevoStatusResponse, error) {
 	__path := "/social-account/{social_account_uid}/stevo/status"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[social_account.StevoStatusResponse](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[social_account.StevoStatusResponse](__c, "GET", __path, nil, nil)
 }

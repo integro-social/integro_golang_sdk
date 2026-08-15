@@ -3,21 +3,21 @@
 package email
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	user_mfa "integro_sdk/types/user_mfa"
 )
 
 // Confirm Confirm bootstrap email-factor enrollment with a code and, on success, mint a user session token.
 //
 // Public — no authentication required; the request is gated solely by the ephemeral enrollment token in the body.
-func Confirm(c *client.Client, body user_mfa.UserMfaEnrollConfirmRequest) (user_mfa.UserMfaEnrollSessionResponse, error) {
+func Confirm(__c *__client.Client, __body user_mfa.UserMfaEnrollConfirmRequest) (user_mfa.UserMfaEnrollSessionResponse, error) {
 	__path := "/user-session/mfa/enroll/email/confirm"
-	return client.Request[user_mfa.UserMfaEnrollSessionResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_mfa.UserMfaEnrollSessionResponse](__c, "POST", __path, nil, __body)
 }
 // Start Begin email-factor enrollment during forced bootstrap, emailing a one-time code.
 //
 // Public — no authentication required; the request is gated solely by the ephemeral enrollment token in the body.
-func Start(c *client.Client, body user_mfa.UserMfaEnrollEmailStartRequest) (struct{}, error) {
+func Start(__c *__client.Client, __body user_mfa.UserMfaEnrollEmailStartRequest) (struct{}, error) {
 	__path := "/user-session/mfa/enroll/email/start"
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }

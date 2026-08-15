@@ -2,9 +2,7 @@
 
 package engagement
 
-type CreateCommentRequest struct {
-	// Platform post/media id — hub posts expose it as `external_id`, and any
-	// other post of the account works too.
-	ExternalPostId string `json:"external_post_id"`
-	Message string `json:"message"`
-}
+// Channel-tagged top-level comment: only facebook and instagram carry a
+// comment surface, so no other channel's shape deserializes. The `channel`
+// must match the account's.
+type CreateCommentRequest = interface{}

@@ -3,8 +3,8 @@
 package pacing
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	database "integro_sdk/types/database"
 	rate_limit "integro_sdk/types/rate_limit"
 )
@@ -15,40 +15,40 @@ import (
 // used. Without a rule (the default) the queue drains as fast as it can.
 //
 // Requires `CreateRateLimits`, which only platform staff hold.
-func Create(c *client.Client, body rate_limit.CreateChannelPacingRequest) (rate_limit.CreateChannelPacingResponse, error) {
+func Create(__c *__client.Client, __body rate_limit.CreateChannelPacingRequest) (rate_limit.CreateChannelPacingResponse, error) {
 	__path := "/rate-limit/pacing"
-	return client.Request[rate_limit.CreateChannelPacingResponse](c, "POST", __path, nil, body)
+	return __client.Request[rate_limit.CreateChannelPacingResponse](__c, "POST", __path, nil, __body)
 }
 // Delete Stop pacing a channel: its queue drains as fast as it can again. Messages
 // already queued still drain, without the delay.
 //
 // Requires `DeleteRateLimits`, which only platform staff hold.
-func Delete(c *client.Client, channel string) (struct{}, error) {
+func Delete(__c *__client.Client, channel string) (struct{}, error) {
 	__path := "/rate-limit/pacing/{channel}"
-	__path = strings.Replace(__path, "{channel}", client.EncodePath(channel), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{channel}", __client.EncodePath(channel), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Get Fetch a single channel pacing rule by uid.
 //
 // Requires `ViewRateLimits`, which only platform staff hold.
-func Get(c *client.Client, channel string) (database.ChannelPacingRule, error) {
+func Get(__c *__client.Client, channel string) (database.ChannelPacingRule, error) {
 	__path := "/rate-limit/pacing/{channel}"
-	__path = strings.Replace(__path, "{channel}", client.EncodePath(channel), 1)
-	return client.Request[database.ChannelPacingRule](c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{channel}", __client.EncodePath(channel), 1)
+	return __client.Request[database.ChannelPacingRule](__c, "GET", __path, nil, nil)
 }
 // List List every channel pacing rule. Channels with no rule are unpaced.
 //
 // Requires `ViewRateLimits`, which only platform staff hold.
-func List(c *client.Client) ([]database.ChannelPacingRule, error) {
+func List(__c *__client.Client) ([]database.ChannelPacingRule, error) {
 	__path := "/rate-limit/pacing"
-	return client.Request[[]database.ChannelPacingRule](c, "GET", __path, nil, nil)
+	return __client.Request[[]database.ChannelPacingRule](__c, "GET", __path, nil, nil)
 }
 // Update Update a channel's pacing. Takes effect on the next send; messages already
 // queued keep draining under the new timing.
 //
 // Requires `UpdateRateLimits`, which only platform staff hold.
-func Update(c *client.Client, channel string, body rate_limit.UpdateChannelPacingRequest) (struct{}, error) {
+func Update(__c *__client.Client, channel string, __body rate_limit.UpdateChannelPacingRequest) (struct{}, error) {
 	__path := "/rate-limit/pacing/{channel}"
-	__path = strings.Replace(__path, "{channel}", client.EncodePath(channel), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{channel}", __client.EncodePath(channel), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

@@ -2,6 +2,7 @@
 
 package post
 
-type UpdatePostRequest struct {
-	Message string `json:"message"`
-}
+// Channel-tagged edit payload — only facebook can edit a published post's
+// text on the platform (the Instagram API cannot edit captions), so no
+// other channel's shape deserializes. The `channel` must match the post's.
+type UpdatePostRequest = interface{}

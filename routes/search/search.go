@@ -3,7 +3,7 @@
 package search
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	database "integro_sdk/types/database"
 	search "integro_sdk/types/search"
 )
@@ -11,7 +11,7 @@ import (
 // Global Search groups and users in one ranked result set.
 //
 // Any authenticated user; the results cover the caller's own groups and the people sharing them, and every group and user for platform staff.
-func Global(c *client.Client, query search.SearchQuery) ([]database.SearchHit, error) {
+func Global(__c *__client.Client, __query search.SearchQuery) ([]database.SearchHit, error) {
 	__path := "/search"
-	return client.Request[[]database.SearchHit](c, "GET", __path, query, nil)
+	return __client.Request[[]database.SearchHit](__c, "GET", __path, __query, nil)
 }

@@ -3,21 +3,21 @@
 package totp
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	user_mfa "integro_sdk/types/user_mfa"
 )
 
 // Confirm Confirm bootstrap TOTP enrollment with a code and, on success, mint a user session token.
 //
 // Public — no authentication required; the request is gated solely by the ephemeral enrollment token in the body.
-func Confirm(c *client.Client, body user_mfa.UserMfaEnrollConfirmRequest) (user_mfa.UserMfaEnrollSessionResponse, error) {
+func Confirm(__c *__client.Client, __body user_mfa.UserMfaEnrollConfirmRequest) (user_mfa.UserMfaEnrollSessionResponse, error) {
 	__path := "/user-session/mfa/enroll/totp/confirm"
-	return client.Request[user_mfa.UserMfaEnrollSessionResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_mfa.UserMfaEnrollSessionResponse](__c, "POST", __path, nil, __body)
 }
 // Start Begin TOTP enrollment during forced bootstrap, returning the secret, otpauth URI, and QR code.
 //
 // Public — no authentication required; the request is gated solely by the ephemeral enrollment token in the body.
-func Start(c *client.Client, body user_mfa.UserMfaEnrollTotpStartRequest) (user_mfa.UserMfaEnrollTotpStartResponse, error) {
+func Start(__c *__client.Client, __body user_mfa.UserMfaEnrollTotpStartRequest) (user_mfa.UserMfaEnrollTotpStartResponse, error) {
 	__path := "/user-session/mfa/enroll/totp/start"
-	return client.Request[user_mfa.UserMfaEnrollTotpStartResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_mfa.UserMfaEnrollTotpStartResponse](__c, "POST", __path, nil, __body)
 }

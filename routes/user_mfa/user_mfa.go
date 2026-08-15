@@ -3,21 +3,21 @@
 package user_mfa
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	user_mfa "integro_sdk/types/user_mfa"
 )
 
 // Dispatch Dispatch a login MFA challenge for the chosen factor, emailing a one-time code for the email factor.
 //
 // Public — no authentication required; the request is gated solely by the ephemeral login MFA token in the body.
-func Dispatch(c *client.Client, body user_mfa.UserMfaDispatchRequest) (struct{}, error) {
+func Dispatch(__c *__client.Client, __body user_mfa.UserMfaDispatchRequest) (struct{}, error) {
 	__path := "/user-session/mfa/dispatch"
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
 // Verify Verify a login MFA code and, on success, mint a user session token.
 //
 // Public — no authentication required; the request is gated solely by the ephemeral login MFA token in the body.
-func Verify(c *client.Client, body user_mfa.UserMfaVerifyRequest) (user_mfa.UserMfaVerifyResponse, error) {
+func Verify(__c *__client.Client, __body user_mfa.UserMfaVerifyRequest) (user_mfa.UserMfaVerifyResponse, error) {
 	__path := "/user-session/mfa/verify"
-	return client.Request[user_mfa.UserMfaVerifyResponse](c, "POST", __path, nil, body)
+	return __client.Request[user_mfa.UserMfaVerifyResponse](__c, "POST", __path, nil, __body)
 }

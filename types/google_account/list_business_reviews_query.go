@@ -2,11 +2,15 @@
 
 package google_account
 
+import (
+	primitives "integro_sdk/types/primitives"
+)
+
 type ListBusinessReviewsQuery struct {
 	// The location's v4 name, `accounts/{id}/locations/{id}`.
 	Location string `json:"location"`
 	// Page size; capped at 50 (Google's limit), default 50.
-	PageSize *uint32 `json:"page_size"`
+	PageSize *primitives.Number1_50 `json:"page_size"`
 	PageToken *string `json:"page_token"`
 	// `update_time desc` (default), `rating` or `rating desc`.
 	OrderBy *string `json:"order_by"`

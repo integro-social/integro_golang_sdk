@@ -302,30 +302,48 @@ const (
 )
 
 // WsHandlers holds optional WebSocket lifecycle callbacks. OnMessage receives
-// each JSON text frame as raw bytes.
-type WsHandlers struct {
-	OnMessage func(json.RawMessage)
+// each JSON text frame decoded as R; OnBinary receives each binary frame
+// verbatim, since a binary frame carries no type to decode it into.
+type WsHandlers[R any] struct {
+	OnMessage func(R)
+	OnBinary  func([]byte)
 	OnOpen    func()
 	OnClose   func()
 	OnError   func(error)
 	OnStatus  func(WsStatus)
 }
 
-// WsConnection is a live socket with automatic reconnection.
-type WsConnection struct {
-	send   chan []byte
+// wsFrame is one frame queued for the socket's write half.
+type wsFrame struct {
+	kind int
+	data []byte
+}
+
+// WsConnection is a live socket with automatic reconnection. S is the frame type
+// the client sends.
+type WsConnection[S any] struct {
+	send   chan wsFrame
 	stop   chan struct{}
 	closed sync.Once
 }
 
 // Send JSON-serializes and sends one frame. Returns false if the socket is gone.
-func (w *WsConnection) Send(message any) bool {
+func (w *WsConnection[S]) Send(message S) bool {
 	raw, err := json.Marshal(message)
 	if err != nil {
 		return false
 	}
+	return w.enqueue(wsFrame{kind: websocket.TextMessage, data: raw})
+}
+
+// SendBinary sends one binary frame verbatim, under the same contract as Send.
+func (w *WsConnection[S]) SendBinary(data []byte) bool {
+	return w.enqueue(wsFrame{kind: websocket.BinaryMessage, data: data})
+}
+
+func (w *WsConnection[S]) enqueue(frame wsFrame) bool {
 	select {
-	case w.send <- raw:
+	case w.send <- frame:
 		return true
 	case <-w.stop:
 		return false
@@ -333,109 +351,24 @@ func (w *WsConnection) Send(message any) bool {
 }
 
 // Stop closes the socket and stops reconnecting.
-func (w *WsConnection) Stop() {
+func (w *WsConnection[S]) Stop() {
 	w.closed.Do(func() { close(w.stop) })
 }
 
-func (c *Client) ws(path string, handlers WsHandlers) *WsConnection {
-	conn := &WsConnection{send: make(chan []byte, 16), stop: make(chan struct{})}
-	wsURL := toWsScheme(c.host) + path
-	status := func(s WsStatus) {
-		if handlers.OnStatus != nil {
-			handlers.OnStatus(s)
-		}
+// buildWsURL is buildURL with the host's HTTP scheme mapped onto the WebSocket
+// one, so a Query[T] endpoint filters the same over a socket as over HTTP.
+func buildWsURL(c *Client, path string, query any) (string, error) {
+	u, err := c.buildURL(path, query)
+	if err != nil {
+		return "", err
 	}
-	go func() {
-		failures := 0
-		for {
-			select {
-			case <-conn.stop:
-				status(WsStopped)
-				return
-			default:
-			}
-			if failures == 0 {
-				status(WsConnecting)
-			} else {
-				status(WsReconnecting)
-			}
-			ws, _, err := websocket.DefaultDialer.Dial(wsURL, c.headerClone())
-			if err != nil {
-				if handlers.OnError != nil {
-					handlers.OnError(err)
-				}
-			} else {
-				failures = 0
-				status(WsOpen)
-				if handlers.OnOpen != nil {
-					handlers.OnOpen()
-				}
-				done := make(chan struct{})
-				go func() {
-					for {
-						_, msg, err := ws.ReadMessage()
-						if err != nil {
-							close(done)
-							return
-						}
-						if handlers.OnMessage != nil {
-							handlers.OnMessage(json.RawMessage(msg))
-						}
-					}
-				}()
-			writeLoop:
-				for {
-					select {
-					case <-conn.stop:
-						_ = ws.Close()
-						status(WsStopped)
-						return
-					case <-done:
-						break writeLoop
-					case out := <-conn.send:
-						if err := ws.WriteMessage(websocket.TextMessage, out); err != nil {
-							break writeLoop
-						}
-					}
-				}
-				_ = ws.Close()
-				if handlers.OnClose != nil {
-					handlers.OnClose()
-				}
-			}
-			select {
-			case <-conn.stop:
-				status(WsStopped)
-				return
-			default:
-			}
-			backoff := 500 * (1 << min(failures, 5))
-			if backoff > 15000 {
-				backoff = 15000
-			}
-			failures++
-			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(backoff)*time.Millisecond)
-			select {
-			case <-conn.stop:
-				cancel()
-				status(WsStopped)
-				return
-			case <-ctx.Done():
-				cancel()
-			}
-		}
-	}()
-	return conn
-}
-
-func toWsScheme(host string) string {
-	if rest, ok := strings.CutPrefix(host, "https://"); ok {
-		return "wss://" + rest
+	if rest, ok := strings.CutPrefix(u, "https://"); ok {
+		return "wss://" + rest, nil
 	}
-	if rest, ok := strings.CutPrefix(host, "http://"); ok {
-		return "ws://" + rest
+	if rest, ok := strings.CutPrefix(u, "http://"); ok {
+		return "ws://" + rest, nil
 	}
-	return host
+	return u, nil
 }
 
 func min(a, b int) int {
@@ -465,8 +398,132 @@ func Sse(c *Client, path string, query any, onEvent func(json.RawMessage)) error
 	return c.sse(path, query, onEvent)
 }
 
-func Ws(c *Client, path string, handlers WsHandlers) *WsConnection {
-	return c.ws(path, handlers)
+// Ws opens a bidirectional WebSocket. S is the frame type the client sends, R
+// the type the server pushes. The connection reconnects on non-manual close with
+// exponential backoff.
+func Ws[S, R any](c *Client, path string, query any, handlers WsHandlers[R]) *WsConnection[S] {
+	conn := &WsConnection[S]{send: make(chan wsFrame, 16), stop: make(chan struct{})}
+	status := func(s WsStatus) {
+		if handlers.OnStatus != nil {
+			handlers.OnStatus(s)
+		}
+	}
+	fail := func(err error) {
+		if handlers.OnError != nil {
+			handlers.OnError(err)
+		}
+	}
+	wsURL, err := buildWsURL(c, path, query)
+	if err != nil {
+		// The query cannot be serialized, so there is no socket to open. Hand
+		// back a stopped connection rather than one silently missing its filter.
+		fail(err)
+		conn.Stop()
+		status(WsStopped)
+		return conn
+	}
+	go func() {
+		failures := 0
+		for {
+			select {
+			case <-conn.stop:
+				status(WsStopped)
+				return
+			default:
+			}
+			if failures == 0 {
+				status(WsConnecting)
+			} else {
+				status(WsReconnecting)
+			}
+			ws, _, err := websocket.DefaultDialer.Dial(wsURL, c.headerClone())
+			if err != nil {
+				fail(err)
+			} else {
+				failures = 0
+				status(WsOpen)
+				if handlers.OnOpen != nil {
+					handlers.OnOpen()
+				}
+				done := make(chan struct{})
+				go func() {
+					for {
+						kind, msg, err := ws.ReadMessage()
+						if err != nil {
+							close(done)
+							return
+						}
+						switch kind {
+						case websocket.TextMessage:
+							if handlers.OnMessage != nil {
+								var decoded R
+								if err := json.Unmarshal(msg, &decoded); err != nil {
+									fail(&ApiError{Kind: "parse", Message: err.Error()})
+									continue
+								}
+								handlers.OnMessage(decoded)
+							}
+						case websocket.BinaryMessage:
+							if handlers.OnBinary != nil {
+								handlers.OnBinary(msg)
+							}
+						}
+					}
+				}()
+			writeLoop:
+				for {
+					select {
+					case <-conn.stop:
+						_ = ws.Close()
+						status(WsStopped)
+						return
+					case <-done:
+						break writeLoop
+					case out := <-conn.send:
+						if err := ws.WriteMessage(out.kind, out.data); err != nil {
+							break writeLoop
+						}
+					}
+				}
+				_ = ws.Close()
+				if handlers.OnClose != nil {
+					handlers.OnClose()
+				}
+			}
+			select {
+			case <-conn.stop:
+				status(WsStopped)
+				return
+			default:
+			}
+			// Frames queued while the socket was down assumed the session that
+			// just ended; the next one has none of that state, so they are
+			// dropped rather than replayed into it.
+		drain:
+			for {
+				select {
+				case <-conn.send:
+				default:
+					break drain
+				}
+			}
+			backoff := 500 * (1 << min(failures, 5))
+			if backoff > 15000 {
+				backoff = 15000
+			}
+			failures++
+			ctx, cancel := context.WithTimeout(context.Background(), time.Duration(backoff)*time.Millisecond)
+			select {
+			case <-conn.stop:
+				cancel()
+				status(WsStopped)
+				return
+			case <-ctx.Done():
+				cancel()
+			}
+		}
+	}()
+	return conn
 }
 
 func EncodePath(v string) string { return encodePath(v) }

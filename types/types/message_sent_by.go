@@ -12,4 +12,5 @@ const (
 	MessageSentByApiKey MessageSentBy = "api_key"
 	MessageSentByUser MessageSentBy = "user"
 	MessageSentByPlatform MessageSentBy = "platform"
+	MessageSentByGhl MessageSentBy = "ghl"
 )

@@ -3,7 +3,7 @@
 package google
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	google_account "integro_sdk/types/google_account"
 )
 
@@ -13,34 +13,34 @@ import (
 // success.
 //
 // Public — no authentication required; authorization comes from the one-shot state token issued by `google.connect`.
-func Callback(c *client.Client, query google_account.GoogleCallbackQuery) (struct{}, error) {
+func Callback(__c *__client.Client, __query google_account.GoogleCallbackQuery) (struct{}, error) {
 	__path := "/google/callback"
-	return client.Request[struct{}](c, "GET", __path, query, nil)
+	return __client.Request[struct{}](__c, "GET", __path, __query, nil)
 }
 // Connect Start the Google OAuth flow for a group with the chosen capabilities
 // (calendar, business profile), returning the consent dialog URL; the
 // granted account is connected to the group by the callback.
 //
 // Requires `ConnectSocialAccounts` in the named group.
-func Connect(c *client.Client, body google_account.ConnectGoogleRequest) (google_account.ConnectGoogleResponse, error) {
+func Connect(__c *__client.Client, __body google_account.ConnectGoogleRequest) (google_account.ConnectGoogleResponse, error) {
 	__path := "/google/connect"
-	return client.Request[google_account.ConnectGoogleResponse](c, "POST", __path, nil, body)
+	return __client.Request[google_account.ConnectGoogleResponse](__c, "POST", __path, nil, __body)
 }
 // ConnectConfirm Register (or refresh) the account from a stashed grant, enabling exactly
 // the chosen capabilities (one-shot). A granted-but-unchosen capability
 // stays out of the hub until a future connect enables it.
 //
 // Requires `ConnectSocialAccounts` in the group the stashed grant targets.
-func ConnectConfirm(c *client.Client, body google_account.GoogleConfirmRequest) (struct{}, error) {
+func ConnectConfirm(__c *__client.Client, __body google_account.GoogleConfirmRequest) (struct{}, error) {
 	__path := "/google/connect/confirm"
-	return client.Request[struct{}](c, "POST", __path, nil, body)
+	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
 // ConnectReview Load a stashed Google grant for the capability-selection screen: the
 // account's identity plus which capabilities the grant covers and which
 // were requested. Repeatable; only confirm consumes the stash.
 //
 // Requires `ConnectSocialAccounts` in the group the stashed grant targets.
-func ConnectReview(c *client.Client, query google_account.GoogleReviewQuery) (google_account.GoogleReview, error) {
+func ConnectReview(__c *__client.Client, __query google_account.GoogleReviewQuery) (google_account.GoogleReview, error) {
 	__path := "/google/connect/review"
-	return client.Request[google_account.GoogleReview](c, "GET", __path, query, nil)
+	return __client.Request[google_account.GoogleReview](__c, "GET", __path, __query, nil)
 }

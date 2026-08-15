@@ -3,16 +3,16 @@
 package admin
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	user_mfa "integro_sdk/types/user_mfa"
 )
 
 // Reset Remove all MFA factors for another user as an administrative recovery action.
 //
 // Requires `ResetUserMfa`, which only platform staff hold; resetting your own factors is forbidden.
-func Reset(c *client.Client, userUid string) (user_mfa.UserMfaAdminResetResponse, error) {
+func Reset(__c *__client.Client, userUid string) (user_mfa.UserMfaAdminResetResponse, error) {
 	__path := "/user/{user_uid}/mfa/reset"
-	__path = strings.Replace(__path, "{user_uid}", client.EncodePath(userUid), 1)
-	return client.Request[user_mfa.UserMfaAdminResetResponse](c, "POST", __path, nil, nil)
+	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
+	return __client.Request[user_mfa.UserMfaAdminResetResponse](__c, "POST", __path, nil, nil)
 }

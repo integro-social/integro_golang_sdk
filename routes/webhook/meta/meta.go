@@ -3,7 +3,7 @@
 package meta
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	message "integro_sdk/types/message"
 )
 
@@ -11,15 +11,15 @@ import (
 // messages (deduplicating redeliveries), and enqueues CRM fan-out events.
 //
 // Public — no authentication required; authorization comes from the `X-Hub-Signature-256` HMAC over the raw body.
-func Receive(c *client.Client) (struct{}, error) {
+func Receive(__c *__client.Client) (struct{}, error) {
 	__path := "/webhook/meta"
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // Verify Meta webhook verification handshake: echoes `hub.challenge` when
 // `hub.verify_token` matches the configured token.
 //
 // Public — no authentication required; authorization comes from the configured webhook verify token.
-func Verify(c *client.Client, query message.WebhookVerifyQuery) (string, error) {
+func Verify(__c *__client.Client, __query message.WebhookVerifyQuery) (string, error) {
 	__path := "/webhook/meta"
-	return client.Request[string](c, "GET", __path, query, nil)
+	return __client.Request[string](__c, "GET", __path, __query, nil)
 }

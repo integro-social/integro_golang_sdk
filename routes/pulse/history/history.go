@@ -3,7 +3,7 @@
 package history
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 	database "integro_sdk/types/database"
 	pulse "integro_sdk/types/pulse"
 )
@@ -11,28 +11,28 @@ import (
 // Disk List historical disk metrics within a time window.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func Disk(c *client.Client, query pulse.PulseHistoryQuery) ([]database.PulseDiskMetricRow, error) {
+func Disk(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]database.PulseDiskMetricRow, error) {
 	__path := "/pulse/history/disk"
-	return client.Request[[]database.PulseDiskMetricRow](c, "GET", __path, query, nil)
+	return __client.Request[[]database.PulseDiskMetricRow](__c, "GET", __path, __query, nil)
 }
 // Gpu List historical GPU metrics within a time window.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func Gpu(c *client.Client, query pulse.PulseHistoryQuery) ([]database.PulseGpuMetricRow, error) {
+func Gpu(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]database.PulseGpuMetricRow, error) {
 	__path := "/pulse/history/gpu"
-	return client.Request[[]database.PulseGpuMetricRow](c, "GET", __path, query, nil)
+	return __client.Request[[]database.PulseGpuMetricRow](__c, "GET", __path, __query, nil)
 }
 // Host List historical host metrics within a time window.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func Host(c *client.Client, query pulse.PulseHistoryQuery) ([]database.PulseHostMetricRow, error) {
+func Host(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]database.PulseHostMetricRow, error) {
 	__path := "/pulse/history/host"
-	return client.Request[[]database.PulseHostMetricRow](c, "GET", __path, query, nil)
+	return __client.Request[[]database.PulseHostMetricRow](__c, "GET", __path, __query, nil)
 }
 // Network List historical network metrics within a time window.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func Network(c *client.Client, query pulse.PulseHistoryQuery) ([]database.PulseNetworkMetricRow, error) {
+func Network(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]database.PulseNetworkMetricRow, error) {
 	__path := "/pulse/history/network"
-	return client.Request[[]database.PulseNetworkMetricRow](c, "GET", __path, query, nil)
+	return __client.Request[[]database.PulseNetworkMetricRow](__c, "GET", __path, __query, nil)
 }

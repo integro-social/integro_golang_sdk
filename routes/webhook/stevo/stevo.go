@@ -3,7 +3,7 @@
 package stevo
 
 import (
-	"integro_sdk"
+	__client "integro_sdk"
 )
 
 // Receive Stevo webhook receiver: authenticates the delivery by the echoed instance
@@ -11,7 +11,7 @@ import (
 // receipts/reactions/edits/revokes, and enqueues CRM fan-out events.
 //
 // Public — no authentication required; authorization comes from the instance token echoed inside the payload.
-func Receive(c *client.Client) (struct{}, error) {
+func Receive(__c *__client.Client) (struct{}, error) {
 	__path := "/webhook/stevo"
-	return client.Request[struct{}](c, "POST", __path, nil, nil)
+	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }

@@ -9,7 +9,9 @@ package validate
 import (
 	"regexp"
 	"strings"
+	"sync"
 	"unicode"
+	"unicode/utf8"
 )
 
 type Preprocess int
@@ -17,6 +19,7 @@ type Preprocess int
 const (
 	PreprocessNone Preprocess = iota
 	PreprocessTrim
+	PreprocessTrimLowercase
 )
 
 // Constraint is a tagged rule; only the fields relevant to Kind are set.
@@ -36,13 +39,15 @@ type ValidationSpec struct {
 // Violation carries the data its Message needs. The zero-value fields not
 // relevant to Kind are unused.
 type Violation struct {
-	Kind     string
-	Min      int
-	Max      int
-	Expected int
-	Actual   int
-	Bound    int64
-	Hint     string
+	Kind      string
+	Min       int
+	Max       int
+	Expected  int
+	Actual    int
+	Bound     int64
+	Hint      string
+	Position  int
+	Character string
 }
 
 // Message is the pt-BR problem text, mirroring the Rust/TS interpreters.
@@ -58,6 +63,10 @@ func (v Violation) Message() string {
 		return "muito curto (mínimo " + itoa(v.Min) + " dígitos)"
 	case "tooManyDigits":
 		return "muito longo (máximo " + itoa(v.Max) + " dígitos)"
+	case "tooFewItems":
+		return "poucos itens (mínimo " + itoa(v.Min) + ")"
+	case "tooManyItems":
+		return "muitos itens (máximo " + itoa(v.Max) + ")"
 	case "invalidFormat":
 		if v.Hint != "" {
 			return "formato inválido (" + v.Hint + ")"
@@ -65,8 +74,14 @@ func (v Violation) Message() string {
 		return "formato inválido"
 	case "invalidChars":
 		return "caracteres inválidos"
+	case "invalidCharAt":
+		return "caractere inválido na posição " + itoa(v.Position) + " ('" + v.Character + "')"
 	case "notDigits":
 		return "deve conter apenas dígitos"
+	case "notANumber":
+		return "deve ser um número"
+	case "notABoolean":
+		return "deve ser verdadeiro ou falso"
 	case "tooSmall":
 		return "muito pequeno (mínimo " + i64toa(v.Bound) + ")"
 	case "tooLarge":
@@ -103,26 +118,83 @@ func hasRune(s string, f func(rune) bool) bool {
 }
 
 func normalize(spec ValidationSpec, s string) string {
-	if spec.Preprocess == PreprocessTrim {
+	switch spec.Preprocess {
+	case PreprocessTrim:
 		return strings.TrimSpace(s)
+	case PreprocessTrimLowercase:
+		return strings.ToLower(strings.TrimSpace(s))
 	}
 	return s
+}
+
+// regexCache keeps one compiled pattern per source, so a check never pays a
+// compilation — the Rust and TypeScript interpreters both cache too. A pattern
+// that will not compile is a generator bug, so it panics at first use rather
+// than reporting every input as badly formatted.
+var regexCache sync.Map
+
+func regexFor(source string) *regexp.Regexp {
+	if cached, ok := regexCache.Load(source); ok {
+		return cached.(*regexp.Regexp)
+	}
+	re := regexp.MustCompile(source)
+	regexCache.Store(source, re)
+	return re
+}
+
+// asInt64 widens any Go integer kind to int64, so a numeric bound fires whatever
+// width the generated newtype carries. A uint64 past the int64 range saturates,
+// which keeps an upper bound violated instead of wrapping negative.
+func asInt64(value interface{}) (int64, bool) {
+	const maxInt64 = int64(^uint64(0) >> 1)
+	switch v := value.(type) {
+	case int:
+		return int64(v), true
+	case int8:
+		return int64(v), true
+	case int16:
+		return int64(v), true
+	case int32:
+		return int64(v), true
+	case int64:
+		return v, true
+	case uint:
+		if uint64(v) > uint64(maxInt64) {
+			return maxInt64, true
+		}
+		return int64(v), true
+	case uint8:
+		return int64(v), true
+	case uint16:
+		return int64(v), true
+	case uint32:
+		return int64(v), true
+	case uint64:
+		if v > uint64(maxInt64) {
+			return maxInt64, true
+		}
+		return int64(v), true
+	}
+	return 0, false
 }
 
 func checkOne(c Constraint, value interface{}) *Violation {
 	s, _ := value.(string)
 	switch c.Kind {
+	// Length bounds count characters (runes), not bytes: `len` would make "josé"
+	// five, while the message says "caracteres" and the Rust and TypeScript
+	// interpreters count scalar values / code points.
 	case "minLen":
-		if len(s) < c.Int {
+		if utf8.RuneCountInString(s) < c.Int {
 			return &Violation{Kind: "tooShort", Min: c.Int}
 		}
 	case "maxLen":
-		if len(s) > c.Int {
+		if utf8.RuneCountInString(s) > c.Int {
 			return &Violation{Kind: "tooLong", Max: c.Int}
 		}
 	case "exactLen":
-		if len(s) != c.Int {
-			return &Violation{Kind: "exactLength", Expected: c.Int, Actual: len(s)}
+		if actual := utf8.RuneCountInString(s); actual != c.Int {
+			return &Violation{Kind: "exactLength", Expected: c.Int, Actual: actual}
 		}
 	case "minDigits":
 		if digitCount(s) < c.Int {
@@ -143,8 +215,7 @@ func checkOne(c Constraint, value interface{}) *Violation {
 			}
 		}
 	case "regex":
-		re, err := regexp.Compile(c.Source)
-		if err != nil || !re.MatchString(s) {
+		if !regexFor(c.Source).MatchString(s) {
 			return &Violation{Kind: "invalidFormat", Hint: c.Hint}
 		}
 	case "requireUppercase":
@@ -164,11 +235,11 @@ func checkOne(c Constraint, value interface{}) *Violation {
 			return &Violation{Kind: "missingSymbol"}
 		}
 	case "min":
-		if n, ok := value.(int64); ok && n < c.Bound {
+		if n, ok := asInt64(value); ok && n < c.Bound {
 			return &Violation{Kind: "tooSmall", Bound: c.Bound}
 		}
 	case "max":
-		if n, ok := value.(int64); ok && n > c.Bound {
+		if n, ok := asInt64(value); ok && n > c.Bound {
 			return &Violation{Kind: "tooLarge", Bound: c.Bound}
 		}
 	}

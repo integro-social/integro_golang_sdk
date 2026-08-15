@@ -3,85 +3,85 @@
 package group
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	group "integro_sdk/types/group"
 )
 
 // Count Count groups.
 //
 // Requires `ViewGroups`; the count covers only groups where the caller holds it.
-func Count(c *client.Client) (uint64, error) {
+func Count(__c *__client.Client) (uint64, error) {
 	__path := "/group/count"
-	return client.Request[uint64](c, "GET", __path, nil, nil)
+	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }
 // Create Create a group, optionally with a logo image.
 //
 // Requires `CreateGroups`, which is only ever held platform-wide — no group exists yet to scope it to.
-func Create(c *client.Client, form *client.MultipartForm) (group.CreateGroupResponse, error) {
+func Create(__c *__client.Client, __form *__client.MultipartForm) (group.CreateGroupResponse, error) {
 	__path := "/group"
-	return client.RequestMultipart[group.CreateGroupResponse](c, "POST", __path, nil, form)
+	return __client.RequestMultipart[group.CreateGroupResponse](__c, "POST", __path, nil, __form)
 }
 // Delete Delete a group that has no API keys and no social accounts.
 //
 // Requires `DeleteGroups` in the group itself; fails while the group still has API keys or social accounts.
-func Delete(c *client.Client, groupUid string) (struct{}, error) {
+func Delete(__c *__client.Client, groupUid string) (struct{}, error) {
 	__path := "/group/{group_uid}"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // Get Fetch a single group, optionally enriched with per-group counts.
 //
 // Requires `ViewGroups` in the group itself; each count is filled only when the caller also holds that count's own permission there — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count` — and is `null` otherwise.
-func Get(c *client.Client, groupUid string, query group.GroupQuery) (group.GroupResponse, error) {
+func Get(__c *__client.Client, groupUid string, __query group.GroupQuery) (group.GroupResponse, error) {
 	__path := "/group/{group_uid}"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[group.GroupResponse](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[group.GroupResponse](__c, "GET", __path, __query, nil)
 }
 // GetLogo Serve a group's logo image.
 //
 // Requires `ViewGroups` in the group itself.
-func GetLogo(c *client.Client, groupUid string) ([]byte, error) {
+func GetLogo(__c *__client.Client, groupUid string) ([]byte, error) {
 	__path := "/group/{group_uid}/logo"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.RequestBytes(c, "GET", __path, nil, nil)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.RequestBytes(__c, "GET", __path, nil, nil)
 }
 // List List groups, optionally enriched with per-group counts.
 //
 // Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count` — `null` everywhere else.
-func List(c *client.Client, query group.GroupQuery) ([]group.GroupResponse, error) {
+func List(__c *__client.Client, __query group.GroupQuery) ([]group.GroupResponse, error) {
 	__path := "/group"
-	return client.Request[[]group.GroupResponse](c, "GET", __path, query, nil)
+	return __client.Request[[]group.GroupResponse](__c, "GET", __path, __query, nil)
 }
 // RemoveLogo Remove a group's logo image.
 //
 // Requires `UpdateGroups` in the group itself.
-func RemoveLogo(c *client.Client, groupUid string) (struct{}, error) {
+func RemoveLogo(__c *__client.Client, groupUid string) (struct{}, error) {
 	__path := "/group/{group_uid}/logo"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[struct{}](c, "DELETE", __path, nil, nil)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
 // SetEnabled Enable or disable a group; API keys bound to a disabled group are rejected.
 //
 // Requires `ToggleGroupEnabled` in the group itself.
-func SetEnabled(c *client.Client, groupUid string, body group.SetGroupEnabledRequest) (struct{}, error) {
+func SetEnabled(__c *__client.Client, groupUid string, __body group.SetGroupEnabledRequest) (struct{}, error) {
 	__path := "/group/{group_uid}/enabled"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
 // SetLogo Upload or replace a group's logo image.
 //
 // Requires `UpdateGroups` in the group itself.
-func SetLogo(c *client.Client, groupUid string, form *client.MultipartForm) (struct{}, error) {
+func SetLogo(__c *__client.Client, groupUid string, __form *__client.MultipartForm) (struct{}, error) {
 	__path := "/group/{group_uid}/logo"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.RequestMultipart[struct{}](c, "POST", __path, nil, form)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.RequestMultipart[struct{}](__c, "POST", __path, nil, __form)
 }
 // Update Update a group's mutable fields such as its name.
 //
 // Requires `UpdateGroups` in the group itself.
-func Update(c *client.Client, groupUid string, body group.UpdateGroupRequest) (struct{}, error) {
+func Update(__c *__client.Client, groupUid string, __body group.UpdateGroupRequest) (struct{}, error) {
 	__path := "/group/{group_uid}"
-	__path = strings.Replace(__path, "{group_uid}", client.EncodePath(groupUid), 1)
-	return client.Request[struct{}](c, "PUT", __path, nil, body)
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

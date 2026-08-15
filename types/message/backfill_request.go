@@ -2,14 +2,7 @@
 
 package message
 
-import (
-	primitives "integro_sdk/types/primitives"
-)
-
-type BackfillRequest struct {
-	SocialAccountUid primitives.Uid `json:"social_account_uid"`
-	// How many conversations to import (newest first); defaults to 50.
-	Conversations *primitives.Number1_200 `json:"conversations"`
-	// How many messages per conversation (newest first); defaults to 50.
-	MessagesPerConversation *primitives.Number1_100 `json:"messages_per_conversation"`
-}
+// Channel-tagged backfill request — Meta's Conversations API covers the
+// page-backed inboxes only, so no other channel's shape deserializes. The
+// `channel` must match the named account's.
+type BackfillRequest = interface{}

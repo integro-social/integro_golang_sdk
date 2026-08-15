@@ -3,8 +3,8 @@
 package calendar
 
 import (
-	"integro_sdk"
-	"strings"
+	__client "integro_sdk"
+	__strings "strings"
 	google "integro_sdk/types/google"
 	google_account "integro_sdk/types/google_account"
 )
@@ -12,63 +12,63 @@ import (
 // CreateEvent Create an event on a calendar the account can write to.
 //
 // Requires `ManageCalendars` in the account's group.
-func CreateEvent(c *client.Client, socialAccountUid string, query google_account.CalendarEventQuery, body google.EventInput) (google.Event, error) {
+func CreateEvent(__c *__client.Client, socialAccountUid string, __query google_account.CalendarEventQuery, __body google.EventInput) (google.Event, error) {
 	__path := "/calendar/{social_account_uid}/event"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[google.Event](c, "POST", __path, query, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[google.Event](__c, "POST", __path, __query, __body)
 }
 // DeleteEvent Delete (cancel) an event; deleting an already-cancelled event succeeds.
 //
 // Requires `ManageCalendars` in the account's group.
-func DeleteEvent(c *client.Client, socialAccountUid string, eventId string, query google_account.CalendarEventQuery) (struct{}, error) {
+func DeleteEvent(__c *__client.Client, socialAccountUid string, eventId string, __query google_account.CalendarEventQuery) (struct{}, error) {
 	__path := "/calendar/{social_account_uid}/event/{event_id}"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	__path = strings.Replace(__path, "{event_id}", client.EncodePath(eventId), 1)
-	return client.Request[struct{}](c, "DELETE", __path, query, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	__path = __strings.Replace(__path, "{event_id}", __client.EncodePath(eventId), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, __query, nil)
 }
 // FreeBusy Busy intervals for a set of calendars within a time range. A calendar
 // that cannot be read carries an `error` — never treat it as free.
 //
 // Requires `ViewCalendars` in the account's group.
-func FreeBusy(c *client.Client, socialAccountUid string, body google_account.FreeBusyRequest) (google_account.FreeBusyResponse, error) {
+func FreeBusy(__c *__client.Client, socialAccountUid string, __body google_account.FreeBusyRequest) (google_account.FreeBusyResponse, error) {
 	__path := "/calendar/{social_account_uid}/freebusy"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[google_account.FreeBusyResponse](c, "POST", __path, nil, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[google_account.FreeBusyResponse](__c, "POST", __path, nil, __body)
 }
 // GetEvent Get one event.
 //
 // Requires `ViewCalendars` in the account's group.
-func GetEvent(c *client.Client, socialAccountUid string, eventId string, query google_account.CalendarEventQuery) (google.Event, error) {
+func GetEvent(__c *__client.Client, socialAccountUid string, eventId string, __query google_account.CalendarEventQuery) (google.Event, error) {
 	__path := "/calendar/{social_account_uid}/event/{event_id}"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	__path = strings.Replace(__path, "{event_id}", client.EncodePath(eventId), 1)
-	return client.Request[google.Event](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	__path = __strings.Replace(__path, "{event_id}", __client.EncodePath(eventId), 1)
+	return __client.Request[google.Event](__c, "GET", __path, __query, nil)
 }
 // ListCalendars List the calendars the account can see — for pickers. Follow
 // `next_page_token` for more.
 //
 // Requires `ViewCalendars` in the account's group.
-func ListCalendars(c *client.Client, socialAccountUid string, query google_account.ListCalendarsQuery) (google.CalendarPage, error) {
+func ListCalendars(__c *__client.Client, socialAccountUid string, __query google_account.ListCalendarsQuery) (google.CalendarPage, error) {
 	__path := "/calendar/{social_account_uid}/calendar"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[google.CalendarPage](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[google.CalendarPage](__c, "GET", __path, __query, nil)
 }
 // ListEvents List a calendar's events within a time range, expanded to single
 // instances and ordered by start. Follow `next_page_token` for more.
 //
 // Requires `ViewCalendars` in the account's group.
-func ListEvents(c *client.Client, socialAccountUid string, query google_account.ListCalendarEventsQuery) (google.EventPage, error) {
+func ListEvents(__c *__client.Client, socialAccountUid string, __query google_account.ListCalendarEventsQuery) (google.EventPage, error) {
 	__path := "/calendar/{social_account_uid}/event"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	return client.Request[google.EventPage](c, "GET", __path, query, nil)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[google.EventPage](__c, "GET", __path, __query, nil)
 }
 // UpdateEvent Patch an event: only the fields sent are changed — an omitted field is
 // kept, never cleared.
 //
 // Requires `ManageCalendars` in the account's group.
-func UpdateEvent(c *client.Client, socialAccountUid string, eventId string, query google_account.CalendarEventQuery, body google.EventInput) (google.Event, error) {
+func UpdateEvent(__c *__client.Client, socialAccountUid string, eventId string, __query google_account.CalendarEventQuery, __body google.EventInput) (google.Event, error) {
 	__path := "/calendar/{social_account_uid}/event/{event_id}"
-	__path = strings.Replace(__path, "{social_account_uid}", client.EncodePath(socialAccountUid), 1)
-	__path = strings.Replace(__path, "{event_id}", client.EncodePath(eventId), 1)
-	return client.Request[google.Event](c, "PATCH", __path, query, body)
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	__path = __strings.Replace(__path, "{event_id}", __client.EncodePath(eventId), 1)
+	return __client.Request[google.Event](__c, "PATCH", __path, __query, __body)
 }
