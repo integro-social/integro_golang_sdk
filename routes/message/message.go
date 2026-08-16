@@ -73,8 +73,30 @@ func Edit(__c *__client.Client, conversationUid string, messageUid string, __bod
 	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
 	return __client.Request[database.Message](__c, "PUT", __path, nil, __body)
 }
+// Forward Forward a message into other conversations. Each target re-sends the
+// stored content as an ordinary queued message: forwarding is the hub's own,
+// so no channel's native forward flag is set and nothing marks the copy as
+// forwarded — a target reads it as a message the account just wrote.
+//
+// The content is re-shaped per target channel, so a forward crosses channels
+// (a whatsapp photo into an instagram thread). Targets are answered one by
+// one and independently: a target the caller cannot send in, whose channel
+// cannot express the content, or whose 24h window has lapsed comes back
+// `rejected` while the rest still queue.
+//
+// Requires `ViewMessages` in the source conversation's group, and
+// `SendMessages` in each target's — a target failing that is `rejected`, not
+// an error.
+func Forward(__c *__client.Client, conversationUid string, messageUid string, __body message.ForwardMessageRequest) ([]message.ForwardOutcome, error) {
+	__path := "/conversation/{conversation_uid}/message/{message_uid}/forward"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[[]message.ForwardOutcome](__c, "POST", __path, nil, __body)
+}
 // List Poll the unified message feed across channels: messages with `id` greater
 // than `since_id`, oldest first, optionally filtered by group or account.
+// `uids` instead returns exactly those messages (≤200, order unspecified),
+// for resolving rows the caller already holds by uid.
 //
 // Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
 func List(__c *__client.Client, __query message.ListMessagesQuery) ([]message.MessageWithContext, error) {

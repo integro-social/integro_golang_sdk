@@ -11,5 +11,9 @@ type ListMessagesQuery struct {
 	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
 	// Poll cursor: only messages with `id` strictly greater are returned.
 	SinceId uint64 `json:"since_id"`
+	// Exact messages to return (≤200), for resolving rows a client already
+	// holds by uid — the reply targets a loaded page quotes but does not
+	// contain. Mutually exclusive with the poll cursor.
+	Uids *[]primitives.Uid `json:"uids"`
 	Limit *primitives.Number1_500 `json:"limit"`
 }
