@@ -13,7 +13,7 @@ type Issue struct {
 	Category types.IssueCategory `json:"category"`
 	Severity types.IssueSeverity `json:"severity"`
 	Status types.IssueStatus `json:"status"`
-	Description primitives.Text8000 `json:"description"`
+	Description primitives.Text0_8000 `json:"description"`
 	Details types.IssueDetails `json:"details"`
 	Screenshots types.IssueScreenshots `json:"screenshots"`
 	ReportedBy primitives.Uid `json:"reported_by"`

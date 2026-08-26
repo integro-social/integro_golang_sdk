@@ -59,6 +59,10 @@ func (v Violation) Message() string {
 		return "muito longo (máximo " + itoa(v.Max) + " caracteres)"
 	case "exactLength":
 		return "tamanho inválido (esperado " + itoa(v.Expected) + ", recebido " + itoa(v.Actual) + ")"
+	case "tooFewBytes":
+		return "muito curto (mínimo " + itoa(v.Min) + " bytes)"
+	case "tooManyBytes":
+		return "muito longo (máximo " + itoa(v.Max) + " bytes)"
 	case "tooFewDigits":
 		return "muito curto (mínimo " + itoa(v.Min) + " dígitos)"
 	case "tooManyDigits":
@@ -195,6 +199,16 @@ func checkOne(c Constraint, value interface{}) *Violation {
 	case "exactLen":
 		if actual := utf8.RuneCountInString(s); actual != c.Int {
 			return &Violation{Kind: "exactLength", Expected: c.Int, Actual: actual}
+		}
+	// Byte bounds are the other unit, for a value that has to fit a fixed-width
+	// slot rather than read at a length — so `len`, the one place it is right.
+	case "minBytes":
+		if len(s) < c.Int {
+			return &Violation{Kind: "tooFewBytes", Min: c.Int}
+		}
+	case "maxBytes":
+		if len(s) > c.Int {
+			return &Violation{Kind: "tooManyBytes", Max: c.Int}
 		}
 	case "minDigits":
 		if digitCount(s) < c.Int {

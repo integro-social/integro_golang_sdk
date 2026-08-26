@@ -10,9 +10,11 @@ import (
 )
 
 // Accept Accept an invitation by its token, creating the user account with the chosen
-// password and, in the same transaction, the membership the invitation carries.
+// name and password and, in the same transaction, the membership the
+// invitation carries and a confirmed email MFA factor. Answers with the
+// session the account is signed in under.
 //
-// Public — no authentication required; authorization comes from the invitation token in the request body.
+// Public — no authentication required; authorization comes from the invitation token in the request body, whose delivery to the address is what the email factor would otherwise re-prove.
 func Accept(__c *__client.Client, __body user_invite.UserInviteAcceptRequest) (user_invite.UserInviteAcceptResponse, error) {
 	__path := "/user-invite/accept"
 	return __client.Request[user_invite.UserInviteAcceptResponse](__c, "POST", __path, nil, __body)
@@ -24,6 +26,21 @@ func Count(__c *__client.Client) (uint64, error) {
 	__path := "/user-invite/count"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }
+// Detail The group an invitation offers, with the role and who sent it.
+//
+// Authenticated, and only for the account the invitation was addressed to: a caller signed in as anybody else reads the token as not found. A POST because the token is a credential, not because it writes.
+func Detail(__c *__client.Client, __body user_invite.UserInviteTokenRequest) (user_invite.UserInviteDetailResponse, error) {
+	__path := "/user-invite/detail"
+	return __client.Request[user_invite.UserInviteDetailResponse](__c, "POST", __path, nil, __body)
+}
+// Join Accept an invitation as the account it was addressed to, joining the group
+// it offers with the role it carries.
+//
+// Authenticated, and only for the account the invitation was addressed to; no permission is asked for, because the invitation is the grant.
+func Join(__c *__client.Client, __body user_invite.UserInviteTokenRequest) (user_invite.UserInviteJoinResponse, error) {
+	__path := "/user-invite/join"
+	return __client.Request[user_invite.UserInviteJoinResponse](__c, "POST", __path, nil, __body)
+}
 // List List pending (unaccepted) user invitations.
 //
 // Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff.
@@ -31,27 +48,44 @@ func List(__c *__client.Client) ([]database.UserInvite, error) {
 	__path := "/user-invite"
 	return __client.Request[[]database.UserInvite](__c, "GET", __path, nil, nil)
 }
-// Resend Refresh a pending user invitation's expiry and re-send its email.
+// Logo Serve the invited group's logo image.
 //
-// Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `OperatePlatformScope` for an invitation naming no group.
+// Authenticated, and only for the account the invitation was addressed to; the invitation stands in for the `ViewGroups` the recipient does not hold yet. A POST because the token is a credential, not because it writes.
+func Logo(__c *__client.Client, __body user_invite.UserInviteTokenRequest) ([]byte, error) {
+	__path := "/user-invite/logo"
+	return __client.RequestBytes(__c, "POST", __path, nil, __body)
+}
+// Preview Resolve an invitation link to the address it was sent to and whether
+// accepting it means creating an account.
+//
+// Public — no authentication required; the token in the body is the authorization, and the address it answers with is the one the token was mailed to. A POST because the token is a credential, not because it writes. Says nothing about the group: that is `userInvite.detail`.
+func Preview(__c *__client.Client, __body user_invite.UserInviteTokenRequest) (user_invite.UserInvitePreviewResponse, error) {
+	__path := "/user-invite/preview"
+	return __client.Request[user_invite.UserInvitePreviewResponse](__c, "POST", __path, nil, __body)
+}
+// Resend Refresh a pending user invitation's expiry to 30 days from now and re-send its email, reusing the original link. An expired or already-accepted invitation is refused — issue a new one instead.
+//
+// Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `InviteUsers` at platform scope for an invitation naming no group.
 func Resend(__c *__client.Client, inviteUid string) (struct{}, error) {
 	__path := "/user-invite/{invite_uid}/resend"
 	__path = __strings.Replace(__path, "{invite_uid}", __client.EncodePath(inviteUid), 1)
 	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
-// Revoke Revoke a pending user invitation so its registration link can no longer be used.
+// Revoke Revoke a pending user invitation so its link can no longer be used.
 //
-// Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `OperatePlatformScope` for an invitation naming no group.
+// Requires `InviteUsers` in the invitation's group plus a role there that may hand out the invited one, or `InviteUsers` at platform scope for an invitation naming no group.
 func Revoke(__c *__client.Client, inviteUid string) (struct{}, error) {
 	__path := "/user-invite/{invite_uid}"
 	__path = __strings.Replace(__path, "{invite_uid}", __client.EncodePath(inviteUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// Send Send an invitation that lets the recipient register a user account, joining
-// the named group with the named role once accepted. Naming neither invites to
-// the platform alone; naming only one of the two is refused.
+// Send Send an invitation to an email address; the link it mails is good for 30 days. An address with no account yet is
+// invited to register, joining the named group with the named role once it
+// accepts; an address that already signs in is invited to the group alone.
+// Naming neither group nor role invites to the platform, which only an address
+// without an account can accept; naming only one of the two is refused.
 //
-// Requires `InviteUsers` in the named group plus a role there that may hand out the named one, or `OperatePlatformScope` when no group is named.
+// Requires `InviteUsers` in the named group plus a role there that may hand out the named one, or `InviteUsers` at platform scope when no group is named.
 func Send(__c *__client.Client, __body user_invite.UserInviteSendRequest) (user_invite.UserInviteSendResponse, error) {
 	__path := "/user-invite"
 	return __client.Request[user_invite.UserInviteSendResponse](__c, "POST", __path, nil, __body)

@@ -9,7 +9,7 @@ import (
 
 type Name struct{ v string }
 
-var nameSpec = validate.ValidationSpec{Preprocess: validate.PreprocessTrim, Constraints: []validate.Constraint{{Kind: "minLen", Int: 3}, {Kind: "maxLen", Int: 100}, {Kind: "noControlChars"}}}
+var nameSpec = validate.ValidationSpec{Preprocess: validate.PreprocessTrim, Constraints: []validate.Constraint{{Kind: "minLen", Int: 2}, {Kind: "maxLen", Int: 100}, {Kind: "noControlChars"}}}
 
 // ParseName is the only producer: validates input, returns the value or the first violation.
 func ParseName(value string) (Name, *validate.Violation) {

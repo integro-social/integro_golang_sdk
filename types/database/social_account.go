@@ -26,7 +26,7 @@ type SocialAccount struct {
 	// An operator's own label for the account, when they set one. Independent
 	// of [`Self::name`]: renaming the account on the platform does not disturb
 	// it, and clearing it falls back to the platform name.
-	Alias *string `json:"alias"`
+	Alias *primitives.Name `json:"alias"`
 	// The account's own picture, as the platform serves it.
 	AvatarUrl *string `json:"avatar_url"`
 	// When [`Self::name`] and [`Self::avatar_url`] were last read from the

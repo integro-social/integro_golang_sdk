@@ -28,5 +28,7 @@ const (
 	AuditResourceUserGroup AuditResource = "user_group"
 	AuditResourceCall AuditResource = "call"
 	AuditResourceGhlLocation AuditResource = "ghl_location"
+	AuditResourceContactImport AuditResource = "contact_import"
+	AuditResourceCampaign AuditResource = "campaign"
 	AuditResourceUnknown AuditResource = "unknown"
 )

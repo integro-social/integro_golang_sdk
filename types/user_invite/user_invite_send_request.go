@@ -10,9 +10,11 @@ import (
 // `group_uid` and `role` are a tied pair: both name the membership accepting
 // the invitation grants, both absent invites to the platform alone. Half a
 // pair is refused.
+//
+// No name: the sender is naming a mailbox, not a person, and the account's
+// name is chosen by whoever answers it.
 type UserInviteSendRequest struct {
 	Email primitives.Email `json:"email"`
-	Name primitives.Name `json:"name"`
 	GroupUid *primitives.Uid `json:"group_uid"`
 	Role *types.MembershipRole `json:"role"`
 }

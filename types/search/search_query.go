@@ -7,6 +7,6 @@ import (
 )
 
 type SearchQuery struct {
-	Q primitives.Text8000 `json:"q"`
+	Q primitives.Text0_8000 `json:"q"`
 	Limit *primitives.Number1_50 `json:"limit"`
 }

@@ -17,7 +17,7 @@ func Count(__c *__client.Client) (uint64, error) {
 }
 // Create Create a group, optionally with a logo image.
 //
-// Requires `CreateGroups`, which is only ever held platform-wide — no group exists yet to scope it to.
+// Requires `CreateGroups`, which is only ever held platform-wide — no group exists yet to scope it to. Rejected — when a logo is attached — when the caller trips the per-user file-upload throttle.
 func Create(__c *__client.Client, __form *__client.MultipartForm) (group.CreateGroupResponse, error) {
 	__path := "/group"
 	return __client.RequestMultipart[group.CreateGroupResponse](__c, "POST", __path, nil, __form)
@@ -71,7 +71,7 @@ func SetEnabled(__c *__client.Client, groupUid string, __body group.SetGroupEnab
 }
 // SetLogo Upload or replace a group's logo image.
 //
-// Requires `UpdateGroups` in the group itself.
+// Requires `UpdateGroups` in the group itself, and is rejected when the caller trips the per-user file-upload throttle.
 func SetLogo(__c *__client.Client, groupUid string, __form *__client.MultipartForm) (struct{}, error) {
 	__path := "/group/{group_uid}/logo"
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)

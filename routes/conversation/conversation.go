@@ -23,6 +23,16 @@ func Action(__c *__client.Client, conversationUid string, __body message.Convers
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
+// Alias Set or clear the operator's label for the contact. Independent of the
+// platform-fetched participant name, which profile refreshes keep updating;
+// clearing the alias falls back to it.
+//
+// Requires `SendMessages` in the conversation's group.
+func Alias(__c *__client.Client, conversationUid string, __body message.SetConversationAliasRequest) (database.Conversation, error) {
+	__path := "/conversation/{conversation_uid}/alias"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[database.Conversation](__c, "PUT", __path, nil, __body)
+}
 // Calls List a conversation's calls, newest first; `before_id` pages older history.
 //
 // Requires `ViewMessages` in the conversation's group.
@@ -74,6 +84,15 @@ func List(__c *__client.Client, __query message.ListConversationsQuery) ([]datab
 	__path := "/conversation"
 	return __client.Request[[]database.Conversation](__c, "GET", __path, __query, nil)
 }
+// MessageCount How many messages the conversation holds, narrowed by `kinds` like the
+// list — what a media gallery shows as its total.
+//
+// Requires `ViewMessages` in the conversation's group.
+func MessageCount(__c *__client.Client, conversationUid string, __query message.ConversationMessageCountQuery) (uint64, error) {
+	__path := "/conversation/{conversation_uid}/message/count"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
+}
 // Messages List a conversation's messages, newest first; `before_id` pages older
 // history.
 //
@@ -92,4 +111,10 @@ func Read(__c *__client.Client, conversationUid string) (database.Conversation, 
 	__path := "/conversation/{conversation_uid}/read"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[database.Conversation](__c, "PUT", __path, nil, nil)
+}
+// UnreadCount How many conversations hold unread messages, across every group where the
+// caller holds `ViewMessages` — the inbox badge.
+func UnreadCount(__c *__client.Client) (uint64, error) {
+	__path := "/conversation/unread"
+	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }

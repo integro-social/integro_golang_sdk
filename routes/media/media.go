@@ -20,11 +20,7 @@ func Delete(__c *__client.Client, mediaUid string) (struct{}, error) {
 	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// Serve Serve a hub-hosted media file. The uid may carry a cosmetic extension
-// suffix (`{uid}.m4a`) — generated URLs include one as a format signal for
-// external fetchers; it is stripped before lookup.
-//
-// Public — no authentication required; the unguessable uid is the capability.
+// Serve Public — no authentication required; the unguessable uid is the capability.
 func Serve(__c *__client.Client, mediaUid string) ([]byte, error) {
 	__path := "/media/{media_uid}"
 	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
@@ -33,7 +29,7 @@ func Serve(__c *__client.Client, mediaUid string) ([]byte, error) {
 // Upload Upload a media file to the hub; the returned public URL can be used in any
 // message or post payload (Meta fetches it from the hub).
 //
-// Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it.
+// Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
 func Upload(__c *__client.Client, __form *__client.MultipartForm) (media.UploadMediaResponse, error) {
 	__path := "/media"
 	return __client.RequestMultipart[media.UploadMediaResponse](__c, "POST", __path, nil, __form)

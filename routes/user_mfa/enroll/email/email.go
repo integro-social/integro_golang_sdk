@@ -16,7 +16,7 @@ func Confirm(__c *__client.Client, __body user_mfa.UserMfaEnrollConfirmRequest) 
 }
 // Start Begin email-factor enrollment during forced bootstrap, emailing a one-time code.
 //
-// Public — no authentication required; the request is gated solely by the ephemeral enrollment token in the body.
+// Public — no authentication required; the request is gated by the ephemeral enrollment token in the body and by the per-IP and per-token code-dispatch throttle.
 func Start(__c *__client.Client, __body user_mfa.UserMfaEnrollEmailStartRequest) (struct{}, error) {
 	__path := "/user-session/mfa/enroll/email/start"
 	return __client.Request[struct{}](__c, "POST", __path, nil, __body)

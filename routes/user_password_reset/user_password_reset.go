@@ -16,7 +16,7 @@ func Confirm(__c *__client.Client, __body user_password_reset.UserPasswordResetC
 }
 // Request Issue a password-reset token and email a reset link to the address if it maps to an enabled account.
 //
-// Public — no authentication required.
+// Public — no authentication required. Rejected when the caller trips either the per-IP or the per-email password-reset throttle.
 func Request(__c *__client.Client, __body user_password_reset.UserPasswordResetStartRequest) (struct{}, error) {
 	__path := "/user-password-reset/request"
 	return __client.Request[struct{}](__c, "POST", __path, nil, __body)

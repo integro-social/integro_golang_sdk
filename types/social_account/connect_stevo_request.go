@@ -15,5 +15,5 @@ type ConnectStevoRequest struct {
 	ApiKey string `json:"api_key"`
 	// An optional label of your own. The account's `name` always comes from the
 	// paired profile — this is the field you control.
-	Name *string `json:"name"`
+	Name *primitives.Name `json:"name"`
 }

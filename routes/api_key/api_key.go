@@ -17,18 +17,20 @@ func Count(__c *__client.Client, __query api_key.ListApiKeysQuery) (uint64, erro
 	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Create Create an API key bound to a group or to the platform. A platform key (no
-// group) automatically carries `operate_platform_scope`; a group-bound key may
-// never carry it. Every granted permission must be one the caller itself holds
-// in the key's scope, and must bring along whatever that permission requires.
+// group) is the one that stands at platform scope — that comes from the
+// binding itself, so nothing is added to the grant set — and a group-bound key
+// may therefore carry no platform-scoped permission at all. Every granted
+// permission must be one the caller itself holds in the key's scope, and must
+// bring along whatever that permission requires.
 //
-// Requires `CreateApiKeys` and `GrantApiKeyPermissions` in the named group, or `OperatePlatformScope` plus both when no group is named.
+// Requires `CreateApiKeys` and `GrantApiKeyPermissions` in the named group, or both at platform scope when no group is named; every permission granted to the key must also be one the caller holds where the key lives.
 func Create(__c *__client.Client, __body api_key.CreateApiKeyRequest) (api_key.CreateApiKeyResponse, error) {
 	__path := "/api-key"
 	return __client.Request[api_key.CreateApiKeyResponse](__c, "POST", __path, nil, __body)
 }
 // Get Fetch a single API key by uid.
 //
-// Requires `ViewApiKeys` in the key's group, or `OperatePlatformScope` plus `ViewApiKeys` for a platform key.
+// Requires `ViewApiKeys` in the key's group, or `ViewApiKeys` at platform scope for a platform key.
 func Get(__c *__client.Client, apiKeyUid string) (database.ApiKey, error) {
 	__path := "/api-key/{api_key_uid}"
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
@@ -43,7 +45,7 @@ func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]database.Ap
 }
 // Revoke Revoke an API key, permanently disabling it.
 //
-// Requires `RevokeApiKeys` in the key's group, or `OperatePlatformScope` plus `RevokeApiKeys` for a platform key.
+// Requires `RevokeApiKeys` in the key's group, or `RevokeApiKeys` at platform scope for a platform key.
 func Revoke(__c *__client.Client, apiKeyUid string) (struct{}, error) {
 	__path := "/api-key/{api_key_uid}/revoke"
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
@@ -51,7 +53,7 @@ func Revoke(__c *__client.Client, apiKeyUid string) (struct{}, error) {
 }
 // Rotate Rotate an API key's secret, returning the new key.
 //
-// Requires `RotateApiKeys` in the key's group, or `OperatePlatformScope` plus `RotateApiKeys` for a platform key.
+// Requires `RotateApiKeys` in the key's group, or `RotateApiKeys` at platform scope for a platform key.
 func Rotate(__c *__client.Client, apiKeyUid string) (api_key.RotateApiKeyResponse, error) {
 	__path := "/api-key/{api_key_uid}/rotate"
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
@@ -59,18 +61,18 @@ func Rotate(__c *__client.Client, apiKeyUid string) (api_key.RotateApiKeyRespons
 }
 // Update Update an API key's name or enabled flag.
 //
-// Requires `UpdateApiKeys` in the key's group, or `OperatePlatformScope` plus `UpdateApiKeys` for a platform key.
+// Requires `UpdateApiKeys` in the key's group, or `UpdateApiKeys` at platform scope for a platform key.
 func Update(__c *__client.Client, apiKeyUid string, __body api_key.UpdateApiKeyRequest) (struct{}, error) {
 	__path := "/api-key/{api_key_uid}"
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
-// UpdatePermissions Replace the granted permission set of an API key. `operate_platform_scope`
-// stays bound to the key's group binding and cannot be granted to a group key;
-// every other granted permission must be one the caller itself holds in the
+// UpdatePermissions Replace the granted permission set of an API key. A platform-scoped
+// permission is refused on a group-bound key, which never stands at platform
+// scope; every granted permission must be one the caller itself holds in the
 // key's scope, and must bring along whatever that permission requires.
 //
-// Requires `GrantApiKeyPermissions` in the key's group, or `OperatePlatformScope` plus `GrantApiKeyPermissions` for a platform key.
+// Requires `GrantApiKeyPermissions` in the key's group, or at platform scope for a platform key; every permission granted must also be one the caller holds where the key lives.
 func UpdatePermissions(__c *__client.Client, apiKeyUid string, __body api_key.UpdateApiKeyPermissionsRequest) (struct{}, error) {
 	__path := "/api-key/{api_key_uid}/permission"
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)

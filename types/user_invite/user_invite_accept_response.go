@@ -6,6 +6,9 @@ import (
 	primitives "integro_sdk/types/primitives"
 )
 
+// The session the new account is already signed in with: accepting the
+// invitation *is* the login, so nothing sends the recipient back to a form.
 type UserInviteAcceptResponse struct {
 	Uid primitives.Uid `json:"uid"`
+	Token primitives.Uid `json:"token"`
 }

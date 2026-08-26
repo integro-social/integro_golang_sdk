@@ -10,6 +10,7 @@ type MessageContentKind string
 const (
 	MessageContentKindText MessageContentKind = "text"
 	MessageContentKindImage MessageContentKind = "image"
+	MessageContentKindSticker MessageContentKind = "sticker"
 	MessageContentKindAudio MessageContentKind = "audio"
 	MessageContentKindVideo MessageContentKind = "video"
 	MessageContentKindFile MessageContentKind = "file"

@@ -17,6 +17,11 @@ type Conversation struct {
 	ParticipantName *string `json:"participant_name"`
 	ParticipantUsername *string `json:"participant_username"`
 	ParticipantAvatarUrl *string `json:"participant_avatar_url"`
+	// The operator's own label for the person — set by hand or by a contact
+	// import's name column. Independent of `participant_name`, which the
+	// platform owns and profile refreshes overwrite; this is never touched by
+	// them, and clearing it falls back to the platform name.
+	Alias *primitives.Name `json:"alias"`
 	LastMessageAt primitives.Timestamp `json:"last_message_at"`
 	// Last inbound (participant) message — anchors whatsapp's 24h window.
 	LastInboundAt *primitives.Timestamp `json:"last_inbound_at"`

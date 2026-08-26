@@ -32,6 +32,9 @@ const (
 	UserPermissionViewMessages UserPermission = "view_messages"
 	UserPermissionSendMessages UserPermission = "send_messages"
 	UserPermissionManageMessages UserPermission = "manage_messages"
+	UserPermissionImportContacts UserPermission = "import_contacts"
+	UserPermissionViewCampaigns UserPermission = "view_campaigns"
+	UserPermissionManageCampaigns UserPermission = "manage_campaigns"
 	UserPermissionViewPosts UserPermission = "view_posts"
 	UserPermissionPublishPosts UserPermission = "publish_posts"
 	UserPermissionUpdatePosts UserPermission = "update_posts"
@@ -65,5 +68,4 @@ const (
 	UserPermissionViewPulse UserPermission = "view_pulse"
 	UserPermissionViewIssues UserPermission = "view_issues"
 	UserPermissionManageIssues UserPermission = "manage_issues"
-	UserPermissionOperatePlatformScope UserPermission = "operate_platform_scope"
 )

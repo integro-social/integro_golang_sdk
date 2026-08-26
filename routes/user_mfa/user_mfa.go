@@ -9,14 +9,14 @@ import (
 
 // Dispatch Dispatch a login MFA challenge for the chosen factor, emailing a one-time code for the email factor.
 //
-// Public — no authentication required; the request is gated solely by the ephemeral login MFA token in the body.
+// Public — no authentication required; the request is gated by the ephemeral login MFA token in the body and — when the email factor is chosen — by the per-IP and per-token code-dispatch throttle.
 func Dispatch(__c *__client.Client, __body user_mfa.UserMfaDispatchRequest) (struct{}, error) {
 	__path := "/user-session/mfa/dispatch"
 	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
 // Verify Verify a login MFA code and, on success, mint a user session token.
 //
-// Public — no authentication required; the request is gated solely by the ephemeral login MFA token in the body.
+// Public — no authentication required; the request is gated by the ephemeral login MFA token in the body and by the per-IP and per-token verification throttle.
 func Verify(__c *__client.Client, __body user_mfa.UserMfaVerifyRequest) (user_mfa.UserMfaVerifyResponse, error) {
 	__path := "/user-session/mfa/verify"
 	return __client.Request[user_mfa.UserMfaVerifyResponse](__c, "POST", __path, nil, __body)

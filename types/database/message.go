@@ -36,6 +36,8 @@ type Message struct {
 	SentBy *types.MessageSentBy `json:"sent_by"`
 	// The api key / user uid behind `sent_by`, when it names one.
 	SentByUid *primitives.Uid `json:"sent_by_uid"`
+	// The send sequence this queued row belongs to; `None` for every send that stands alone.
+	Burst *string `json:"burst"`
 	// Set when the message text was edited on the platform.
 	EditedAt *primitives.Timestamp `json:"edited_at"`
 	// Set when the message was revoked on the platform; the row stays.

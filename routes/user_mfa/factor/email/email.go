@@ -16,7 +16,7 @@ func Confirm(__c *__client.Client, __body user_mfa.UserMfaEnrollConfirmRequest) 
 }
 // Start Begin self-service email-factor enrollment, emailing a one-time code and returning an enrollment token.
 //
-// Authenticated user acting on their own factors; no permission required.
+// Authenticated user acting on their own factors; no permission required. Rejected when the caller trips the per-IP or per-token code-dispatch throttle.
 func Start(__c *__client.Client) (user_mfa.UserMfaMgmtEmailStartResponse, error) {
 	__path := "/user-mfa/factor/email/start"
 	return __client.Request[user_mfa.UserMfaMgmtEmailStartResponse](__c, "POST", __path, nil, nil)

@@ -4,10 +4,15 @@ package message
 
 import (
 	primitives "integro_sdk/types/primitives"
+	types "integro_sdk/types/types"
 )
 
 type ConversationMessagesQuery struct {
 	// Scrollback cursor: only messages with `id` strictly smaller are returned.
 	BeforeId *uint64 `json:"before_id"`
 	Limit *primitives.Number1_200 `json:"limit"`
+	// Only messages of these content kinds. A media gallery pages
+	// `image, video, sticker, audio, file` without loading the text between
+	// them; absent or empty means every kind.
+	Kinds *[]types.MessageContentKind `json:"kinds"`
 }

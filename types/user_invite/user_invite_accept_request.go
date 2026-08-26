@@ -8,5 +8,6 @@ import (
 
 type UserInviteAcceptRequest struct {
 	Token primitives.Uid `json:"token"`
+	Name primitives.Name `json:"name"`
 	Password primitives.Password8_128_F_F_T_F `json:"password"`
 }

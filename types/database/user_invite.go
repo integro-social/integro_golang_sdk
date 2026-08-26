@@ -13,7 +13,6 @@ import (
 type UserInvite struct {
 	Uid primitives.Uid `json:"uid"`
 	Email primitives.Email `json:"email"`
-	Name primitives.Name `json:"name"`
 	InvitedBy primitives.Uid `json:"invited_by"`
 	GroupUid *primitives.Uid `json:"group_uid"`
 	Role *types.MembershipRole `json:"role"`

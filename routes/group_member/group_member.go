@@ -10,7 +10,7 @@ import (
 
 // Add Add an existing user to the group with a role.
 //
-// Requires `AddMembers` in the group itself, and the caller's role there must be able to manage the role being assigned; a user already in the group is a conflict, and a user who does not exist yet is invited, not added.
+// Requires `AddMembers` in the group itself — a row platform staff alone hold — plus a role there able to manage the one being assigned; a user already in the group is a conflict, and a user who does not exist yet is invited, not added. Group administrators onboard through an invitation instead.
 func Add(__c *__client.Client, groupUid string, __body group.AddGroupMemberRequest) (struct{}, error) {
 	__path := "/group/{group_uid}/member"
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)

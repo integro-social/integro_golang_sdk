@@ -13,4 +13,5 @@ const (
 	MessageSentByUser MessageSentBy = "user"
 	MessageSentByPlatform MessageSentBy = "platform"
 	MessageSentByGhl MessageSentBy = "ghl"
+	MessageSentByCampaign MessageSentBy = "campaign"
 )

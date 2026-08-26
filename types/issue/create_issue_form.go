@@ -9,7 +9,7 @@ import (
 
 type CreateIssueForm struct {
 	Severity types.IssueSeverity `json:"severity"`
-	Description primitives.Text8000 `json:"description"`
+	Description primitives.Text0_8000 `json:"description"`
 	Details types.IssueDetails `json:"details"`
 	Screenshots [][]byte `json:"screenshots"`
 }
