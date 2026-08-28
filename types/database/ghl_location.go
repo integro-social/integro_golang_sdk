@@ -24,6 +24,10 @@ type GhlLocation struct {
 	NeedsReauth bool `json:"needs_reauth"`
 	// The social account this location bridges; `None` until an admin links one.
 	TargetAccountUid *primitives.Uid `json:"target_account_uid"`
+	// The contact tag added on GoHighLevel's side when a human answers from the
+	// hub or the paired phone — the hook a location's workflow uses to put its
+	// Conversation AI bot to sleep. `None` = the handoff is off.
+	HandoffTag *string `json:"handoff_tag"`
 	// Inbound-sync cursor into `message.id`: the target account's messages
 	// beyond it still owe GHL a delivery.
 	LastMessageId uint64 `json:"last_message_id"`

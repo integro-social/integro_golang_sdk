@@ -7,5 +7,5 @@ import (
 )
 
 type ListGhlQuery struct {
-	GroupUid primitives.Uid `json:"group_uid"`
+	GroupUid *primitives.Uid `json:"group_uid"`
 }

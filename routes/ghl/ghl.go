@@ -49,14 +49,26 @@ func Link(__c *__client.Client, ghlLocationUid string, __body ghl.LinkGhlRequest
 	__path = __strings.Replace(__path, "{ghl_location_uid}", __client.EncodePath(ghlLocationUid), 1)
 	return __client.Request[database.GhlLocation](__c, "PUT", __path, nil, __body)
 }
-// List List the GoHighLevel locations installed in a group, each carrying the
-// whatsapp account it bridges (`target_account_uid`, null while unlinked) and
-// whether its grant needs reconnecting.
+// List List the installed GoHighLevel locations, optionally filtered by group, each
+// carrying the whatsapp account it bridges (`target_account_uid`, null while
+// unlinked) and whether its grant needs reconnecting.
 //
-// Requires `ViewSocialAccounts` in the named group.
+// Requires `ViewSocialAccounts`; the list covers only locations of groups where the caller holds it.
 func List(__c *__client.Client, __query ghl.ListGhlQuery) ([]database.GhlLocation, error) {
 	__path := "/ghl"
 	return __client.Request[[]database.GhlLocation](__c, "GET", __path, __query, nil)
+}
+// SetHandoffTag Set the contact tag the bridge adds on GoHighLevel's side when a human —
+// a hub operator, or the paired phone — answers a contact, so a workflow
+// keyed on that tag can put the location's Conversation AI bot to sleep.
+// `null` turns the handoff off. Sends through the hub API, campaign sends and
+// GoHighLevel's own never add it.
+//
+// Requires `ConnectSocialAccounts` in the location's group.
+func SetHandoffTag(__c *__client.Client, ghlLocationUid string, __body ghl.SetGhlHandoffTagRequest) (database.GhlLocation, error) {
+	__path := "/ghl/{ghl_location_uid}/handoff-tag"
+	__path = __strings.Replace(__path, "{ghl_location_uid}", __client.EncodePath(ghlLocationUid), 1)
+	return __client.Request[database.GhlLocation](__c, "PUT", __path, nil, __body)
 }
 // Unlink Unbridge the location's whatsapp account, stopping the mirroring in both
 // directions. The location stays installed and can be pointed at another
