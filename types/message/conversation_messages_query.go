@@ -12,7 +12,7 @@ type ConversationMessagesQuery struct {
 	BeforeId *uint64 `json:"before_id"`
 	Limit *primitives.Number1_200 `json:"limit"`
 	// Only messages of these content kinds. A media gallery pages
-	// `image, video, sticker, audio, file` without loading the text between
-	// them; absent or empty means every kind.
+	// `image, video, gif, sticker, audio, file` without loading the text
+	// between them; absent or empty means every kind.
 	Kinds *[]types.MessageContentKind `json:"kinds"`
 }

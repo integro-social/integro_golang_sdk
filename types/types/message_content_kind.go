@@ -13,6 +13,7 @@ const (
 	MessageContentKindSticker MessageContentKind = "sticker"
 	MessageContentKindAudio MessageContentKind = "audio"
 	MessageContentKindVideo MessageContentKind = "video"
+	MessageContentKindGif MessageContentKind = "gif"
 	MessageContentKindFile MessageContentKind = "file"
 	MessageContentKindLocation MessageContentKind = "location"
 	MessageContentKindContacts MessageContentKind = "contacts"
