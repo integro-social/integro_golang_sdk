@@ -50,7 +50,6 @@ const (
 	UserPermissionViewBusiness UserPermission = "view_business"
 	UserPermissionManageBusiness UserPermission = "manage_business"
 	UserPermissionUploadMedia UserPermission = "upload_media"
-	UserPermissionDeleteMedia UserPermission = "delete_media"
 	UserPermissionViewWebhook UserPermission = "view_webhook"
 	UserPermissionManageWebhook UserPermission = "manage_webhook"
 	UserPermissionViewApiKeys UserPermission = "view_api_keys"

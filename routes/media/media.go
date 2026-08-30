@@ -8,26 +8,23 @@ import (
 	media "integro_sdk/types/media"
 )
 
-// Delete Delete a hub-hosted media file. The uid may carry the same cosmetic
-// extension suffix the serve route accepts, so the URL handed back by upload
-// can be deleted verbatim. Platform posts/messages already published with it
-// keep working (Meta copies media on ingestion), but new sends referencing
-// the URL will fail.
+// Serve Serve a hub-hosted media file. The uid may carry a cosmetic extension
+// suffix (`{uid}.m4a`) — generated URLs include one as a format signal for
+// external fetchers; it is stripped before lookup. A uid nothing names any
+// more answers 404: the file went with its last referrer.
 //
-// Requires `DeleteMedia` in the media's group.
-func Delete(__c *__client.Client, mediaUid string) (struct{}, error) {
-	__path := "/media/{media_uid}"
-	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
-	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
-}
-// Serve Public — no authentication required; the unguessable uid is the capability.
+// Public — no authentication required; the unguessable uid is the capability.
 func Serve(__c *__client.Client, mediaUid string) ([]byte, error) {
 	__path := "/media/{media_uid}"
 	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
 	return __client.RequestBytes(__c, "GET", __path, nil, nil)
 }
 // Upload Upload a media file to the hub; the returned public URL can be used in any
-// message or post payload (Meta fetches it from the hub).
+// message or post payload (Meta fetches it from the hub). Bytes the hub
+// already holds come back as the existing file — same uid, same URL. The
+// URL stays valid while a message, post or campaign template names it, and
+// for 24 hours after this upload otherwise; a third party handed the URL
+// copies what it needs while it resolves.
 //
 // Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
 func Upload(__c *__client.Client, __form *__client.MultipartForm) (media.UploadMediaResponse, error) {
