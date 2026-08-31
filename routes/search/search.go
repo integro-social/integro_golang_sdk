@@ -6,12 +6,20 @@ import (
 	__client "integro_sdk"
 	database "integro_sdk/types/database"
 	search "integro_sdk/types/search"
+	types "integro_sdk/types/types"
 )
 
-// Global Search groups and users in one ranked result set.
+// Global Search groups, users, contacts and messages: up to `limit` hits of each requested kind, kinds in a fixed order, groups and users ranked, contacts and messages newest first. A preview — the entity lists page the full answers.
 //
-// Any authenticated user; the results cover the caller's own groups and the people sharing them, and every group and user for platform staff.
+// Any authenticated user; groups and users cover the caller's own groups and the people sharing them (every group and user for platform staff); contacts and messages cover the accounts of every group where the caller holds `ViewMessages` (every account for platform staff, none for a caller holding it nowhere).
 func Global(__c *__client.Client, __query search.SearchQuery) ([]database.SearchHit, error) {
 	__path := "/search"
 	return __client.Request[[]database.SearchHit](__c, "GET", __path, __query, nil)
+}
+// Message Search message text, newest first; `before_id` pages older hits. `conversation_uid` searches inside one conversation; otherwise every conversation of the filtered accounts. Each hit carries a snippet split into plain and matched runs.
+//
+// Requires `ViewMessages`; the hits cover only messages of groups where the caller holds it, and a conversation outside them reads as not found.
+func Message(__c *__client.Client, __query search.MessageSearchQuery) ([]types.MessageSearchHit, error) {
+	__path := "/search/message"
+	return __client.Request[[]types.MessageSearchHit](__c, "GET", __path, __query, nil)
 }

@@ -77,7 +77,9 @@ func Delete(__c *__client.Client, conversationUid string) (struct{}, error) {
 // List List conversations, newest activity first, optionally filtered by group or
 // social account; `before_activity_at`+`before_uid` page older activity
 // (keyset cursor). Rows carry the denormalized chat-list summary (unread
-// badge + last-message preview).
+// badge + last-message preview). `q` narrows to conversations whose
+// participant (alias, name, username, phone) contains it — a term under 2
+// characters answers with no rows; not combinable with `uids`.
 //
 // Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
 func List(__c *__client.Client, __query message.ListConversationsQuery) ([]database.Conversation, error) {
@@ -94,7 +96,9 @@ func MessageCount(__c *__client.Client, conversationUid string, __query message.
 	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Messages List a conversation's messages, newest first; `before_id` pages older
-// history.
+// history. `after_id` pages newer history from an anchored message: each
+// page is the oldest `limit` rows above the cursor, still newest-first on
+// the wire (never both cursors).
 //
 // Requires `ViewMessages` in the conversation's group.
 func Messages(__c *__client.Client, conversationUid string, __query message.ConversationMessagesQuery) ([]database.Message, error) {

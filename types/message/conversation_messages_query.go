@@ -10,6 +10,10 @@ import (
 type ConversationMessagesQuery struct {
 	// Scrollback cursor: only messages with `id` strictly smaller are returned.
 	BeforeId *uint64 `json:"before_id"`
+	// Forward cursor: the oldest `limit` messages with `id` strictly greater,
+	// returned newest-first — each page continues upward from the last.
+	// Exclusive with `before_id`.
+	AfterId *uint64 `json:"after_id"`
 	Limit *primitives.Number1_200 `json:"limit"`
 	// Only messages of these content kinds. A media gallery pages
 	// `image, video, gif, sticker, audio, file` without loading the text
