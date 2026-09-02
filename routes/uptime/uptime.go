@@ -4,28 +4,28 @@ package uptime
 
 import (
 	__client "integro_sdk"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	uptime "integro_sdk/types/uptime"
 )
 
 // GetLatest Get the most recent server uptime record.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func GetLatest(__c *__client.Client) (*database.ServerUptime, error) {
+func GetLatest(__c *__client.Client) (*domain.ServerUptime, error) {
 	__path := "/uptime/latest"
-	return __client.Request[*database.ServerUptime](__c, "GET", __path, nil, nil)
+	return __client.Request[*domain.ServerUptime](__c, "GET", __path, nil, nil)
 }
 // GetStats Compute aggregate server uptime statistics within a time range.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func GetStats(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) (database.ServerUptimeStats, error) {
+func GetStats(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) (domain.ServerUptimeStats, error) {
 	__path := "/uptime/stat"
-	return __client.Request[database.ServerUptimeStats](__c, "GET", __path, __query, nil)
+	return __client.Request[domain.ServerUptimeStats](__c, "GET", __path, __query, nil)
 }
 // List List server uptime records within a time range.
 //
 // Requires `ViewPulse`, which only platform staff hold.
-func List(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) ([]database.ServerUptime, error) {
+func List(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) ([]domain.ServerUptime, error) {
 	__path := "/uptime"
-	return __client.Request[[]database.ServerUptime](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.ServerUptime](__c, "GET", __path, __query, nil)
 }

@@ -3,9 +3,9 @@
 package api_key
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 type UpdateApiKeyPermissionsRequest struct {
-	Permissions database.ApiKeyPermissions `json:"permissions"`
+	Permissions domain.ApiKeyPermissions `json:"permissions"`
 }

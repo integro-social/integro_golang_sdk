@@ -3,12 +3,12 @@
 package group
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type AddGroupMemberRequest struct {
 	// An existing user; onboarding a new address goes through an invite.
 	UserUid primitives.Uid `json:"user_uid"`
-	Role types.MembershipRole `json:"role"`
+	Role domain.MembershipRole `json:"role"`
 }

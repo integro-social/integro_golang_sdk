@@ -6,7 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	api_key "integro_sdk/types/api_key"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 // Count Count API keys, optionally filtered by group.
@@ -28,20 +28,29 @@ func Create(__c *__client.Client, __body api_key.CreateApiKeyRequest) (api_key.C
 	__path := "/api-key"
 	return __client.Request[api_key.CreateApiKeyResponse](__c, "POST", __path, nil, __body)
 }
+// Delete Delete an API key outright, revoked or not: it stops authenticating at
+// once and leaves the listings, while its audit trail stays.
+//
+// Requires `DeleteApiKeys` in the key's group, or `DeleteApiKeys` at platform scope for a platform key.
+func Delete(__c *__client.Client, apiKeyUid string) (struct{}, error) {
+	__path := "/api-key/{api_key_uid}"
+	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
+}
 // Get Fetch a single API key by uid.
 //
 // Requires `ViewApiKeys` in the key's group, or `ViewApiKeys` at platform scope for a platform key.
-func Get(__c *__client.Client, apiKeyUid string) (database.ApiKey, error) {
+func Get(__c *__client.Client, apiKeyUid string) (domain.ApiKey, error) {
 	__path := "/api-key/{api_key_uid}"
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
-	return __client.Request[database.ApiKey](__c, "GET", __path, nil, nil)
+	return __client.Request[domain.ApiKey](__c, "GET", __path, nil, nil)
 }
 // List List API keys, optionally filtered by group.
 //
 // Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff.
-func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]database.ApiKey, error) {
+func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]domain.ApiKey, error) {
 	__path := "/api-key"
-	return __client.Request[[]database.ApiKey](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.ApiKey](__c, "GET", __path, __query, nil)
 }
 // Revoke Revoke an API key, permanently disabling it.
 //

@@ -5,7 +5,7 @@ package user_invite
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	user_invite "integro_sdk/types/user_invite"
 )
 
@@ -44,9 +44,9 @@ func Join(__c *__client.Client, __body user_invite.UserInviteTokenRequest) (user
 // List List pending (unaccepted) user invitations.
 //
 // Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff.
-func List(__c *__client.Client) ([]database.UserInvite, error) {
+func List(__c *__client.Client) ([]domain.UserInvite, error) {
 	__path := "/user-invite"
-	return __client.Request[[]database.UserInvite](__c, "GET", __path, nil, nil)
+	return __client.Request[[]domain.UserInvite](__c, "GET", __path, nil, nil)
 }
 // Logo Serve the invited group's logo image.
 //

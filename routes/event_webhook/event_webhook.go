@@ -5,7 +5,7 @@ package event_webhook
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	event "integro_sdk/types/event"
 )
 
@@ -21,9 +21,9 @@ func Delete(__c *__client.Client, webhookUid string) (struct{}, error) {
 // returned here).
 //
 // Requires `ViewWebhook` in the target group; group-scoped API keys read their own group, others must name it.
-func Get(__c *__client.Client, __query event.GetWebhookQuery) (*database.Webhook, error) {
+func Get(__c *__client.Client, __query event.GetWebhookQuery) (*domain.Webhook, error) {
 	__path := "/event/webhook"
-	return __client.Request[*database.Webhook](__c, "GET", __path, __query, nil)
+	return __client.Request[*domain.Webhook](__c, "GET", __path, __query, nil)
 }
 // Set Configure (create or replace) the group's outbound webhook: the group's
 // events (optionally narrowed by kind/channel filters) are POSTed to the

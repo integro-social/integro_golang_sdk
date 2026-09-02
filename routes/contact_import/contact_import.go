@@ -6,7 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	contact_import "integro_sdk/types/contact_import"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 // Cancel Cancel the import: every still-queued row becomes `skipped`. Terminal;
@@ -94,10 +94,10 @@ func Resume(__c *__client.Client, importUid string) (contact_import.ContactImpor
 // the fix table and the verdict drill-downs.
 //
 // Requires `ImportContacts` in the import's group.
-func Rows(__c *__client.Client, importUid string, __query contact_import.ListImportRowsQuery) ([]database.ContactImportRow, error) {
+func Rows(__c *__client.Client, importUid string, __query contact_import.ListImportRowsQuery) ([]domain.ContactImportRow, error) {
 	__path := "/contact-import/{import_uid}/row"
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
-	return __client.Request[[]database.ContactImportRow](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.ContactImportRow](__c, "GET", __path, __query, nil)
 }
 // Start Start loading: pending rows are dealt round-robin across the accounts and
 // one paced loader per account begins verifying numbers and creating
@@ -122,11 +122,11 @@ func Update(__c *__client.Client, importUid string, __body contact_import.Update
 // import is staged.
 //
 // Requires `ImportContacts` in the import's group.
-func UpdateRow(__c *__client.Client, importUid string, rowId string, __body contact_import.UpdateImportRowRequest) (database.ContactImportRow, error) {
+func UpdateRow(__c *__client.Client, importUid string, rowId string, __body contact_import.UpdateImportRowRequest) (domain.ContactImportRow, error) {
 	__path := "/contact-import/{import_uid}/row/{row_id}"
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
 	__path = __strings.Replace(__path, "{row_id}", __client.EncodePath(rowId), 1)
-	return __client.Request[database.ContactImportRow](__c, "PUT", __path, nil, __body)
+	return __client.Request[domain.ContactImportRow](__c, "PUT", __path, nil, __body)
 }
 // Upload Upload a CSV of contacts: the file is parsed synchronously, every record
 // gets a parse verdict, and the import is created `staged` — nothing touches

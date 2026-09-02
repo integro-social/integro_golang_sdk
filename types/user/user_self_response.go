@@ -3,8 +3,7 @@
 package user
 
 import (
-	database "integro_sdk/types/database"
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 // The caller's own account plus everything a gating decision reads: the
@@ -12,10 +11,10 @@ import (
 // per group they belong to. A user who belongs to nowhere is ordinary — both
 // lists are simply empty.
 type UserSelfResponse struct {
-	database.User
+	domain.User
 	// Held everywhere, in every group and outside all of them: the whole
 	// catalog for platform staff, empty for everyone else, whose authority
 	// lives entirely in `memberships`.
-	Permissions []types.UserPermission `json:"permissions"`
+	Permissions []domain.UserPermission `json:"permissions"`
 	Memberships []MembershipResponse `json:"memberships"`
 }

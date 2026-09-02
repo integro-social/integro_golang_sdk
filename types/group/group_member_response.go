@@ -3,8 +3,8 @@
 package group
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // One membership, carrying the identity fields needed to recognize the person
@@ -16,6 +16,6 @@ type GroupMemberResponse struct {
 	Name primitives.Name `json:"name"`
 	Enabled bool `json:"enabled"`
 	LastSeen *primitives.Timestamp `json:"last_seen"`
-	Role types.MembershipRole `json:"role"`
+	Role domain.MembershipRole `json:"role"`
 	MemberSince primitives.Timestamp `json:"member_since"`
 }

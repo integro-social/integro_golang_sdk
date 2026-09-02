@@ -3,8 +3,8 @@
 package user_invite
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type UserInviteDetailResponse struct {
@@ -13,7 +13,7 @@ type UserInviteDetailResponse struct {
 	GroupName primitives.Name `json:"group_name"`
 	// Whether `userInvite.logo` has an image to serve for this group.
 	HasLogo bool `json:"has_logo"`
-	Role types.MembershipRole `json:"role"`
+	Role domain.MembershipRole `json:"role"`
 	InvitedByName primitives.Name `json:"invited_by_name"`
 	ExpiresAt primitives.Timestamp `json:"expires_at"`
 }

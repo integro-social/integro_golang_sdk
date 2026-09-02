@@ -3,11 +3,11 @@
 package mailing
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type EmailQueueListQuery struct {
-	Status *types.EmailQueueStatus `json:"status"`
+	Status *domain.EmailQueueStatus `json:"status"`
 	Limit *primitives.Number1_500 `json:"limit"`
 }

@@ -3,8 +3,8 @@
 package social_account
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // A group account whose stored token no longer works — access was removed
@@ -12,6 +12,6 @@ import (
 // selected again) is the cure.
 type RemovedAccess struct {
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
-	Channel types.Channel `json:"channel"`
+	Channel domain.Channel `json:"channel"`
 	Name string `json:"name"`
 }

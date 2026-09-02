@@ -3,11 +3,11 @@
 package pulse
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 type PulseInventoryResponse struct {
-	Disks []database.PulseDiskInventoryRow `json:"disks"`
-	Networks []database.PulseNetworkInventoryRow `json:"networks"`
-	Gpus []database.PulseGpuInventoryRow `json:"gpus"`
+	Disks []domain.PulseDiskInventoryRow `json:"disks"`
+	Networks []domain.PulseNetworkInventoryRow `json:"networks"`
+	Gpus []domain.PulseGpuInventoryRow `json:"gpus"`
 }

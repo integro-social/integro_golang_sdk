@@ -3,8 +3,8 @@
 package media
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type UploadMediaResponse struct {
@@ -12,7 +12,7 @@ type UploadMediaResponse struct {
 	// Public URL Meta (and CRMs) can fetch — usable anywhere the send/publish
 	// APIs take a media URL.
 	Url string `json:"url"`
-	Kind types.MediaKind `json:"kind"`
+	Kind domain.MediaKind `json:"kind"`
 	ContentType string `json:"content_type"`
 	Size uint64 `json:"size"`
 }

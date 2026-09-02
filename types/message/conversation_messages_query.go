@@ -3,8 +3,8 @@
 package message
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type ConversationMessagesQuery struct {
@@ -18,5 +18,5 @@ type ConversationMessagesQuery struct {
 	// Only messages of these content kinds. A media gallery pages
 	// `image, video, gif, sticker, audio, file` without loading the text
 	// between them; absent or empty means every kind.
-	Kinds *[]types.MessageContentKind `json:"kinds"`
+	Kinds *[]domain.MessageContentKind `json:"kinds"`
 }

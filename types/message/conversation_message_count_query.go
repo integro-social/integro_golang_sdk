@@ -3,10 +3,10 @@
 package message
 
 import (
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 type ConversationMessageCountQuery struct {
 	// Only messages of these content kinds — the same narrowing as the list.
-	Kinds *[]types.MessageContentKind `json:"kinds"`
+	Kinds *[]domain.MessageContentKind `json:"kinds"`
 }

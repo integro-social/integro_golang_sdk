@@ -3,12 +3,12 @@
 package rate_limit
 
 import (
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 type UpdateRateLimitRuleRequest struct {
 	// Replacement rule payload — target *and* budget, so it is sent whole
 	// rather than as a field mask. Must keep the same target (`kind` plus its
-	// identity fields); only the budget may change.
-	Rule types.RateLimitRuleKind `json:"rule"`
+	// identity fields); only the budget may change. The tier is immutable.
+	Rule domain.RateLimitRuleKind `json:"rule"`
 }

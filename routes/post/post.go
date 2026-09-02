@@ -5,7 +5,7 @@ package post
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	insight "integro_sdk/types/insight"
 	meta "integro_sdk/types/meta"
 	post "integro_sdk/types/post"
@@ -15,9 +15,9 @@ import (
 // content must match the account's channel.
 //
 // Requires `PublishPosts` in the account's group.
-func Create(__c *__client.Client, __body post.CreatePostRequest) (database.Post, error) {
+func Create(__c *__client.Client, __body post.CreatePostRequest) (domain.Post, error) {
 	__path := "/post"
-	return __client.Request[database.Post](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.Post](__c, "POST", __path, nil, __body)
 }
 // Delete Delete a post: published posts are removed from the platform (Instagram
 // carousels are deleted as a whole). A scheduled or pending post is
@@ -34,10 +34,10 @@ func Delete(__c *__client.Client, postUid string) (struct{}, error) {
 // Get Fetch a single post by uid.
 //
 // Requires `ViewPosts` in the post's group.
-func Get(__c *__client.Client, postUid string) (database.Post, error) {
+func Get(__c *__client.Client, postUid string) (domain.Post, error) {
 	__path := "/post/{post_uid}"
 	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
-	return __client.Request[database.Post](__c, "GET", __path, nil, nil)
+	return __client.Request[domain.Post](__c, "GET", __path, nil, nil)
 }
 // Insights Fetch platform metrics for a published post (impressions, reach, clicks,
 // reactions, views, … — overridable via `metrics`).
@@ -49,7 +49,7 @@ func Insights(__c *__client.Client, postUid string, __query post.PostInsightsQue
 	return __client.Request[[]meta.Insight](__c, "GET", __path, __query, nil)
 }
 // InsightsHistory Day-by-day history of a post's collected metrics, grouped per metric —
-// the charting companion to the live `post.insights` passthrough. Posts are
+// the charting companion to the live insights passthrough. Posts are
 // collected for 30 days after publishing (stories for 48h, after which their
 // insights stop resolving), so the series flatlines after that window.
 //
@@ -62,9 +62,9 @@ func InsightsHistory(__c *__client.Client, postUid string, __query insight.Insig
 // List List posts, newest first, optionally filtered by group or social account.
 //
 // Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
-func List(__c *__client.Client, __query post.ListPostsQuery) ([]database.Post, error) {
+func List(__c *__client.Client, __query post.ListPostsQuery) ([]domain.Post, error) {
 	__path := "/post"
-	return __client.Request[[]database.Post](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.Post](__c, "GET", __path, __query, nil)
 }
 // SetComments Enable or disable comments on a published post. The payload is
 // channel-tagged and must match the post's channel — instagram only
@@ -104,8 +104,8 @@ func SetPinned(__c *__client.Client, postUid string, __body post.SetPostPinnedRe
 // other channel's shape deserializes.
 //
 // Requires `UpdatePosts` in the post's group.
-func Update(__c *__client.Client, postUid string, __body post.UpdatePostRequest) (database.Post, error) {
+func Update(__c *__client.Client, postUid string, __body post.UpdatePostRequest) (domain.Post, error) {
 	__path := "/post/{post_uid}"
 	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
-	return __client.Request[database.Post](__c, "PUT", __path, nil, __body)
+	return __client.Request[domain.Post](__c, "PUT", __path, nil, __body)
 }

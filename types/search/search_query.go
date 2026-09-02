@@ -3,8 +3,8 @@
 package search
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type SearchQuery struct {
@@ -12,5 +12,5 @@ type SearchQuery struct {
 	// Hits per kind (1..=50, default 10) — a preview cap, not a page.
 	Limit *primitives.Number1_50 `json:"limit"`
 	// Only these kinds; absent or empty means every kind.
-	Kinds *[]types.SearchKind `json:"kinds"`
+	Kinds *[]domain.SearchKind `json:"kinds"`
 }

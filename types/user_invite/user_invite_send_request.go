@@ -3,8 +3,8 @@
 package user_invite
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // `group_uid` and `role` are a tied pair: both name the membership accepting
@@ -16,5 +16,5 @@ import (
 type UserInviteSendRequest struct {
 	Email primitives.Email `json:"email"`
 	GroupUid *primitives.Uid `json:"group_uid"`
-	Role *types.MembershipRole `json:"role"`
+	Role *domain.MembershipRole `json:"role"`
 }

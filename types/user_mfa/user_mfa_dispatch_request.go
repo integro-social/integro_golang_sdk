@@ -3,11 +3,11 @@
 package user_mfa
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type UserMfaDispatchRequest struct {
 	MfaToken primitives.Uid `json:"mfa_token"`
-	Factor types.UserMfaKind `json:"factor"`
+	Factor domain.UserMfaKind `json:"factor"`
 }

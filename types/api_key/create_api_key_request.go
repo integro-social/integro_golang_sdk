@@ -3,12 +3,12 @@
 package api_key
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 type CreateApiKeyRequest struct {
 	Name primitives.Name `json:"name"`
 	GroupUid *primitives.Uid `json:"group_uid"`
-	Permissions database.ApiKeyPermissions `json:"permissions"`
+	Permissions domain.ApiKeyPermissions `json:"permissions"`
 }

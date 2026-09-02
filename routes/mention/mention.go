@@ -5,7 +5,7 @@ package mention
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	engagement "integro_sdk/types/engagement"
 )
 
@@ -13,9 +13,9 @@ import (
 // first (Instagram only — the account mentioned in captions or comments).
 //
 // Requires `ViewComments`; the feed covers only mentions of groups where the caller holds it.
-func List(__c *__client.Client, __query engagement.ListMentionsQuery) ([]database.Mention, error) {
+func List(__c *__client.Client, __query engagement.ListMentionsQuery) ([]domain.Mention, error) {
 	__path := "/mention"
-	return __client.Request[[]database.Mention](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.Mention](__c, "GET", __path, __query, nil)
 }
 // Reply Reply to an Instagram mention (in the mentioned media's comments). The
 // payload is channel-tagged and must match the account's channel — mentions

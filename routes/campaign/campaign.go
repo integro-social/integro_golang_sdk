@@ -6,8 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	campaign "integro_sdk/types/campaign"
-	database "integro_sdk/types/database"
-	message "integro_sdk/types/message"
+	domain "integro_sdk/types/domain"
 )
 
 // AddRecipients Append an audience to the end of the queue — the same sources as a
@@ -95,10 +94,10 @@ func Preflight(__c *__client.Client, campaignUid string) (campaign.PreflightRepo
 // Recipients A page of the recipient ledger in drip order, optionally one status.
 //
 // Requires `ViewCampaigns` in the campaign's group.
-func Recipients(__c *__client.Client, campaignUid string, __query campaign.ListRecipientsQuery) ([]database.CampaignRecipient, error) {
+func Recipients(__c *__client.Client, campaignUid string, __query campaign.ListRecipientsQuery) ([]domain.CampaignRecipient, error) {
 	__path := "/campaign/{campaign_uid}/recipient"
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
-	return __client.Request[[]database.CampaignRecipient](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.CampaignRecipient](__c, "GET", __path, __query, nil)
 }
 // Redistribute Hand the whole queue out again across the current accounts: balanced,
 // preferring an account that already has each number's conversation. For
@@ -166,10 +165,10 @@ func Stats(__c *__client.Client, campaignUid string) (campaign.CampaignStats, er
 // operator's own eyes on the rendered result.
 //
 // Requires `ManageCampaigns` in the campaign's group; the conversation must belong to the same group and channel.
-func Test(__c *__client.Client, campaignUid string, __body campaign.TestSendRequest) (message.MessageWithContext, error) {
+func Test(__c *__client.Client, campaignUid string, __body campaign.TestSendRequest) (domain.MessageWithContext, error) {
 	__path := "/campaign/{campaign_uid}/test"
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
-	return __client.Request[message.MessageWithContext](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.MessageWithContext](__c, "POST", __path, nil, __body)
 }
 // Update Replace the campaign's schedule, ceilings and rotation. Draft, paused and
 // done only — a running drip is retuned by pausing first.

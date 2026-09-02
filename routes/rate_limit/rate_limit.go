@@ -5,20 +5,22 @@ package rate_limit
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
 	rate_limit "integro_sdk/types/rate_limit"
 )
 
-// Create Create a rate-limit rule for any target kind (HTTP scope, action, email dispatch, or channel pacing).
+// Create Create a rate-limit rule in a tier: one bucket shared by the whole
+// platform, the per-caller global default, a staff override for one group,
+// or a group's own (tighter) limit.
 //
-// Requires `CreateRateLimits`, which only platform staff hold.
+// Requires `CreateRateLimits` — platform-wide for `shared`, `global` and
+// `override`, in the group for `own`.
 func Create(__c *__client.Client, __body rate_limit.CreateRateLimitRuleRequest) (rate_limit.CreateRateLimitRuleResponse, error) {
 	__path := "/rate-limit"
 	return __client.Request[rate_limit.CreateRateLimitRuleResponse](__c, "POST", __path, nil, __body)
 }
 // Delete Delete a rate-limit rule by uid.
 //
-// Requires `DeleteRateLimits`, which only platform staff hold.
+// Requires `DeleteRateLimits` in the rule's tier.
 func Delete(__c *__client.Client, ruleUid string) (struct{}, error) {
 	__path := "/rate-limit/{rule_uid}"
 	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)
@@ -26,22 +28,24 @@ func Delete(__c *__client.Client, ruleUid string) (struct{}, error) {
 }
 // Get Fetch a single rate-limit rule by uid.
 //
-// Requires `ViewRateLimits`, which only platform staff hold.
-func Get(__c *__client.Client, ruleUid string) (database.RateLimitRule, error) {
+// Requires `ViewRateLimits` — anywhere for a shared or global rule, in the
+// group for a group tier.
+func Get(__c *__client.Client, ruleUid string) (rate_limit.RateLimitRuleResponse, error) {
 	__path := "/rate-limit/{rule_uid}"
 	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)
-	return __client.Request[database.RateLimitRule](__c, "GET", __path, nil, nil)
+	return __client.Request[rate_limit.RateLimitRuleResponse](__c, "GET", __path, nil, nil)
 }
-// List List every rate-limit rule.
+// List List rate-limit rules across every tier the caller may see.
 //
-// Requires `ViewRateLimits`, which only platform staff hold.
-func List(__c *__client.Client) ([]database.RateLimitRule, error) {
+// Requires `ViewRateLimits`.
+func List(__c *__client.Client, __query rate_limit.ListRateLimitRulesQuery) ([]rate_limit.RateLimitRuleResponse, error) {
 	__path := "/rate-limit"
-	return __client.Request[[]database.RateLimitRule](__c, "GET", __path, nil, nil)
+	return __client.Request[[]rate_limit.RateLimitRuleResponse](__c, "GET", __path, __query, nil)
 }
-// Update Update an existing rate-limit rule's budget; the rule's target is immutable.
+// Update Update an existing rate-limit rule's budget; the rule's target and tier
+// are immutable.
 //
-// Requires `UpdateRateLimits`, which only platform staff hold.
+// Requires `UpdateRateLimits` in the rule's tier.
 func Update(__c *__client.Client, ruleUid string, __body rate_limit.UpdateRateLimitRuleRequest) (struct{}, error) {
 	__path := "/rate-limit/{rule_uid}"
 	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)

@@ -3,11 +3,11 @@
 package social_account
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 type SocialAccountResponse struct {
-	database.SocialAccount
+	domain.SocialAccount
 	// Live session status for the session-backed whatsapp channels
 	// (native/stevo); null for channels without a session concept.
 	Session *SessionStatus `json:"session"`

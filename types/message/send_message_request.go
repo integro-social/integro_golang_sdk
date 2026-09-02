@@ -2,10 +2,14 @@
 
 package message
 
+import (
+	domain "integro_sdk/types/domain"
+)
+
 type SendMessageRequest struct {
 	// Client dedup key, unique per conversation. Retrying with the same key
 	// never duplicates history: a failed row is retried in place, any other
 	// row (sent, pending, canceled) is returned as-is without a new send.
 	IdempotencyKey *string `json:"idempotency_key"`
-	SendContent
+	domain.SendContent
 }

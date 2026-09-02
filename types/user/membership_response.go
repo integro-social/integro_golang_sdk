@@ -3,8 +3,8 @@
 package user
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // One group the caller belongs to, with the authority its role carries there
@@ -13,11 +13,11 @@ import (
 // frontend's job.
 type MembershipResponse struct {
 	GroupUid primitives.Uid `json:"group_uid"`
-	Role types.MembershipRole `json:"role"`
+	Role domain.MembershipRole `json:"role"`
 	// What the caller may do inside this group, and nowhere else by virtue of
 	// this entry.
-	Permissions []types.UserPermission `json:"permissions"`
+	Permissions []domain.UserPermission `json:"permissions"`
 	// The membership roles the caller may hand out in this group — an admin of
 	// one group assigns nothing in another.
-	AssignableRoles []types.MembershipRole `json:"assignable_roles"`
+	AssignableRoles []domain.MembershipRole `json:"assignable_roles"`
 }

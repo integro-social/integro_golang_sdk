@@ -3,17 +3,17 @@
 package campaign
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 // One campaign with what its list row and page header render.
 type CampaignDetail struct {
-	Campaign database.Campaign `json:"campaign"`
+	Campaign domain.Campaign `json:"campaign"`
 	SocialAccountUids []primitives.Uid `json:"social_account_uids"`
 	TemplateCount uint32 `json:"template_count"`
 	Counts CampaignCounts `json:"counts"`
 	// Each account's share of the queue, and how much of it is numbers the
 	// account has never spoken to (a new conversation each).
-	Loads []database.RecipientLoad `json:"loads"`
+	Loads []domain.RecipientLoad `json:"loads"`
 }

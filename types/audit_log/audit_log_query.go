@@ -3,16 +3,15 @@
 package audit_log
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type AuditLogQuery struct {
-	database.AuditLogWindow
+	domain.AuditLogWindow
 	GroupUid *primitives.Uid `json:"group_uid"`
 	UserUid *primitives.Uid `json:"user_uid"`
-	Action *types.AuditAction `json:"action"`
-	Resource *types.AuditResource `json:"resource"`
+	Action *domain.AuditAction `json:"action"`
+	Resource *domain.AuditResource `json:"resource"`
 	ResourceUid *string `json:"resource_uid"`
 }

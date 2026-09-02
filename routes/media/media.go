@@ -8,6 +8,18 @@ import (
 	media "integro_sdk/types/media"
 )
 
+// CreateUploadUrl Issue a single-use URL that accepts one file's raw bytes over `PUT`, so a
+// client holding only bytes can put them in the hub without a multipart
+// form. The URL carries its own unguessable token, needs no credential, and
+// expires 15 minutes after this call; the first upload consumes it whether
+// or not the bytes are accepted, and the upload answers with the stored
+// media and its public URL.
+//
+// Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
+func CreateUploadUrl(__c *__client.Client, __body media.CreateUploadUrlRequest) (media.CreateUploadUrlResponse, error) {
+	__path := "/media/upload-ticket"
+	return __client.Request[media.CreateUploadUrlResponse](__c, "POST", __path, nil, __body)
+}
 // Serve Serve a hub-hosted media file. The uid may carry a cosmetic extension
 // suffix (`{uid}.m4a`) — generated URLs include one as a format signal for
 // external fetchers; it is stripped before lookup. A uid nothing names any
@@ -30,4 +42,18 @@ func Serve(__c *__client.Client, mediaUid string) ([]byte, error) {
 func Upload(__c *__client.Client, __form *__client.MultipartForm) (media.UploadMediaResponse, error) {
 	__path := "/media"
 	return __client.RequestMultipart[media.UploadMediaResponse](__c, "POST", __path, nil, __form)
+}
+// UploadWithTicket Store the file an upload ticket was issued for: the raw bytes are the whole
+// request body, the request `content-type` is a type hint the bytes
+// themselves override, and the ticket supplies the filename. The ticket is
+// consumed by this call whether or not the bytes are accepted — an empty
+// body, or one past 100 MiB, is refused and the client asks for a new
+// ticket. The reply is the stored media, whose public URL can be used in any
+// message or post payload.
+//
+// Public — no authentication; the unguessable ticket token is the capability, issued by `media.createUploadUrl` and valid for 15 minutes.
+func UploadWithTicket(__c *__client.Client, token string) (media.UploadMediaResponse, error) {
+	__path := "/media/upload/{token}"
+	__path = __strings.Replace(__path, "{token}", __client.EncodePath(token), 1)
+	return __client.Request[media.UploadMediaResponse](__c, "PUT", __path, nil, nil)
 }

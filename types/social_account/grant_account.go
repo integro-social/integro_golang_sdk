@@ -3,12 +3,12 @@
 package social_account
 
 import (
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 // One account the stashed grant covers, for the selection screen.
 type GrantAccount struct {
-	Channel types.Channel `json:"channel"`
+	Channel domain.Channel `json:"channel"`
 	ExternalId string `json:"external_id"`
 	Name string `json:"name"`
 	Username *string `json:"username"`

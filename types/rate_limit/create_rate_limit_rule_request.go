@@ -3,9 +3,17 @@
 package rate_limit
 
 import (
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 type CreateRateLimitRuleRequest struct {
-	Rule types.RateLimitRuleKind `json:"rule"`
+	// The tier the rule sits in. `shared`, `global` and `override` need
+	// platform standing; `own` needs `CreateRateLimits` in that group, and the
+	// rule must stay within the ceiling that applies to the group (its
+	// override, else the global default).
+	Scope domain.RateLimitScope `json:"scope"`
+	// Target and budget. Only targets whose caller belongs to a group accept a
+	// group tier; only request budgets (not pacing) accept `shared`, and email
+	// dispatch accepts nothing else.
+	Rule domain.RateLimitRuleKind `json:"rule"`
 }

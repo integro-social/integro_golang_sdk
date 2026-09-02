@@ -32,7 +32,7 @@ func Delete(__c *__client.Client, groupUid string) (struct{}, error) {
 }
 // Get Fetch a single group, optionally enriched with per-group counts.
 //
-// Requires `ViewGroups` in the group itself; each count is filled only when the caller also holds that count's own permission there — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count` — and is `null` otherwise.
+// Requires `ViewGroups` in the group itself; each count is filled only when the caller also holds that count's own permission there — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — and is `null` otherwise.
 func Get(__c *__client.Client, groupUid string, __query group.GroupQuery) (group.GroupResponse, error) {
 	__path := "/group/{group_uid}"
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
@@ -48,7 +48,7 @@ func GetLogo(__c *__client.Client, groupUid string) ([]byte, error) {
 }
 // List List groups, optionally enriched with per-group counts.
 //
-// Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count` — `null` everywhere else.
+// Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
 func List(__c *__client.Client, __query group.GroupQuery) ([]group.GroupResponse, error) {
 	__path := "/group"
 	return __client.Request[[]group.GroupResponse](__c, "GET", __path, __query, nil)

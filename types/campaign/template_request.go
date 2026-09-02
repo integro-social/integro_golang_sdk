@@ -3,8 +3,8 @@
 package campaign
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // A spoke for the template wheel: the sequence of messages one recipient
@@ -17,5 +17,5 @@ type TemplateRequest struct {
 	Label *primitives.Name `json:"label"`
 	// The sequence, in send order: 1–10 parts of text, image/video/file
 	// (caption optional) or audio.
-	Parts []types.OutboundContent `json:"parts"`
+	Parts []domain.OutboundContent `json:"parts"`
 }

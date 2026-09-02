@@ -3,8 +3,8 @@
 package user
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // One membership seen from the user's side — the mirror of the group roster's
@@ -17,6 +17,6 @@ type UserMembershipResponse struct {
 	// The group's own flag: a membership into a disabled group keeps working,
 	// so the roster says so rather than hiding it.
 	Enabled bool `json:"enabled"`
-	Role types.MembershipRole `json:"role"`
+	Role domain.MembershipRole `json:"role"`
 	MemberSince primitives.Timestamp `json:"member_since"`
 }

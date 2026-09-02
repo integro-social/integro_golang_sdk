@@ -5,7 +5,7 @@ package user
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	user "integro_sdk/types/user"
 )
 
@@ -57,10 +57,10 @@ func Delete(__c *__client.Client, userUid string) (struct{}, error) {
 // Get Get a single user by uid.
 //
 // Requires `ViewUsers`, which only platform staff hold.
-func Get(__c *__client.Client, userUid string) (database.User, error) {
+func Get(__c *__client.Client, userUid string) (domain.User, error) {
 	__path := "/user/{user_uid}"
 	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
-	return __client.Request[database.User](__c, "GET", __path, nil, nil)
+	return __client.Request[domain.User](__c, "GET", __path, nil, nil)
 }
 // GetSelf Get the authenticated user's own account, along with the permissions and memberships every gating decision reads.
 //
@@ -72,9 +72,9 @@ func GetSelf(__c *__client.Client) (user.UserSelfResponse, error) {
 // List List all users.
 //
 // Requires `ViewUsers`, which only platform staff hold.
-func List(__c *__client.Client) ([]database.User, error) {
+func List(__c *__client.Client) ([]domain.User, error) {
 	__path := "/user"
-	return __client.Request[[]database.User](__c, "GET", __path, nil, nil)
+	return __client.Request[[]domain.User](__c, "GET", __path, nil, nil)
 }
 // SetSuperAdmin Grant or revoke another user's platform staff standing.
 //

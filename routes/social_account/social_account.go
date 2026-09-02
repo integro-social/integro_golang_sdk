@@ -5,6 +5,7 @@ package social_account
 import (
 	__client "integro_sdk"
 	__strings "strings"
+	domain "integro_sdk/types/domain"
 	insight "integro_sdk/types/insight"
 	meta "integro_sdk/types/meta"
 	social_account "integro_sdk/types/social_account"
@@ -84,6 +85,20 @@ func Delete(__c *__client.Client, socialAccountUid string) (struct{}, error) {
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
+// Exposure Read the account's exposure telemetry, hour by hour over the requested
+// period (at most 92 days): how many platform lookups it made (usync number
+// checks, profile pictures, presence subscriptions), its sends by origin,
+// first-time contacts, whatsapp 429 and 463/475 answers, slow send acks and
+// sends still without a delivery receipt an hour later, plus the alerts the
+// last 24 hours raise right now. Only the session-backed whatsapp channels
+// are metered.
+//
+// Requires `ViewSocialAccounts` in the account's group.
+func Exposure(__c *__client.Client, socialAccountUid string, __query social_account.ExposureQuery) (domain.ExposureReport, error) {
+	__path := "/social-account/{social_account_uid}/exposure"
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[domain.ExposureReport](__c, "GET", __path, __query, nil)
+}
 // Get Fetch a single connected social account by uid, with the live session
 // status of its whatsapp session when applicable.
 //
@@ -105,9 +120,9 @@ func Insights(__c *__client.Client, socialAccountUid string, __query social_acco
 }
 // InsightsHistory Day-by-day history of the account's collected metrics (reach, views,
 // follower counts, …), grouped per metric — the charting companion to the
-// live `socialAccount.insights` passthrough. History exists only from the
-// day the account was connected. A channel that reports no insights is
-// refused here exactly as the live endpoint refuses it.
+// live insights passthrough. History exists only from the day the account
+// was connected. A channel that reports no insights is refused here exactly
+// as the live endpoint refuses it.
 //
 // Requires `ViewInsights` in the account's group.
 func InsightsHistory(__c *__client.Client, socialAccountUid string, __query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
@@ -158,7 +173,8 @@ func NativeQr(__c *__client.Client, pairingHandle string) (social_account.Native
 	return __client.Request[social_account.NativeQrResponse](__c, "GET", __path, nil, nil)
 }
 // NativeReconnect Re-establish the account's session after a drop; conflicts if the phone
-// unpaired (re-pair with a new QR instead).
+// unpaired (re-pair with a new QR instead) or while a whatsapp ban on the
+// number is still in force, since logging back in during a ban lengthens it.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
 func NativeReconnect(__c *__client.Client, socialAccountUid string) (struct{}, error) {
@@ -198,12 +214,38 @@ func SetAlias(__c *__client.Client, socialAccountUid string, __body social_accou
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
+// SetConversationCap Cap how many conversations the hub may open on this account in any 24
+// hours, whoever asks for them (inbox, api key, campaign, import, GoHighLevel),
+// or lift the cap with `null`. Only the session-backed whatsapp channels enforce
+// it; other channels are refused.
+//
+// Requires `UpdateSocialAccounts` in the account's group.
+func SetConversationCap(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountConversationCapRequest) (struct{}, error) {
+	__path := "/social-account/{social_account_uid}/conversation-cap"
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
+}
 // SetEnabled Enable or disable a connected social account; disabled accounts stop
-// ingesting webhooks and reject sends/publishes.
+// ingesting webhooks and reject sends/publishes. Enabling clears a session
+// incident the next connect would clear anyway, leaves a reach-out hold to
+// expire on its own, and conflicts while a whatsapp ban is still in force. Disabling a native whatsapp account also
+// disconnects its session, and enabling connects it again.
 //
 // Requires `UpdateSocialAccounts` in the account's group.
 func SetEnabled(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountEnabledRequest) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/enabled"
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
+}
+// SetPresence Choose how this native whatsapp account announces itself online: following
+// the operators looking at its inbox (the default) or never. Takes effect on
+// the live session at once. One change per account every 30 seconds; a
+// sooner one is refused with the seconds left. Other channels have no
+// presence to steer and are refused.
+//
+// Requires `UpdateSocialAccounts` in the account's group.
+func SetPresence(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountPresenceRequest) (struct{}, error) {
+	__path := "/social-account/{social_account_uid}/presence"
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
@@ -252,8 +294,9 @@ func StevoQr(__c *__client.Client, socialAccountUid string) (social_account.Stev
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[social_account.StevoQrResponse](__c, "GET", __path, nil, nil)
 }
-// StevoReconnect Re-establish the instance's session after a drop. Temporarily disabled —
-// always fails with 503.
+// StevoReconnect Re-establish the instance's session after a drop; conflicts while a
+// whatsapp ban on the number is still in force, since logging back in
+// during a ban lengthens it. Temporarily disabled — always fails with 503.
 //
 // Requires `ConnectSocialAccounts` in the account's group.
 func StevoReconnect(__c *__client.Client, socialAccountUid string) (struct{}, error) {
@@ -262,10 +305,13 @@ func StevoReconnect(__c *__client.Client, socialAccountUid string) (struct{}, er
 	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // StevoStatus Live connection status of the instance (connected = session up; logged_in
-// = phone paired). Reading it also refreshes the account's stored name and
-// picture from the paired profile when they changed, emitting
-// `account_updated` — the poll is the natural refresh point, since it already
-// runs whenever the panel is open.
+// = phone paired). Reading it also refreshes the account's stored name from
+// the paired profile when it changed (the picture follows the daily profile
+// sweep, which asks for it only once the gateway has echoed the account's
+// own number), and reads the gateway's health report: a reported reach-out
+// hold records a `reachout_timelock` session incident on the account, and its
+// lifting clears it. Both emit `account_updated` — the poll is the natural
+// refresh point, since it already runs whenever the panel is open.
 //
 // Requires `ViewSocialAccounts` in the account's group.
 func StevoStatus(__c *__client.Client, socialAccountUid string) (social_account.StevoStatusResponse, error) {

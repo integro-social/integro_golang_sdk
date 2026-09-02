@@ -5,7 +5,7 @@ package issue
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	issue "integro_sdk/types/issue"
 )
 
@@ -26,17 +26,17 @@ func Create(__c *__client.Client, __form *__client.MultipartForm) (issue.CreateI
 // Get Fetch a single issue by uid.
 //
 // Requires `ViewIssues`, which only platform staff hold.
-func Get(__c *__client.Client, issueUid string) (database.Issue, error) {
+func Get(__c *__client.Client, issueUid string) (domain.Issue, error) {
 	__path := "/issue/{issue_uid}"
 	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
-	return __client.Request[database.Issue](__c, "GET", __path, nil, nil)
+	return __client.Request[domain.Issue](__c, "GET", __path, nil, nil)
 }
 // List List issues.
 //
 // Requires `ViewIssues`, which only platform staff hold.
-func List(__c *__client.Client) ([]database.Issue, error) {
+func List(__c *__client.Client) ([]domain.Issue, error) {
 	__path := "/issue"
-	return __client.Request[[]database.Issue](__c, "GET", __path, nil, nil)
+	return __client.Request[[]domain.Issue](__c, "GET", __path, nil, nil)
 }
 // Screenshot Serve a screenshot file attached to an issue.
 //

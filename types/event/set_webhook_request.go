@@ -3,8 +3,8 @@
 package event
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type SetWebhookRequest struct {
@@ -18,5 +18,5 @@ type SetWebhookRequest struct {
 	// filtered to presence alone receives nothing.
 	Events *[]string `json:"events"`
 	// Channels delivered to this subscription; omit for everything.
-	Channels *[]types.Channel `json:"channels"`
+	Channels *[]domain.Channel `json:"channels"`
 }

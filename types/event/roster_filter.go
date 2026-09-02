@@ -3,8 +3,8 @@
 package event
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // The connection's base subscription. Every list is OR within itself, AND
@@ -13,7 +13,7 @@ import (
 type RosterFilter struct {
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
-	Channels *[]types.Channel `json:"channels"`
+	Channels *[]domain.Channel `json:"channels"`
 	// Event kinds and/or family aliases (`message`, `presence`, `comment`,
 	// `mention`, `post`, `conversation`, `account`, `review`).
 	Events *[]string `json:"events"`

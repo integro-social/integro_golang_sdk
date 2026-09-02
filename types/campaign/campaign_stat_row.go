@@ -3,13 +3,13 @@
 package campaign
 
 import (
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 // One recipient-status × message-status cell of the stats join.
 type CampaignStatRow struct {
-	RecipientStatus types.CampaignRecipientStatus `json:"recipient_status"`
+	RecipientStatus domain.CampaignRecipientStatus `json:"recipient_status"`
 	// The pointed message's own status; `null` for never-dispatched rows.
-	MessageStatus *types.MessageStatus `json:"message_status"`
+	MessageStatus *domain.MessageStatus `json:"message_status"`
 	Count uint32 `json:"count"`
 }

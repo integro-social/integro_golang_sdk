@@ -3,13 +3,13 @@
 package issue
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type CreateIssueForm struct {
-	Severity types.IssueSeverity `json:"severity"`
+	Severity domain.IssueSeverity `json:"severity"`
 	Description primitives.Text0_8000 `json:"description"`
-	Details types.IssueDetails `json:"details"`
+	Details domain.IssueDetails `json:"details"`
 	Screenshots [][]byte `json:"screenshots"`
 }

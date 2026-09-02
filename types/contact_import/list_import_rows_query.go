@@ -3,12 +3,12 @@
 package contact_import
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type ListImportRowsQuery struct {
-	Verdict *types.ContactImportRowVerdict `json:"verdict"`
+	Verdict *domain.ContactImportRowVerdict `json:"verdict"`
 	// Keyset cursor: only rows with `id` strictly greater are returned.
 	AfterId *uint64 `json:"after_id"`
 	Limit *primitives.Number1_500 `json:"limit"`

@@ -3,9 +3,9 @@
 package group
 
 import (
-	types "integro_sdk/types/types"
+	domain "integro_sdk/types/domain"
 )
 
 type SetGroupMemberRoleRequest struct {
-	Role types.MembershipRole `json:"role"`
+	Role domain.MembershipRole `json:"role"`
 }

@@ -3,11 +3,11 @@
 package group
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 type GroupResponse struct {
-	database.Group
+	domain.Group
 	// Present only with `with_counts`, and only for a caller holding
 	// `ViewApiKeys` in this group; `null` says the count is out of reach, never
 	// that the group has no keys.
@@ -16,4 +16,8 @@ type GroupResponse struct {
 	// `ViewMembers` in this group; `null` says the count is out of reach, never
 	// that the group has no members.
 	MemberCount *uint64 `json:"member_count"`
+	// Present only with `with_counts`, and only for a caller holding
+	// `ViewSocialAccounts` in this group; `null` says the count is out of
+	// reach, never that the group has no accounts.
+	SocialAccountCount *uint64 `json:"social_account_count"`
 }

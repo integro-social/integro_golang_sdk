@@ -6,7 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	call "integro_sdk/types/call"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 // Answer Answer a ringing call, claiming it for the caller — who is then the only
@@ -14,11 +14,11 @@ import (
 // gets "chamada já atendida".
 //
 // Requires `SendMessages` in the conversation's group.
-func Answer(__c *__client.Client, conversationUid string, callUid string) (database.Call, error) {
+func Answer(__c *__client.Client, conversationUid string, callUid string) (domain.Call, error) {
 	__path := "/conversation/{conversation_uid}/call/{call_uid}/answer"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	__path = __strings.Replace(__path, "{call_uid}", __client.EncodePath(callUid), 1)
-	return __client.Request[database.Call](__c, "POST", __path, nil, nil)
+	return __client.Request[domain.Call](__c, "POST", __path, nil, nil)
 }
 // Hangup End a call in progress. Not restricted to the operator holding it: a call
 // whose operator walked away has to be endable by whoever is still there. A
@@ -59,10 +59,10 @@ func Media(__c *__client.Client, conversationUid string, callUid string, __handl
 // one call at a time per account.
 //
 // Requires `SendMessages` in the conversation's group.
-func Place(__c *__client.Client, conversationUid string, __body call.PlaceCallRequest) (database.Call, error) {
+func Place(__c *__client.Client, conversationUid string, __body call.PlaceCallRequest) (domain.Call, error) {
 	__path := "/conversation/{conversation_uid}/call"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[database.Call](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.Call](__c, "POST", __path, nil, __body)
 }
 // Reject Refuse a ringing call. Available to anyone who could have answered it — a
 // shared inbox's ringing call is everyone's to decline.
@@ -75,12 +75,13 @@ func Reject(__c *__client.Client, conversationUid string, callUid string) (struc
 	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // Ringing List the calls ringing right now on accounts the caller can see — inbound,
-// unclaimed and still answerable. Ring events are broadcast once and never
-// replayed, so a client that just connected (a reloaded page, a login while a
-// call is ringing) hydrates its ringing list from here.
+// unclaimed and still answerable, at most 2 minutes old (an older open call
+// lost its ending and settles as missed). Ring events are broadcast once and
+// never replayed, so a client that just connected (a reloaded page, a login
+// while a call is ringing) hydrates its ringing list from here.
 //
 // Requires `ViewMessages`; the list is clamped to the groups where it is held.
-func Ringing(__c *__client.Client) ([]database.Call, error) {
+func Ringing(__c *__client.Client) ([]domain.Call, error) {
 	__path := "/call/ringing"
-	return __client.Request[[]database.Call](__c, "GET", __path, nil, nil)
+	return __client.Request[[]domain.Call](__c, "GET", __path, nil, nil)
 }

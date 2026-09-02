@@ -3,8 +3,8 @@
 package campaign
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // The full editable configuration, replaced as one unit.
@@ -24,6 +24,6 @@ type UpdateCampaignRequest struct {
 	EndsAt *primitives.Timestamp `json:"ends_at"`
 	MaxPerDay *primitives.Number1_100000 `json:"max_per_day"`
 	MaxPerAccountPerDay *primitives.Number1_100000 `json:"max_per_account_per_day"`
-	TemplateMode types.TemplateRotation `json:"template_mode"`
+	TemplateMode domain.TemplateRotation `json:"template_mode"`
 	CooldownDays *primitives.Number1_365 `json:"cooldown_days"`
 }

@@ -3,12 +3,12 @@
 package user_mfa
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type UserMfaFactorRow struct {
-	Kind types.UserMfaKind `json:"kind"`
+	Kind domain.UserMfaKind `json:"kind"`
 	ConfirmedAt *primitives.Timestamp `json:"confirmed_at"`
 	LastUsedAt *primitives.Timestamp `json:"last_used_at"`
 }

@@ -3,14 +3,14 @@
 package contact_import
 
 import (
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 // One import with everything its page renders: the row, the accounts it
 // distributes over, the derived counters, and the drain estimate.
 type ContactImportDetail struct {
-	Import database.ContactImport `json:"import"`
+	Import domain.ContactImport `json:"import"`
 	SocialAccountUids []primitives.Uid `json:"social_account_uids"`
 	Counts ContactImportCounts `json:"counts"`
 	// Estimated milliseconds until the pending rows drain at current pacing;

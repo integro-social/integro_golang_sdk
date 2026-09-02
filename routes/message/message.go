@@ -5,7 +5,7 @@ package message
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	message "integro_sdk/types/message"
 	primitives "integro_sdk/types/primitives"
 )
@@ -67,23 +67,23 @@ func Delete(__c *__client.Client, conversationUid string, messageUid string) (st
 // window.
 //
 // Requires `ManageMessages` in the conversation's group.
-func Edit(__c *__client.Client, conversationUid string, messageUid string, __body message.EditMessageRequest) (database.Message, error) {
+func Edit(__c *__client.Client, conversationUid string, messageUid string, __body message.EditMessageRequest) (domain.Message, error) {
 	__path := "/conversation/{conversation_uid}/message/{message_uid}"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
-	return __client.Request[database.Message](__c, "PUT", __path, nil, __body)
+	return __client.Request[domain.Message](__c, "PUT", __path, nil, __body)
 }
 // Forward Forward a message into other conversations. Each target re-sends the
-// stored content as an ordinary queued message: forwarding is the hub's own,
-// so no channel's native forward flag is set and nothing marks the copy as
-// forwarded — a target reads it as a message the account just wrote.
+// stored content as a queued message of its own, marked as forwarded: native
+// whatsapp shows the recipient the forwarded label, the other channels carry
+// no such marker and read it as a message the account just wrote.
 //
 // The content is re-shaped per target channel, so a forward crosses channels
 // (a whatsapp photo into an instagram thread); a gif lands as a plain video
 // anywhere but native whatsapp. Targets are answered one by one and
 // independently: a target the caller cannot send in, whose channel cannot
 // express the content, or whose 24h window has lapsed comes back `rejected`
-// while the rest still queue.
+// while the rest still queue. At most five targets per call.
 //
 // Requires `ViewMessages` in the source conversation's group, and
 // `SendMessages` in each target's — a target failing that is `rejected`, not
@@ -100,9 +100,9 @@ func Forward(__c *__client.Client, conversationUid string, messageUid string, __
 // for resolving rows the caller already holds by uid.
 //
 // Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
-func List(__c *__client.Client, __query message.ListMessagesQuery) ([]message.MessageWithContext, error) {
+func List(__c *__client.Client, __query message.ListMessagesQuery) ([]domain.MessageWithContext, error) {
 	__path := "/message"
-	return __client.Request[[]message.MessageWithContext](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.MessageWithContext](__c, "GET", __path, __query, nil)
 }
 // React React to a message through the platform. The payload is channel-tagged
 // and must match the message's channel; Messenger has no reaction API and
@@ -134,10 +134,10 @@ func React(__c *__client.Client, conversationUid string, messageUid string, __bo
 // without a new send.
 //
 // Requires `SendMessages` in the conversation's group.
-func Send(__c *__client.Client, conversationUid string, __body message.SendMessageRequest) (message.MessageWithContext, error) {
+func Send(__c *__client.Client, conversationUid string, __body message.SendMessageRequest) (domain.MessageWithContext, error) {
 	__path := "/conversation/{conversation_uid}/message"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[message.MessageWithContext](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.MessageWithContext](__c, "POST", __path, nil, __body)
 }
 // Unreact Remove the account's reaction from a message (Instagram and the WhatsApp
 // flavors — Messenger has no reaction API).

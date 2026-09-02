@@ -5,16 +5,16 @@ package mail_queue
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	mailing "integro_sdk/types/mailing"
 )
 
 // List List queued emails, optionally filtered by delivery status.
 //
 // Requires `ManageEmailQueue`, which only platform staff hold.
-func List(__c *__client.Client, __query mailing.EmailQueueListQuery) ([]database.EmailQueueItem, error) {
+func List(__c *__client.Client, __query mailing.EmailQueueListQuery) ([]domain.EmailQueueItem, error) {
 	__path := "/mail-queue"
-	return __client.Request[[]database.EmailQueueItem](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.EmailQueueItem](__c, "GET", __path, __query, nil)
 }
 // Remove Remove a queued email from the delivery queue. An email that carried a
 // subscriber and had not been sent flips that record's email status to

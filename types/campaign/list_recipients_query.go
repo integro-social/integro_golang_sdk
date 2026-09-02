@@ -3,12 +3,12 @@
 package campaign
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 type ListRecipientsQuery struct {
-	Status *types.CampaignRecipientStatus `json:"status"`
+	Status *domain.CampaignRecipientStatus `json:"status"`
 	// Keyset cursor: only rows with `id` strictly greater are returned.
 	AfterId *uint64 `json:"after_id"`
 	Limit *primitives.Number1_500 `json:"limit"`

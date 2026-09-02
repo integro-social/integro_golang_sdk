@@ -5,7 +5,7 @@ package comment
 import (
 	__client "integro_sdk"
 	__strings "strings"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	engagement "integro_sdk/types/engagement"
 )
 
@@ -15,10 +15,10 @@ import (
 // other channel's shape deserializes.
 //
 // Requires `ReplyComments` in the account's group.
-func Create(__c *__client.Client, socialAccountUid string, __body engagement.CreateCommentRequest) (database.Comment, error) {
+func Create(__c *__client.Client, socialAccountUid string, __body engagement.CreateCommentRequest) (domain.Comment, error) {
 	__path := "/social-account/{social_account_uid}/comment"
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
-	return __client.Request[database.Comment](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.Comment](__c, "POST", __path, nil, __body)
 }
 // Delete Delete a comment from the platform; the row is kept with `deleted` set.
 //
@@ -33,11 +33,11 @@ func Delete(__c *__client.Client, socialAccountUid string, commentUid string) (s
 // account reads as not found.
 //
 // Requires `ViewComments` in the account's group.
-func Get(__c *__client.Client, socialAccountUid string, commentUid string) (database.Comment, error) {
+func Get(__c *__client.Client, socialAccountUid string, commentUid string) (domain.Comment, error) {
 	__path := "/social-account/{social_account_uid}/comment/{comment_uid}"
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	__path = __strings.Replace(__path, "{comment_uid}", __client.EncodePath(commentUid), 1)
-	return __client.Request[database.Comment](__c, "GET", __path, nil, nil)
+	return __client.Request[domain.Comment](__c, "GET", __path, nil, nil)
 }
 // Like Like a comment as the page (Facebook only — Instagram's API has no
 // comment likes).
@@ -53,9 +53,9 @@ func Like(__c *__client.Client, socialAccountUid string, commentUid string) (str
 // oldest first, optionally filtered by group, account, or post.
 //
 // Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
-func List(__c *__client.Client, __query engagement.ListCommentsQuery) ([]database.Comment, error) {
+func List(__c *__client.Client, __query engagement.ListCommentsQuery) ([]domain.Comment, error) {
 	__path := "/comment"
-	return __client.Request[[]database.Comment](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.Comment](__c, "GET", __path, __query, nil)
 }
 // PrivateReply Answer a comment privately with a DM (allowed once per comment; the
 // message lands in the conversation via the echo webhook). The account's
@@ -71,11 +71,11 @@ func PrivateReply(__c *__client.Client, socialAccountUid string, commentUid stri
 // Reply Reply to a comment as the account (threaded reply).
 //
 // Requires `ReplyComments` in the account's group.
-func Reply(__c *__client.Client, socialAccountUid string, commentUid string, __body engagement.CommentMessageRequest) (database.Comment, error) {
+func Reply(__c *__client.Client, socialAccountUid string, commentUid string, __body engagement.CommentMessageRequest) (domain.Comment, error) {
 	__path := "/social-account/{social_account_uid}/comment/{comment_uid}/reply"
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	__path = __strings.Replace(__path, "{comment_uid}", __client.EncodePath(commentUid), 1)
-	return __client.Request[database.Comment](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.Comment](__c, "POST", __path, nil, __body)
 }
 // SetHidden Hide or unhide a comment on the platform.
 //

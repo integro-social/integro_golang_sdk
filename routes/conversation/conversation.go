@@ -6,7 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	call "integro_sdk/types/call"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 	message "integro_sdk/types/message"
 )
 
@@ -14,8 +14,10 @@ import (
 // typing_off. The payload is channel-tagged and the `channel` must match the
 // conversation's account; official whatsapp has no typing_off (its indicator
 // auto-dismisses), so that channel's shape cannot express one. Mark-seen
+// receipts every inbound message still unread (the latest 50 on the
+// session-backed whatsapp channels, the latest one on official whatsapp) and
 // advances the conversation's `seen_up_to` watermark (`last_inbound_at >
-// seen_up_to` = unread).
+// seen_up_to` = unread); with nothing unread it is a no-op.
 //
 // Requires `SendMessages` in the conversation's group.
 func Action(__c *__client.Client, conversationUid string, __body message.ConversationActionRequest) (struct{}, error) {
@@ -28,41 +30,54 @@ func Action(__c *__client.Client, conversationUid string, __body message.Convers
 // clearing the alias falls back to it.
 //
 // Requires `SendMessages` in the conversation's group.
-func Alias(__c *__client.Client, conversationUid string, __body message.SetConversationAliasRequest) (database.Conversation, error) {
+func Alias(__c *__client.Client, conversationUid string, __body message.SetConversationAliasRequest) (domain.Conversation, error) {
 	__path := "/conversation/{conversation_uid}/alias"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[database.Conversation](__c, "PUT", __path, nil, __body)
+	return __client.Request[domain.Conversation](__c, "PUT", __path, nil, __body)
+}
+// Avatar The participant's full-size profile picture, fetched from the platform on
+// first request and kept until the platform reports a picture change; a
+// request that finds none is not retried for ten minutes. Channels without a
+// full-size picture answer with the picture the hub already holds.
+//
+// Requires `ViewMessages` in the conversation's group.
+func Avatar(__c *__client.Client, conversationUid string) (message.ConversationAvatar, error) {
+	__path := "/conversation/{conversation_uid}/avatar"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.ConversationAvatar](__c, "GET", __path, nil, nil)
 }
 // Calls List a conversation's calls, newest first; `before_id` pages older history.
 //
 // Requires `ViewMessages` in the conversation's group.
-func Calls(__c *__client.Client, conversationUid string, __query call.ConversationCallsQuery) ([]database.Call, error) {
+func Calls(__c *__client.Client, conversationUid string, __query call.ConversationCallsQuery) ([]domain.Call, error) {
 	__path := "/conversation/{conversation_uid}/call"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[[]database.Call](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.Call](__c, "GET", __path, __query, nil)
 }
 // Clear Erase the conversation's stored history on the hub, keeping the
 // conversation: its messages go, the preview and unread badge reset, and the
 // 24h-window watermarks stay. Nothing is deleted on the platform.
 //
 // Requires `ManageMessages` in the conversation's group.
-func Clear(__c *__client.Client, conversationUid string) (database.Conversation, error) {
+func Clear(__c *__client.Client, conversationUid string) (domain.Conversation, error) {
 	__path := "/conversation/{conversation_uid}/message"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[database.Conversation](__c, "DELETE", __path, nil, nil)
+	return __client.Request[domain.Conversation](__c, "DELETE", __path, nil, nil)
 }
 // Create Open (or return) a conversation with a phone number — a channel-tagged
 // request whose declared channel must match the account's; only
 // whatsapp_stevo / whatsapp_native can verify a number on the platform,
-// so no other channel's shape deserializes. The number is checked first
-// (an unrecognized number or failed check creates nothing), the platform's
-// canonical id keys the conversation, and the initial profile (name,
-// picture) is stored best-effort.
+// so no other channel's shape deserializes. A number the account already
+// talks to returns its conversation with no platform lookup at all; a new
+// one is checked first (an unrecognized number or failed check creates
+// nothing), the platform's canonical id keys the conversation, and the
+// initial profile (name, picture) is stored best-effort and refreshed at
+// most every 30 days.
 //
 // Requires `SendMessages` in the account's group.
-func Create(__c *__client.Client, __body message.CreateConversationRequest) (database.Conversation, error) {
+func Create(__c *__client.Client, __body message.CreateConversationRequest) (domain.Conversation, error) {
 	__path := "/conversation"
-	return __client.Request[database.Conversation](__c, "POST", __path, nil, __body)
+	return __client.Request[domain.Conversation](__c, "POST", __path, nil, __body)
 }
 // Delete Delete the conversation and its whole stored history from the hub.
 // Nothing is deleted on the platform: a later inbound message from the same
@@ -82,9 +97,9 @@ func Delete(__c *__client.Client, conversationUid string) (struct{}, error) {
 // characters answers with no rows; not combinable with `uids`.
 //
 // Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
-func List(__c *__client.Client, __query message.ListConversationsQuery) ([]database.Conversation, error) {
+func List(__c *__client.Client, __query message.ListConversationsQuery) ([]domain.Conversation, error) {
 	__path := "/conversation"
-	return __client.Request[[]database.Conversation](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.Conversation](__c, "GET", __path, __query, nil)
 }
 // MessageCount How many messages the conversation holds, narrowed by `kinds` like the
 // list — what a media gallery shows as its total.
@@ -101,23 +116,25 @@ func MessageCount(__c *__client.Client, conversationUid string, __query message.
 // the wire (never both cursors).
 //
 // Requires `ViewMessages` in the conversation's group.
-func Messages(__c *__client.Client, conversationUid string, __query message.ConversationMessagesQuery) ([]database.Message, error) {
+func Messages(__c *__client.Client, conversationUid string, __query message.ConversationMessagesQuery) ([]domain.Message, error) {
 	__path := "/conversation/{conversation_uid}/message"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[[]database.Message](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.Message](__c, "GET", __path, __query, nil)
 }
 // Read Clear the conversation's unread badge (hub-local read state, shared by
 // every operator). Never sends a platform read receipt — that stays the
 // explicit `mark_seen` conversation action.
 //
 // Requires `ViewMessages` in the conversation's group.
-func Read(__c *__client.Client, conversationUid string) (database.Conversation, error) {
+func Read(__c *__client.Client, conversationUid string) (domain.Conversation, error) {
 	__path := "/conversation/{conversation_uid}/read"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
-	return __client.Request[database.Conversation](__c, "PUT", __path, nil, nil)
+	return __client.Request[domain.Conversation](__c, "PUT", __path, nil, nil)
 }
 // UnreadCount How many conversations hold unread messages, across every group where the
 // caller holds `ViewMessages` — the inbox badge.
+//
+// Requires `ViewMessages`; the count covers every group where the caller holds it.
 func UnreadCount(__c *__client.Client) (uint64, error) {
 	__path := "/conversation/unread"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)

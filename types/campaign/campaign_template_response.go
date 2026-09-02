@@ -3,8 +3,8 @@
 package campaign
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
-	types "integro_sdk/types/types"
 )
 
 // A template as the API shows it: the stored JSON decoded into its parts.
@@ -14,6 +14,6 @@ type CampaignTemplateResponse struct {
 	// The linear rotation order.
 	Position uint32 `json:"position"`
 	Label *primitives.Name `json:"label"`
-	Parts []types.OutboundContent `json:"parts"`
+	Parts []domain.OutboundContent `json:"parts"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 }

@@ -5,7 +5,7 @@ package audit_log
 import (
 	__client "integro_sdk"
 	audit_log "integro_sdk/types/audit_log"
-	database "integro_sdk/types/database"
+	domain "integro_sdk/types/domain"
 )
 
 // Count Count audit log entries matching the given filters and time window.
@@ -18,14 +18,14 @@ func Count(__c *__client.Client, __query audit_log.AuditLogQuery) (uint64, error
 // List List audit log entries matching the given filters and time window.
 //
 // Requires `ViewAuditLogs`; platform staff read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-func List(__c *__client.Client, __query audit_log.AuditLogQuery) ([]database.AuditLog, error) {
+func List(__c *__client.Client, __query audit_log.AuditLogQuery) ([]domain.AuditLog, error) {
 	__path := "/audit-log"
-	return __client.Request[[]database.AuditLog](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.AuditLog](__c, "GET", __path, __query, nil)
 }
 // Stats Aggregate audit log statistics for the given filters and time window.
 //
 // Requires `ViewAuditLogs`; platform staff aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-func Stats(__c *__client.Client, __query audit_log.AuditLogQuery) (database.AuditLogStats, error) {
+func Stats(__c *__client.Client, __query audit_log.AuditLogQuery) (domain.AuditLogStats, error) {
 	__path := "/audit-log/stat"
-	return __client.Request[database.AuditLogStats](__c, "GET", __path, __query, nil)
+	return __client.Request[domain.AuditLogStats](__c, "GET", __path, __query, nil)
 }
