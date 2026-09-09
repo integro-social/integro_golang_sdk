@@ -3,6 +3,7 @@
 package google_account
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
@@ -10,5 +11,5 @@ type ConnectGoogleRequest struct {
 	GroupUid primitives.Uid `json:"group_uid"`
 	// At least one; connecting later with more capabilities extends the grant
 	// (incremental auth) instead of replacing it.
-	Capabilities []GoogleCapability `json:"capabilities"`
+	Capabilities []domain.GoogleCapability `json:"capabilities"`
 }

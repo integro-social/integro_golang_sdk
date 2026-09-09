@@ -2,7 +2,7 @@
 
 package message
 
-// The replacement text, shared by both editing flavors.
+// The replacement text.
 type MessageEdit struct {
 	// The new text: replaces the body of text messages, the caption of media
 	// messages.

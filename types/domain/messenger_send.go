@@ -10,8 +10,9 @@ import (
 // quick replies may attach to any content.
 type MessengerSend struct {
 	Content MessengerContent `json:"content"`
-	// Lifts the standard 24h response window (`human_agent` = 7 days; the
-	// Meta app must hold the `human_agent` permission).
+	// A message tag that lifts the response window where the channel honors
+	// it (`GET /channel`, `response_window.lift`); refused on any other
+	// channel.
 	Tag *meta.MessageTag `json:"tag"`
 	// Up to 13 quick-reply chips.
 	QuickReplies *[]QuickReply `json:"quick_replies"`

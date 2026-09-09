@@ -24,7 +24,7 @@ func Delete(__c *__client.Client, __query message.DeleteTemplateQuery) (struct{}
 	return __client.Request[struct{}](__c, "DELETE", __path, __query, nil)
 }
 // List List the WABA's whatsapp message templates, all statuses (only APPROVED
-// ones are sendable).
+// ones are sendable); whatsapp and whatsapp_alt accounts alike.
 //
 // Requires `ViewTemplates` in the account's group.
 func List(__c *__client.Client, __query message.ListTemplatesQuery) ([]message.TemplateResponse, error) {

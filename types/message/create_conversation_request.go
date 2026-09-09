@@ -2,7 +2,9 @@
 
 package message
 
-// Channel-tagged conversation creation — only the channels that can verify
-// a number on the platform can initiate, so no other channel's shape
-// deserializes.
+// Channel-tagged conversation creation — whatsapp_native verifies the
+// number on the platform and opens the thread silently; whatsapp and
+// whatsapp_alt open it by sending an approved template, the only content
+// those channels accept before the recipient writes. No other channel's
+// shape deserializes.
 type CreateConversationRequest = interface{}

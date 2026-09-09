@@ -12,10 +12,8 @@ type GrantAccount struct {
 	ExternalId string `json:"external_id"`
 	Name string `json:"name"`
 	Username *string `json:"username"`
-	// Already registered in the target group — confirming it refreshes the
-	// stored token and display fields.
-	Connected bool `json:"connected"`
-	// Registered in another group: shown locked, never selectable (accounts
-	// cannot be moved between groups by a connect).
-	OtherGroup bool `json:"other_group"`
+	// How many accounts of this identity the target group already holds;
+	// confirming adds another, independent one, unless the login named the
+	// account it reconnects.
+	Connections uint32 `json:"connections"`
 }

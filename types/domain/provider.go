@@ -16,7 +16,9 @@ const (
 	ProviderFacebook Provider = "facebook"
 	ProviderInstagram Provider = "instagram"
 	ProviderWhatsapp Provider = "whatsapp"
-	ProviderWhatsappStevo Provider = "whatsapp_stevo"
 	ProviderWhatsappNative Provider = "whatsapp_native"
+	ProviderFacebookAlt Provider = "facebook_alt"
+	ProviderInstagramAlt Provider = "instagram_alt"
+	ProviderWhatsappAlt Provider = "whatsapp_alt"
 	ProviderGoogle Provider = "google"
 )

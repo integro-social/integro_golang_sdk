@@ -3,6 +3,6 @@
 package ghl
 
 // Channel-tagged link target — a GHL send names a bare phone number, so only
-// the whatsapp flavors that can open a conversation from one can back a
+// the whatsapp flavor that can open a conversation from one can back a
 // location; no other channel's shape deserializes.
 type LinkGhlRequest = interface{}

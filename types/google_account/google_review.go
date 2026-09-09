@@ -2,6 +2,10 @@
 
 package google_account
 
+import (
+	domain "integro_sdk/types/domain"
+)
+
 // What a stashed Google grant covers, for the capability-selection screen.
 type GoogleReview struct {
 	Email string `json:"email"`
@@ -12,8 +16,8 @@ type GoogleReview struct {
 	Connected bool `json:"connected"`
 	// Capabilities the grant covers — the selectable set. Incremental auth
 	// unions grants, so this may exceed what was just requested.
-	Granted []GoogleCapability `json:"granted"`
+	Granted []domain.GoogleCapability `json:"granted"`
 	// Capabilities the admin asked for when starting the flow — the
 	// pre-checked set.
-	Requested []GoogleCapability `json:"requested"`
+	Requested []domain.GoogleCapability `json:"requested"`
 }

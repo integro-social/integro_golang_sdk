@@ -8,7 +8,7 @@ import (
 
 type SocialAccountResponse struct {
 	domain.SocialAccount
-	// Live session status for the session-backed whatsapp channels
-	// (native/stevo); null for channels without a session concept.
+	// Live session status for the session-backed whatsapp channel (native);
+	// null for channels without a session concept.
 	Session *SessionStatus `json:"session"`
 }

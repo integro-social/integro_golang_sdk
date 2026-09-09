@@ -2,7 +2,7 @@
 
 package domain
 
-// Why a session-backed whatsapp account (native/stevo) last stopped working.
+// Why a session-backed whatsapp account (native) last stopped working.
 //
 // [`crate::channel::Channel`]-agnostic, and split by what an operator has to
 // *do* about it — which is why the three terminal cases are separate variants

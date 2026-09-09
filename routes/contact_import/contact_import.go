@@ -132,7 +132,7 @@ func UpdateRow(__c *__client.Client, importUid string, rowId string, __body cont
 // gets a parse verdict, and the import is created `staged` — nothing touches
 // a platform until `start`. Invalid rows stay editable while staged.
 //
-// Requires `ImportContacts` in the accounts' group; every account must be a whatsapp session account (stevo or native) of that same group.
+// Requires `ImportContacts` in the accounts' group; every account must be a native whatsapp account of that same group.
 func Upload(__c *__client.Client, __form *__client.MultipartForm) (contact_import.ContactImportDetail, error) {
 	__path := "/contact-import"
 	return __client.RequestMultipart[contact_import.ContactImportDetail](__c, "POST", __path, nil, __form)

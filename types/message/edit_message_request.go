@@ -2,7 +2,7 @@
 
 package message
 
-// Channel-tagged edit payload — only the unofficial WhatsApp flavors expose
-// a platform edit call, so no other channel's shape deserializes. The
-// `channel` must match the message's.
+// Channel-tagged edit payload — only native WhatsApp exposes a platform
+// edit call, so no other channel's shape deserializes. The `channel` must
+// match the message's.
 type EditMessageRequest = interface{}

@@ -10,4 +10,8 @@ type NativePairingStatusResponse struct {
 	Status NativePairingStatus `json:"status"`
 	// Set once `status` is `paired`.
 	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
+	// Set once `status` is `failed` for a scan the hub refused after the phone
+	// accepted it — a repair scanned with another number, say — so the
+	// operator learns why; absent on a plain timeout or platform failure.
+	Failure *string `json:"failure"`
 }

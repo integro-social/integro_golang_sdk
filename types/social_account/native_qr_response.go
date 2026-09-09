@@ -2,7 +2,16 @@
 
 package social_account
 
+import (
+	primitives "integro_sdk/types/primitives"
+)
+
 type NativeQrResponse struct {
-	// The QR code to render, or null until the first code arrives.
+	// The QR code to render, or null until the first code arrives and while a
+	// fresh batch is being fetched after a renewal.
 	Qr *string `json:"qr"`
+	// The instant the code stops being accepted, about a minute after it
+	// arrived. Past it the code is dead, nothing replaces it on its own, and
+	// `socialAccount.nativeRenewQr` asks the phone for a fresh one.
+	ExpiresAt *primitives.Timestamp `json:"expires_at"`
 }

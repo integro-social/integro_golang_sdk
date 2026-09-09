@@ -40,8 +40,8 @@ func Cancel(__c *__client.Client, campaignUid string) (campaign.CampaignDetail, 
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[campaign.CampaignDetail](__c, "POST", __path, nil, nil)
 }
-// Create Create a draft campaign in a group. Its accounts are the group's whatsapp
-// accounts (native or Stevo, mixed freely); nothing sends until templates,
+// Create Create a draft campaign in a group. Its accounts are the group's native
+// whatsapp accounts; nothing sends until templates,
 // accounts and an audience exist and `start` passes the preflight.
 //
 // Requires `ManageCampaigns` in the target group; group-scoped API keys create into their own group, others must name it.
@@ -128,8 +128,7 @@ func Resume(__c *__client.Client, campaignUid string) (campaign.CampaignDetail, 
 	return __client.Request[campaign.CampaignDetail](__c, "POST", __path, nil, nil)
 }
 // SetAccounts Replace the participating account set. Draft, paused and done only; every
-// account must be a whatsapp (native or Stevo) account of the campaign's
-// group. Queued recipients of an account taken out are handed to the
+// account must be a native whatsapp account of the campaign's group. Queued recipients of an account taken out are handed to the
 // accounts that remain, balanced and preferring one that already knows
 // them; rows that already ran stay. The set may be empty — the queue then
 // waits for the next account change — and the campaign cannot start until

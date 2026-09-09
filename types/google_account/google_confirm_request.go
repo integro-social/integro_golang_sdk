@@ -2,9 +2,13 @@
 
 package google_account
 
+import (
+	domain "integro_sdk/types/domain"
+)
+
 type GoogleConfirmRequest struct {
 	Token string `json:"token"`
 	// The capabilities to enable on the hub account; the stored scope keeps
 	// only these families, even when the grant covers more.
-	Capabilities []GoogleCapability `json:"capabilities"`
+	Capabilities []domain.GoogleCapability `json:"capabilities"`
 }

@@ -2,8 +2,19 @@
 
 package social_account
 
+// What the login's redirect carries back: the hub's one-shot `state`, then
+// Meta's `code`/`error` or the alternate gateway's selection state in its
+// own spelling.
 type ConnectCallbackQuery struct {
 	State *string `json:"state"`
 	Code *string `json:"code"`
 	Error *string `json:"error"`
+	ErrorDescription *string `json:"error_description"`
+	Platform *string `json:"platform"`
+	ProfileId *string `json:"profileId"`
+	TempToken *string `json:"tempToken"`
+	Step *string `json:"step"`
+	AccountId *string `json:"accountId"`
+	ConnectToken *string `json:"connect_token"`
+	UserProfile *string `json:"userProfile"`
 }

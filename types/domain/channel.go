@@ -4,13 +4,17 @@ package domain
 
 // The social platforms the hub speaks. Every channel-scoped payload —
 // messages, posts, accounts — is distinguished by this identifier so
-// consumers integrate one API shape across platforms.
+// consumers integrate one API shape across platforms. A channel is a
+// [`ChannelFamily`] (what the contact sees and what the platform allows)
+// reached through a [`Transport`] (how the hub speaks to it).
 type Channel string
 
 const (
 	ChannelFacebook Channel = "facebook"
 	ChannelInstagram Channel = "instagram"
 	ChannelWhatsapp Channel = "whatsapp"
-	ChannelWhatsappStevo Channel = "whatsapp_stevo"
 	ChannelWhatsappNative Channel = "whatsapp_native"
+	ChannelFacebookAlt Channel = "facebook_alt"
+	ChannelInstagramAlt Channel = "instagram_alt"
+	ChannelWhatsappAlt Channel = "whatsapp_alt"
 )

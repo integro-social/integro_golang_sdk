@@ -2,7 +2,8 @@
 
 package message
 
-// Channel-tagged backfill request — Meta's Conversations API covers the
-// page-backed inboxes only, so no other channel's shape deserializes. The
-// `channel` must match the named account's.
+// Channel-tagged backfill request — only the page-backed inboxes expose
+// history (Meta's Conversations API natively, the gateway's replayed
+// history on the alt channels), so no other channel's shape deserializes.
+// The `channel` must match the named account's.
 type BackfillRequest = interface{}

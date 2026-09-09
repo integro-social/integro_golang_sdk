@@ -14,12 +14,12 @@ type SocialAccount struct {
 	// onto none.
 	Provider Provider `json:"provider"`
 	// Platform identity webhooks address: page id (facebook), ig user id
-	// (instagram), or the provider's stable subject. Unique together with
-	// `provider`.
+	// (instagram), or the provider's stable subject. Not unique: every
+	// connection of the same identity is its own account, sharing nothing
+	// with the others.
 	ExternalId string `json:"external_id"`
-	// The number behind a session-backed whatsapp account, once known: native
-	// pairing states it, stevo hides it behind the api key until the gateway
-	// echoes one of the account's own messages. `None` until then.
+	// The number behind a session-backed whatsapp account, stated by the native
+	// pairing. `None` for the other providers.
 	Phone *string `json:"phone"`
 	// Backing Facebook Page — the send/publish path for both channels.
 	PageId string `json:"page_id"`

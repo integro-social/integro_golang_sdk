@@ -14,7 +14,13 @@ type MessageSearchHit struct {
 	Id uint64 `json:"id"`
 	ConversationUid primitives.Uid `json:"conversation_uid"`
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
+	// The conversation's alias, the contact's name or their username, in that
+	// order; `None` when the contact carries none of them.
 	ConversationName *string `json:"conversation_name"`
+	// The contact's platform id (wa_id, PSID, IGSID) and username, so a
+	// nameless conversation still reads as its phone or handle.
+	ParticipantId string `json:"participant_id"`
+	ParticipantUsername *string `json:"participant_username"`
 	ParticipantAvatarUrl *string `json:"participant_avatar_url"`
 	Direction MessageDirection `json:"direction"`
 	SentAt primitives.Timestamp `json:"sent_at"`

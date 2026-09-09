@@ -8,4 +8,7 @@ import (
 
 type ConnectNativeRequest struct {
 	GroupUid primitives.Uid `json:"group_uid"`
+	// The group's native account to pair again, if any: the scan must be of
+	// its number, and the new device replaces the one it had.
+	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
 }

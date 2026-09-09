@@ -2,6 +2,7 @@
 
 package message
 
-// Channel-tagged reaction payload — the Messenger Send API has no reaction
-// support, so no facebook variant exists. Must match the message's channel.
+// Channel-tagged reaction payload; must match the message's channel.
+// Messenger and the WhatsApp flavors take the emoji itself, Instagram takes
+// Meta's reaction name.
 type ReactToMessageRequest = interface{}
