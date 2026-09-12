@@ -4,6 +4,8 @@ package domain
 
 // Content the hub can send — the kinds a message is composed from. Most
 // kinds also arrive inbound (a received text is `Text` too); shapes that can
-// only arrive are [`InboundContent`]. Attachment URLs are public URLs the
-// caller supplies (out) or the CDN links the platform provides (in).
+// only arrive are [`InboundContent`]. An attachment is a [`MediaRef`]: a
+// hosted media the caller uploaded or the hub rehosted, or a remote address
+// — a public URL the caller supplies (out) or the CDN link the platform
+// provided and the rehost worker has not copied yet (in).
 type OutboundContent = interface{}

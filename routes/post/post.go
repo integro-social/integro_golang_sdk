@@ -20,8 +20,9 @@ func Create(__c *__client.Client, __body post.CreatePostRequest) (domain.Post, e
 	return __client.Request[domain.Post](__c, "POST", __path, nil, __body)
 }
 // Delete Delete a post: published posts are removed from the platform (Instagram
-// carousels are deleted as a whole). A scheduled or pending post is
-// cancelled hub-side — it is never published, and its unpublished Instagram
+// carousels are deleted as a whole); a published instagram_alt post cannot
+// be removed through the alternate gateway and is refused (400). A
+// scheduled or pending post is cancelled hub-side — it is never published, and its unpublished Instagram
 // container is left to expire on Meta's side rather than deleted. The row is
 // kept with a `deleted` status.
 //

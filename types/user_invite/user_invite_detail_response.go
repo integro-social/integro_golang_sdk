@@ -11,8 +11,9 @@ type UserInviteDetailResponse struct {
 	Email primitives.Email `json:"email"`
 	GroupUid primitives.Uid `json:"group_uid"`
 	GroupName primitives.Name `json:"group_name"`
-	// Whether `userInvite.logo` has an image to serve for this group.
-	HasLogo bool `json:"has_logo"`
+	// The group's logo at a signed address the invited account may fetch
+	// before it holds `ViewGroups`; valid for 30 minutes from this answer.
+	LogoUrl *string `json:"logo_url"`
 	Role domain.MembershipRole `json:"role"`
 	InvitedByName primitives.Name `json:"invited_by_name"`
 	ExpiresAt primitives.Timestamp `json:"expires_at"`

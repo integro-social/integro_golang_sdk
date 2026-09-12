@@ -13,7 +13,7 @@ import (
 // form. The URL carries its own unguessable token, needs no credential, and
 // expires 15 minutes after this call; the first upload consumes it whether
 // or not the bytes are accepted, and the upload answers with the stored
-// media and its public URL.
+// media's uid.
 //
 // Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
 func CreateUploadUrl(__c *__client.Client, __body media.CreateUploadUrlRequest) (media.CreateUploadUrlResponse, error) {
@@ -21,22 +21,21 @@ func CreateUploadUrl(__c *__client.Client, __body media.CreateUploadUrlRequest) 
 	return __client.Request[media.CreateUploadUrlResponse](__c, "POST", __path, nil, __body)
 }
 // Serve Serve a hub-hosted media file. The uid may carry a cosmetic extension
-// suffix (`{uid}.m4a`) — generated URLs include one as a format signal for
-// external fetchers; it is stripped before lookup. A uid nothing names any
-// more answers 404: the file went with its last referrer.
+// suffix (`{uid}.m4a`), stripped before lookup. A uid nothing names any more
+// answers 404: the file went with its last referrer.
 //
-// Public — no authentication required; the unguessable uid is the capability.
-func Serve(__c *__client.Client, mediaUid string) ([]byte, error) {
+// A session cookie, a bearer session token or an API key: served when the caller may see something that names the file — `ViewMessages` in the group for a message attachment or a conversation avatar, `ViewPosts` for a post, `ViewCampaigns` for a template, `ViewSocialAccounts` for an account avatar, `ViewGroups` for a group logo, platform `ViewIssues` for a screenshot — or when the caller uploaded it from a session within the last 24 hours and nothing names it yet. A signed grant (`exp`, `sig`) minted by the hub for a platform fetch serves without a credential until it expires. Anything else answers 404, indistinguishable from an unknown uid.
+func Serve(__c *__client.Client, mediaUid string, __query media.MediaGrantQuery) ([]byte, error) {
 	__path := "/media/{media_uid}"
 	__path = __strings.Replace(__path, "{media_uid}", __client.EncodePath(mediaUid), 1)
-	return __client.RequestBytes(__c, "GET", __path, nil, nil)
+	return __client.RequestBytes(__c, "GET", __path, __query, nil)
 }
-// Upload Upload a media file to the hub; the returned public URL can be used in any
-// message or post payload (Meta fetches it from the hub). Bytes the hub
-// already holds come back as the existing file — same uid, same URL. The
-// URL stays valid while a message, post or campaign template names it, and
-// for 24 hours after this upload otherwise; a third party handed the URL
-// copies what it needs while it resolves.
+// Upload Upload a media file to the hub; the returned uid names it in any message,
+// post or template payload as `{"kind":"hosted","uid":…}`. Bytes the hub
+// already holds come back as the existing file — same uid. The file stays
+// while a message, post, template, avatar, logo or issue names it, and for 24
+// hours after this upload otherwise; until it is attached, only the uploader
+// can fetch it.
 //
 // Requires `UploadMedia` in the target group; group-scoped API keys upload into their own group, others must name it. A human caller is additionally rejected when they trip the per-user file-upload throttle.
 func Upload(__c *__client.Client, __form *__client.MultipartForm) (media.UploadMediaResponse, error) {
@@ -48,8 +47,8 @@ func Upload(__c *__client.Client, __form *__client.MultipartForm) (media.UploadM
 // themselves override, and the ticket supplies the filename. The ticket is
 // consumed by this call whether or not the bytes are accepted — an empty
 // body, or one past 100 MiB, is refused and the client asks for a new
-// ticket. The reply is the stored media, whose public URL can be used in any
-// message or post payload.
+// ticket. The reply is the stored media, whose uid names it in any message
+// or post payload.
 //
 // Public — no authentication; the unguessable ticket token is the capability, issued by `media.createUploadUrl` and valid for 15 minutes.
 func UploadWithTicket(__c *__client.Client, token string) (media.UploadMediaResponse, error) {

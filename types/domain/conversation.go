@@ -15,7 +15,9 @@ type Conversation struct {
 	// Best-effort profile fetched from Meta on first contact.
 	ParticipantName *string `json:"participant_name"`
 	ParticipantUsername *string `json:"participant_username"`
-	ParticipantAvatarUrl *string `json:"participant_avatar_url"`
+	// The participant's picture: a hosted preview the hub copied, or the
+	// platform's own link where the platform serves it.
+	ParticipantAvatar *MediaRef `json:"participant_avatar"`
 	// The operator's own label for the person — set by hand or by a contact
 	// import's name column. Independent of `participant_name`, which the
 	// platform owns and profile refreshes overwrite; this is never touched by

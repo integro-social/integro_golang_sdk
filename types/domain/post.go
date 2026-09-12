@@ -18,6 +18,8 @@ type Post struct {
 	ContainerId *string `json:"container_id"`
 	// Carousel child containers (comma-separated) still processing.
 	ContainerChildren *string `json:"container_children"`
+	// The alternate gateway's id for the post, once it accepted it.
+	GatewayPostId *string `json:"gateway_post_id"`
 	ExternalId *string `json:"external_id"`
 	Permalink *string `json:"permalink"`
 	CreatedBy *primitives.Uid `json:"created_by"`

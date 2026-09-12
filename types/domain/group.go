@@ -10,7 +10,8 @@ type Group struct {
 	Uid primitives.Uid `json:"uid"`
 	Name primitives.Name `json:"name"`
 	Enabled bool `json:"enabled"`
-	LogoContentType *string `json:"logo_content_type"`
+	// The group's logo, a hosted media; `null` when the group has none.
+	LogoUid *primitives.Uid `json:"logo_uid"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 	UpdatedAt primitives.Timestamp `json:"updated_at"`
 }

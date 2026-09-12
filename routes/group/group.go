@@ -38,14 +38,6 @@ func Get(__c *__client.Client, groupUid string, __query group.GroupQuery) (group
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
 	return __client.Request[group.GroupResponse](__c, "GET", __path, __query, nil)
 }
-// GetLogo Serve a group's logo image.
-//
-// Requires `ViewGroups` in the group itself.
-func GetLogo(__c *__client.Client, groupUid string) ([]byte, error) {
-	__path := "/group/{group_uid}/logo"
-	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
-	return __client.RequestBytes(__c, "GET", __path, nil, nil)
-}
 // List List groups, optionally enriched with per-group counts.
 //
 // Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
@@ -69,13 +61,15 @@ func SetEnabled(__c *__client.Client, groupUid string, __body group.SetGroupEnab
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
-// SetLogo Upload or replace a group's logo image.
+// SetLogo Upload or replace a group's logo image; the stored media's uid lands on
+// `Group.logo_uid`, served by `media.serve` to anyone holding `ViewGroups`
+// in the group.
 //
 // Requires `UpdateGroups` in the group itself, and is rejected when the caller trips the per-user file-upload throttle.
-func SetLogo(__c *__client.Client, groupUid string, __form *__client.MultipartForm) (struct{}, error) {
+func SetLogo(__c *__client.Client, groupUid string, __form *__client.MultipartForm) (group.SetGroupLogoResponse, error) {
 	__path := "/group/{group_uid}/logo"
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
-	return __client.RequestMultipart[struct{}](__c, "POST", __path, nil, __form)
+	return __client.RequestMultipart[group.SetGroupLogoResponse](__c, "POST", __path, nil, __form)
 }
 // Update Update a group's mutable fields such as its name.
 //

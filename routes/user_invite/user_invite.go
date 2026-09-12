@@ -48,13 +48,6 @@ func List(__c *__client.Client) ([]domain.UserInvite, error) {
 	__path := "/user-invite"
 	return __client.Request[[]domain.UserInvite](__c, "GET", __path, nil, nil)
 }
-// Logo Serve the invited group's logo image.
-//
-// Authenticated, and only for the account the invitation was addressed to; the invitation stands in for the `ViewGroups` the recipient does not hold yet. A POST because the token is a credential, not because it writes.
-func Logo(__c *__client.Client, __body user_invite.UserInviteTokenRequest) ([]byte, error) {
-	__path := "/user-invite/logo"
-	return __client.RequestBytes(__c, "POST", __path, nil, __body)
-}
 // Preview Resolve an invitation link to the address it was sent to and whether
 // accepting it means creating an account.
 //

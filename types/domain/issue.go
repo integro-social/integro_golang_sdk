@@ -14,7 +14,8 @@ type Issue struct {
 	Status IssueStatus `json:"status"`
 	Description primitives.Text0_8000 `json:"description"`
 	Details IssueDetails `json:"details"`
-	Screenshots IssueScreenshots `json:"screenshots"`
+	// The screenshots attached at report time, as hosted media.
+	Screenshots []primitives.Uid `json:"screenshots"`
 	ReportedBy primitives.Uid `json:"reported_by"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 	UpdatedAt primitives.Timestamp `json:"updated_at"`

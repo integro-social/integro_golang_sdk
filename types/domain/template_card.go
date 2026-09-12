@@ -6,6 +6,6 @@ package domain
 type TemplateCard struct {
 	Title string `json:"title"`
 	Subtitle *string `json:"subtitle"`
-	ImageUrl *string `json:"image_url"`
+	Image *MediaRef `json:"image"`
 	Buttons []TemplateButton `json:"buttons"`
 }

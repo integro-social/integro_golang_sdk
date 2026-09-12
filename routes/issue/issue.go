@@ -16,7 +16,7 @@ func Count(__c *__client.Client) (uint64, error) {
 	__path := "/issue/count"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }
-// Create Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user.
+// Create Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues`.
 //
 // Any authenticated user. Rejected when the platform is at its open-issue cap, and — when screenshots are attached — when the caller trips the per-user file-upload throttle.
 func Create(__c *__client.Client, __form *__client.MultipartForm) (issue.CreateIssueResponse, error) {
@@ -37,15 +37,6 @@ func Get(__c *__client.Client, issueUid string) (domain.Issue, error) {
 func List(__c *__client.Client) ([]domain.Issue, error) {
 	__path := "/issue"
 	return __client.Request[[]domain.Issue](__c, "GET", __path, nil, nil)
-}
-// Screenshot Serve a screenshot file attached to an issue.
-//
-// Requires `ViewIssues`, which only platform staff hold.
-func Screenshot(__c *__client.Client, issueUid string, screenshotUid string) ([]byte, error) {
-	__path := "/issue/{issue_uid}/screenshot/{screenshot_uid}"
-	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
-	__path = __strings.Replace(__path, "{screenshot_uid}", __client.EncodePath(screenshotUid), 1)
-	return __client.RequestBytes(__c, "GET", __path, nil, nil)
 }
 // SetStatus Update the status of an issue.
 //

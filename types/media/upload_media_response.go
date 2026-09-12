@@ -8,10 +8,9 @@ import (
 )
 
 type UploadMediaResponse struct {
+	// Names the file everywhere a media is attached: `{"kind":"hosted","uid":…}`
+	// in a message, a post or a template. Served at `media.serve`.
 	Uid primitives.Uid `json:"uid"`
-	// Public URL Meta (and CRMs) can fetch — usable anywhere the send/publish
-	// APIs take a media URL.
-	Url string `json:"url"`
 	Kind domain.MediaKind `json:"kind"`
 	ContentType string `json:"content_type"`
 	Size uint64 `json:"size"`

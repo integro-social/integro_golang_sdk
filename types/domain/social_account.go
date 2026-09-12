@@ -30,9 +30,10 @@ type SocialAccount struct {
 	// of [`Self::name`]: renaming the account on the platform does not disturb
 	// it, and clearing it falls back to the platform name.
 	Alias *primitives.Name `json:"alias"`
-	// The account's own picture, as the platform serves it.
-	AvatarUrl *string `json:"avatar_url"`
-	// When [`Self::name`] and [`Self::avatar_url`] were last read from the
+	// The account's own picture: a hosted copy the hub keeps, or the
+	// platform's own link where the platform serves it.
+	Avatar *MediaRef `json:"avatar"`
+	// When [`Self::name`] and [`Self::avatar`] were last read from the
 	// platform. `None` means never — which the refresh sweep treats as due now.
 	ProfileRefreshedAt *primitives.Timestamp `json:"profile_refreshed_at"`
 	Username *string `json:"username"`

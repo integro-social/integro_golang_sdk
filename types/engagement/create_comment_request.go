@@ -2,7 +2,7 @@
 
 package engagement
 
-// Channel-tagged top-level comment: only facebook and instagram carry a
-// comment surface, so no other channel's shape deserializes. The `channel`
-// must match the account's.
+// Channel-tagged top-level comment: only facebook and instagram, official
+// or through the alternate gateway, carry a comment surface, so no other
+// channel's shape deserializes. The `channel` must match the account's.
 type CreateCommentRequest = interface{}

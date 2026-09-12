@@ -21,7 +21,7 @@ type MessageSearchHit struct {
 	// nameless conversation still reads as its phone or handle.
 	ParticipantId string `json:"participant_id"`
 	ParticipantUsername *string `json:"participant_username"`
-	ParticipantAvatarUrl *string `json:"participant_avatar_url"`
+	ParticipantAvatar *MediaRef `json:"participant_avatar"`
 	Direction MessageDirection `json:"direction"`
 	SentAt primitives.Timestamp `json:"sent_at"`
 	// The matched passage, split where the index found the terms.

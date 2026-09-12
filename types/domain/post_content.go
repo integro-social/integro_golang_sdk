@@ -4,5 +4,6 @@ package domain
 
 // Channel-tagged post payload: publishing surfaces genuinely differ per
 // platform, so the variants carry channel-specific fields while the API
-// stays a single endpoint distinguished by the `channel` tag.
+// stays a single endpoint distinguished by the `channel` tag. The alt
+// twins carry the same payloads through the alternate gateway.
 type PostContent = interface{}

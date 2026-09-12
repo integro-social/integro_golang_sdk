@@ -4,11 +4,12 @@ package meta
 
 import (
 	__client "integro_sdk"
-	message "integro_sdk/types/message"
+	transport "integro_sdk/types/transport"
 )
 
-// Receive Meta webhook receiver: verifies the payload signature, stores normalized
-// messages (deduplicating redeliveries), and enqueues CRM fan-out events.
+// Receive Meta webhook receiver: verifies the payload signature and hands every
+// messaging event and page change to the feature that owns it, which
+// stores it (deduplicating redeliveries) and enqueues CRM fan-out events.
 //
 // Public — no authentication required; authorization comes from the `X-Hub-Signature-256` HMAC over the raw body.
 func Receive(__c *__client.Client) (struct{}, error) {
@@ -19,7 +20,7 @@ func Receive(__c *__client.Client) (struct{}, error) {
 // `hub.verify_token` matches the configured token.
 //
 // Public — no authentication required; authorization comes from the configured webhook verify token.
-func Verify(__c *__client.Client, __query message.WebhookVerifyQuery) (string, error) {
+func Verify(__c *__client.Client, __query transport.WebhookVerifyQuery) (string, error) {
 	__path := "/webhook/meta"
 	return __client.Request[string](__c, "GET", __path, __query, nil)
 }

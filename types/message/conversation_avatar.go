@@ -2,9 +2,13 @@
 
 package message
 
-// The largest picture the channel offers for the conversation's participant,
-// hosted by the hub. `None` when the participant has none, hides it, or the
-// platform could not be asked.
+import (
+	domain "integro_sdk/types/domain"
+)
+
+// The largest picture the channel offers for the conversation's participant.
+// `None` when the participant has none, hides it, or the platform could not
+// be asked.
 type ConversationAvatar struct {
-	Url *string `json:"url"`
+	Media *domain.MediaRef `json:"media"`
 }

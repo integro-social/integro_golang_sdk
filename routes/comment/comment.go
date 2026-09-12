@@ -11,8 +11,9 @@ import (
 
 // Create Comment on a post/media as the account named in the path (top-level
 // comment). The payload is channel-tagged and must match the account's
-// channel — only facebook and instagram carry a comment surface, so no
-// other channel's shape deserializes.
+// channel — only facebook and instagram, official or through the alternate
+// gateway, carry a comment surface, so no other channel's shape
+// deserializes.
 //
 // Requires `ReplyComments` in the account's group.
 func Create(__c *__client.Client, socialAccountUid string, __body engagement.CreateCommentRequest) (domain.Comment, error) {
@@ -39,8 +40,8 @@ func Get(__c *__client.Client, socialAccountUid string, commentUid string) (doma
 	__path = __strings.Replace(__path, "{comment_uid}", __client.EncodePath(commentUid), 1)
 	return __client.Request[domain.Comment](__c, "GET", __path, nil, nil)
 }
-// Like Like a comment as the page (Facebook only — Instagram's API has no
-// comment likes).
+// Like Like a comment as the page (Facebook only, official or through the
+// alternate gateway — Instagram's API has no comment likes).
 //
 // Requires `ReplyComments` in the account's group.
 func Like(__c *__client.Client, socialAccountUid string, commentUid string) (struct{}, error) {
