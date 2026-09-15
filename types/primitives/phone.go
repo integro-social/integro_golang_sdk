@@ -9,7 +9,7 @@ import (
 
 type Phone struct{ v string }
 
-var phoneSpec = validate.ValidationSpec{Preprocess: validate.PreprocessTrim, Constraints: []validate.Constraint{{Kind: "minDigits", Int: 7}, {Kind: "maxDigits", Int: 15}, {Kind: "regex", Source: "^\\+[1-9]\\d{6,14}$", Hint: "esperado E.164: +<código do país><número>"}}}
+var phoneSpec = validate.ValidationSpec{Preprocess: []validate.Preprocess{validate.PreprocessTrim}, Constraints: []validate.Constraint{{Kind: "minDigits", Int: 7}, {Kind: "maxDigits", Int: 15}, {Kind: "regex", Source: "^\\+[1-9]\\d{6,14}$", Hint: "esperado E.164: +<código do país><número>"}}}
 
 // ParsePhone is the only producer: validates input, returns the value or the first violation.
 func ParsePhone(value string) (Phone, *validate.Violation) {

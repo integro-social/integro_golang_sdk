@@ -9,7 +9,7 @@ import (
 
 type Password8_128_F_F_T_F struct{ v string }
 
-var password8_128_F_F_T_FSpec = validate.ValidationSpec{Preprocess: validate.PreprocessNone, Constraints: []validate.Constraint{{Kind: "minLen", Int: 8}, {Kind: "maxLen", Int: 128}, {Kind: "requireDigit"}}}
+var password8_128_F_F_T_FSpec = validate.ValidationSpec{Preprocess: []validate.Preprocess{}, Constraints: []validate.Constraint{{Kind: "minLen", Int: 8}, {Kind: "maxLen", Int: 128}, {Kind: "requireDigit"}}}
 
 // ParsePassword8_128_F_F_T_F is the only producer: validates input, returns the value or the first violation.
 func ParsePassword8_128_F_F_T_F(value string) (Password8_128_F_F_T_F, *validate.Violation) {

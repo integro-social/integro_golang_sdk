@@ -6,8 +6,6 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	domain "integro_sdk/types/domain"
-	insight "integro_sdk/types/insight"
-	meta "integro_sdk/types/meta"
 	post "integro_sdk/types/post"
 )
 
@@ -39,26 +37,6 @@ func Get(__c *__client.Client, postUid string) (domain.Post, error) {
 	__path := "/post/{post_uid}"
 	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
 	return __client.Request[domain.Post](__c, "GET", __path, nil, nil)
-}
-// Insights Fetch platform metrics for a published post (impressions, reach, clicks,
-// reactions, views, … — overridable via `metrics`).
-//
-// Requires `ViewInsights` in the post's group.
-func Insights(__c *__client.Client, postUid string, __query post.PostInsightsQuery) ([]meta.Insight, error) {
-	__path := "/post/{post_uid}/insight"
-	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
-	return __client.Request[[]meta.Insight](__c, "GET", __path, __query, nil)
-}
-// InsightsHistory Day-by-day history of a post's collected metrics, grouped per metric —
-// the charting companion to the live insights passthrough. Posts are
-// collected for 30 days after publishing (stories for 48h, after which their
-// insights stop resolving), so the series flatlines after that window.
-//
-// Requires `ViewInsights` in the post's group.
-func InsightsHistory(__c *__client.Client, postUid string, __query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
-	__path := "/post/{post_uid}/insight/history"
-	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
-	return __client.Request[[]insight.InsightSeries](__c, "GET", __path, __query, nil)
 }
 // List List posts, newest first, optionally filtered by group or social account.
 //

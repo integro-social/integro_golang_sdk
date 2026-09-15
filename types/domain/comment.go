@@ -20,6 +20,11 @@ type Comment struct {
 	FromName *string `json:"from_name"`
 	// The account's own comments (our replies or comments made natively).
 	FromAccount bool `json:"from_account"`
+	// The author's picture url on the platform, when it gave one; expires.
+	FromPicture *string `json:"from_picture"`
+	// Whether the account liked it (Facebook only; the hub persists its own likes).
+	Liked bool `json:"liked"`
+	LikeCount int64 `json:"like_count"`
 	Text string `json:"text"`
 	Hidden bool `json:"hidden"`
 	Deleted bool `json:"deleted"`

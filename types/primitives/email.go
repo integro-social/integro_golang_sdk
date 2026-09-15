@@ -9,7 +9,7 @@ import (
 
 type Email struct{ v string }
 
-var emailSpec = validate.ValidationSpec{Preprocess: validate.PreprocessTrimLowercase, Constraints: []validate.Constraint{{Kind: "minLen", Int: 5}, {Kind: "maxLen", Int: 254}, {Kind: "regex", Source: "^[a-zA-Z0-9_%+-]+(\\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$", Hint: ""}}}
+var emailSpec = validate.ValidationSpec{Preprocess: []validate.Preprocess{validate.PreprocessTrim, validate.PreprocessLowercase}, Constraints: []validate.Constraint{{Kind: "minLen", Int: 5}, {Kind: "maxLen", Int: 254}, {Kind: "regex", Source: "^[a-zA-Z0-9_%+-]+(\\.[a-zA-Z0-9_%+-]+)*@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$", Hint: ""}}}
 
 // ParseEmail is the only producer: validates input, returns the value or the first violation.
 func ParseEmail(value string) (Email, *validate.Violation) {

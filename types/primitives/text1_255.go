@@ -9,7 +9,7 @@ import (
 
 type Text1_255 struct{ v string }
 
-var text1_255Spec = validate.ValidationSpec{Preprocess: validate.PreprocessTrim, Constraints: []validate.Constraint{{Kind: "minLen", Int: 1}, {Kind: "maxLen", Int: 255}}}
+var text1_255Spec = validate.ValidationSpec{Preprocess: []validate.Preprocess{validate.PreprocessTrim}, Constraints: []validate.Constraint{{Kind: "minLen", Int: 1}, {Kind: "maxLen", Int: 255}}}
 
 // ParseText1_255 is the only producer: validates input, returns the value or the first violation.
 func ParseText1_255(value string) (Text1_255, *validate.Violation) {

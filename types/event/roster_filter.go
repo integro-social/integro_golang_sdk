@@ -15,6 +15,6 @@ type RosterFilter struct {
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	Channels *[]domain.Channel `json:"channels"`
 	// Event kinds and/or family aliases (`message`, `presence`, `comment`,
-	// `mention`, `post`, `conversation`, `account`, `review`).
+	// `post`, `conversation`, `account`, `review`).
 	Events *[]string `json:"events"`
 }

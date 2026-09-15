@@ -7,10 +7,7 @@ import (
 )
 
 type InsightHistoryQuery struct {
-	// Filter to these collected metric names (comma-separated); defaults to
-	// every stored metric.
-	Metrics *string `json:"metrics"`
 	// Inclusive range over snapshot days (unix ms); defaults to the last 30 days.
-	From *primitives.Timestamp `json:"from"`
-	To *primitives.Timestamp `json:"to"`
+	Since *primitives.Timestamp `json:"since"`
+	Until *primitives.Timestamp `json:"until"`
 }

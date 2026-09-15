@@ -7,7 +7,6 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	insight "integro_sdk/types/insight"
-	meta "integro_sdk/types/meta"
 	social_account "integro_sdk/types/social_account"
 )
 
@@ -105,27 +104,16 @@ func Get(__c *__client.Client, socialAccountUid string) (social_account.SocialAc
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[social_account.SocialAccountResponse](__c, "GET", __path, nil, nil)
 }
-// Insights Fetch platform metrics for a facebook page or instagram professional
-// account (the per-channel defaults, or a caller-supplied
-// `metrics`/`period`/`metric_type`). No whatsapp flavor exposes insights.
+// InsightsHistory Day-by-day history of the account's collected metrics, in its channel's
+// own vocabulary. History exists from the day the account was connected; the
+// newest day is often still partial. A channel that reports no metrics is
+// refused.
 //
 // Requires `ViewInsights` in the account's group.
-func Insights(__c *__client.Client, socialAccountUid string, __query social_account.AccountInsightsQuery) ([]meta.Insight, error) {
-	__path := "/social-account/{social_account_uid}/insight"
-	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
-	return __client.Request[[]meta.Insight](__c, "GET", __path, __query, nil)
-}
-// InsightsHistory Day-by-day history of the account's collected metrics (reach, views,
-// follower counts, …), grouped per metric — the charting companion to the
-// live insights passthrough. History exists only from the day the account
-// was connected. A channel that reports no insights is refused here exactly
-// as the live endpoint refuses it.
-//
-// Requires `ViewInsights` in the account's group.
-func InsightsHistory(__c *__client.Client, socialAccountUid string, __query insight.InsightHistoryQuery) ([]insight.InsightSeries, error) {
+func InsightsHistory(__c *__client.Client, socialAccountUid string, __query insight.InsightHistoryQuery) (insight.AccountInsightHistory, error) {
 	__path := "/social-account/{social_account_uid}/insight/history"
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
-	return __client.Request[[]insight.InsightSeries](__c, "GET", __path, __query, nil)
+	return __client.Request[insight.AccountInsightHistory](__c, "GET", __path, __query, nil)
 }
 // List List connected social accounts, optionally filtered by group, each with the
 // live session status of its whatsapp session when applicable.

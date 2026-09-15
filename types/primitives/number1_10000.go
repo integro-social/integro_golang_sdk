@@ -9,7 +9,7 @@ import (
 
 type Number1_10000 struct{ v int64 }
 
-var number1_10000Spec = validate.ValidationSpec{Preprocess: validate.PreprocessNone, Constraints: []validate.Constraint{{Kind: "min", Bound: 1}, {Kind: "max", Bound: 10000}}}
+var number1_10000Spec = validate.ValidationSpec{Preprocess: []validate.Preprocess{}, Constraints: []validate.Constraint{{Kind: "min", Bound: 1}, {Kind: "max", Bound: 10000}}}
 
 // ParseNumber1_10000 is the only producer: validates input, returns the value or the first violation.
 func ParseNumber1_10000(value int64) (Number1_10000, *validate.Violation) {

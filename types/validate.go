@@ -17,9 +17,9 @@ import (
 type Preprocess int
 
 const (
-	PreprocessNone Preprocess = iota
-	PreprocessTrim
-	PreprocessTrimLowercase
+	PreprocessTrim Preprocess = iota
+	PreprocessLowercase
+	PreprocessUppercase
 )
 
 // Constraint is a tagged rule; only the fields relevant to Kind are set.
@@ -32,7 +32,7 @@ type Constraint struct {
 }
 
 type ValidationSpec struct {
-	Preprocess  Preprocess
+	Preprocess  []Preprocess
 	Constraints []Constraint
 }
 
@@ -122,13 +122,39 @@ func hasRune(s string, f func(rune) bool) bool {
 }
 
 func normalize(spec ValidationSpec, s string) string {
-	switch spec.Preprocess {
-	case PreprocessTrim:
-		return strings.TrimSpace(s)
-	case PreprocessTrimLowercase:
-		return strings.ToLower(strings.TrimSpace(s))
+	for _, step := range spec.Preprocess {
+		switch step {
+		case PreprocessTrim:
+			s = strings.TrimSpace(s)
+		case PreprocessLowercase:
+			s = asciiLower(s)
+		case PreprocessUppercase:
+			s = asciiUpper(s)
+		}
 	}
 	return s
+}
+
+// asciiLower and asciiUpper map only A-Z and a-z. strings.ToLower and ToUpper
+// apply Unicode simple case mapping, which disagrees with the full mapping the
+// Rust and TypeScript interpreters would use outside ASCII, so every port maps
+// ASCII alone.
+func asciiLower(s string) string {
+	return strings.Map(func(r rune) rune {
+		if r >= 'A' && r <= 'Z' {
+			return r + ('a' - 'A')
+		}
+		return r
+	}, s)
+}
+
+func asciiUpper(s string) string {
+	return strings.Map(func(r rune) rune {
+		if r >= 'a' && r <= 'z' {
+			return r - ('a' - 'A')
+		}
+		return r
+	}, s)
 }
 
 // regexCache keeps one compiled pattern per source, so a check never pays a

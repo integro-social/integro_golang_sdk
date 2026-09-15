@@ -9,7 +9,7 @@ import (
 
 type Pin6 struct{ v string }
 
-var pin6Spec = validate.ValidationSpec{Preprocess: validate.PreprocessTrim, Constraints: []validate.Constraint{{Kind: "exactLen", Int: 6}, {Kind: "asciiDigitsOnly"}}}
+var pin6Spec = validate.ValidationSpec{Preprocess: []validate.Preprocess{validate.PreprocessTrim}, Constraints: []validate.Constraint{{Kind: "exactLen", Int: 6}, {Kind: "asciiDigitsOnly"}}}
 
 // ParsePin6 is the only producer: validates input, returns the value or the first violation.
 func ParsePin6(value string) (Pin6, *validate.Violation) {
