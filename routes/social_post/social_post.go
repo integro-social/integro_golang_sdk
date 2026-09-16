@@ -39,16 +39,12 @@ func List(__c *__client.Client, __query post.ListSocialPostsQuery) ([]domain.Soc
 	__path := "/social-post"
 	return __client.Request[[]domain.SocialPost](__c, "GET", __path, __query, nil)
 }
-// Sync Start a re-read of the account's posts from its platform in the background
-// and answer at once: the 25 most recent plus every post with comments, their
-// thumbnails and, for posts seen for the first time, their whole comment
-// thread. Every post the sync touches emits `social_post_updated`. Allowed
-// once per account every five minutes; the hub runs it by itself once when an
-// account connects. Only facebook_alt and instagram_alt accounts can be synced.
+// Summary Totals over the platform posts in scope: how many there are, their
+// comments and the ones still unanswered. The list's pages never add up to
+// these; this does.
 //
-// Requires `ViewPosts` in the account's group; throttled to one call per account every five minutes.
-func Sync(__c *__client.Client, socialAccountUid string) (struct{}, error) {
-	__path := "/social-account/{social_account_uid}/social-post/sync"
-	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
-	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
+// Requires `ViewPosts`; counts only posts of groups where the caller holds it, narrowed by `group_uid` / `social_account_uid` when given.
+func Summary(__c *__client.Client, __query post.SocialPostSummaryQuery) (domain.SocialPostSummary, error) {
+	__path := "/social-post/summary"
+	return __client.Request[domain.SocialPostSummary](__c, "GET", __path, __query, nil)
 }

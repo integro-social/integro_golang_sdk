@@ -6,11 +6,9 @@ import (
 	primitives "integro_sdk/types/primitives"
 )
 
-type ListSocialPostsQuery struct {
+type SocialPostSummaryQuery struct {
 	GroupUid *primitives.Uid `json:"group_uid"`
 	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
-	// The platform post of one hub post.
-	PostUid *primitives.Uid `json:"post_uid"`
 	// Only posts with at least one third-party comment the account has not answered.
 	UnansweredOnly bool `json:"unanswered_only"`
 	// Only posts published at or after this instant (ms).
@@ -19,7 +17,4 @@ type ListSocialPostsQuery struct {
 	Until *primitives.Timestamp `json:"until"`
 	// Caption search: a case-insensitive substring.
 	Q *string `json:"q"`
-	// Page cursor: only posts published strictly before this instant (ms).
-	Before *primitives.Timestamp `json:"before"`
-	Limit *primitives.Number1_200 `json:"limit"`
 }

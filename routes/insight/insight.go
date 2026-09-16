@@ -7,6 +7,31 @@ import (
 	insight "integro_sdk/types/insight"
 )
 
+// Conversation Customer service over a scope per hour, day, week or month. A customer
+// message opens a request; later customer messages join it until the account
+// replies, or until the customer writes again after 24 hours without a reply.
+// The wait runs from the request's first message to the account's next
+// message, whoever or whatever sent it; a request never answered is counted
+// only as an atendimento. A request opens an atendimento
+// when the customer writes first or after 24 hours of silence. Requests and
+// outreach belong to the period they started in. New conversations count each conversation's first
+// message ever. Periods align to `utc_offset_minutes`; weeks start on
+// Monday.
+//
+// Requires `ViewMessages`; covers only accounts of groups where the caller holds it, narrowed by `group_uid`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
+func Conversation(__c *__client.Client, __body insight.ConversationInsightQuery) (insight.ConversationInsightResponse, error) {
+	__path := "/insight/conversation"
+	return __client.Request[insight.ConversationInsightResponse](__c, "POST", __path, nil, __body)
+}
+// Posting Platform posts published over a scope per hour, day, week or month,
+// counted at their publication time; posts removed from the platform are
+// left out. Periods align to `utc_offset_minutes`; weeks start on Monday.
+//
+// Requires `ViewPosts`; covers only accounts of groups where the caller holds it, narrowed by `group_uid`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
+func Posting(__c *__client.Client, __body insight.PostingInsightQuery) (insight.PostingInsightResponse, error) {
+	__path := "/insight/posting"
+	return __client.Request[insight.PostingInsightResponse](__c, "POST", __path, nil, __body)
+}
 // Query Aggregate collected metrics over many accounts of one channel, by day,
 // week or month. Only accounts of the declared channel take part; a named
 // account of another channel is refused. Breakdown metrics (demographics)

@@ -2,8 +2,17 @@
 
 package engagement
 
+import (
+	primitives "integro_sdk/types/primitives"
+)
+
 type PrivateReplyResponse struct {
 	// Platform message id; the DM itself lands in the conversation via the
 	// echo webhook.
 	Mid string `json:"mid"`
+	// The conversation the reply opened, when the hub can name it: on the
+	// official channels the platform returns the recipient; on the gateway
+	// channels it is the commenter's existing conversation by username.
+	// `null` until the platform's echo creates it.
+	ConversationUid *primitives.Uid `json:"conversation_uid"`
 }

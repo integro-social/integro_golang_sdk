@@ -13,5 +13,4 @@ const (
 	RateLimitActionSessionStart RateLimitAction = "session_start"
 	RateLimitActionNativePairing RateLimitAction = "native_pairing"
 	RateLimitActionProfileRefresh RateLimitAction = "profile_refresh"
-	RateLimitActionSocialPostSync RateLimitAction = "social_post_sync"
 )

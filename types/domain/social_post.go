@@ -22,13 +22,21 @@ type SocialPost struct {
 	PictureSource *string `json:"picture_source"`
 	Permalink *string `json:"permalink"`
 	PublishedAt *primitives.Timestamp `json:"published_at"`
-	// The platform's own count, refreshed by sync and bumped by the webhook.
+	// The platform's own count or the comments the hub holds, whichever is
+	// larger: the platform's count lags behind a comment the webhook delivered.
 	CommentCount int64 `json:"comment_count"`
 	LikeCount int64 `json:"like_count"`
 	Detail SocialPostDetail `json:"detail"`
+	// When the gateway last described the post. `None` marks a post the hub
+	// knows only through its comments: the listings never reached it.
 	SyncedAt *primitives.Timestamp `json:"synced_at"`
+	// When the whole comment thread of such a post was read by post id.
+	ThreadImportedAt *primitives.Timestamp `json:"thread_imported_at"`
 	InsightRefreshedAt *primitives.Timestamp `json:"insight_refreshed_at"`
 	InsightNextAt *primitives.Timestamp `json:"insight_next_at"`
+	// When the gateway found the post gone from the platform; a deleted post
+	// leaves the list and its metrics stop being read.
+	DeletedAt *primitives.Timestamp `json:"deleted_at"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 	UpdatedAt primitives.Timestamp `json:"updated_at"`
 	UnansweredCount int64 `json:"unanswered_count"`
