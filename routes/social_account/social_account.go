@@ -104,6 +104,17 @@ func Get(__c *__client.Client, socialAccountUid string) (social_account.SocialAc
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[social_account.SocialAccountResponse](__c, "GET", __path, nil, nil)
 }
+// GroupReferences List what still acts on this account from inside its group — GoHighLevel
+// locations, campaigns that are not canceled and contact imports that are not
+// finished — split into what can move with it and what other accounts of the
+// group also use. Read it before moving the account to another group.
+//
+// Session users only. Requires `UpdateSocialAccounts` in the account's group.
+func GroupReferences(__c *__client.Client, socialAccountUid string) (domain.AccountReferences, error) {
+	__path := "/social-account/{social_account_uid}/group/reference"
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[domain.AccountReferences](__c, "GET", __path, nil, nil)
+}
 // InsightsHistory Day-by-day history of the account's collected metrics, in its channel's
 // own vocabulary. History exists from the day the account was connected; the
 // newest day is often still partial. A channel that reports no metrics is
@@ -229,6 +240,22 @@ func SetConversationCap(__c *__client.Client, socialAccountUid string, __body so
 // Requires `UpdateSocialAccounts` in the account's group.
 func SetEnabled(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountEnabledRequest) (struct{}, error) {
 	__path := "/social-account/{social_account_uid}/enabled"
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
+}
+// SetGroup Move an account to another group, together with its conversations, messages,
+// posts and calls, whose media becomes visible to the new group and stops being
+// visible to the old one. Refused while a campaign or contact import also uses
+// other accounts of the current group, and — unless `move_references` is set —
+// while a GoHighLevel location, campaign or contact import acts only on this
+// account; with it set, those move along. Canceled campaigns, and contact
+// imports that are done or canceled, stay where they ran; a done campaign
+// moves, since it can run again. Watchers of the old group see the account
+// removed, and the move is recorded in the audit of both groups.
+//
+// Session users only. Requires `UpdateSocialAccounts` in both the account's current group and the target group.
+func SetGroup(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountGroupRequest) (struct{}, error) {
+	__path := "/social-account/{social_account_uid}/group"
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

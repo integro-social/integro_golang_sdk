@@ -9,14 +9,14 @@ import (
 	issue "integro_sdk/types/issue"
 )
 
-// Count Count issues.
+// Count Count issues — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
 //
-// Requires `ViewIssues`, which only platform staff hold.
+// Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the count beyond the caller's own reports.
 func Count(__c *__client.Client) (uint64, error) {
 	__path := "/issue/count"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
 }
-// Create Report a new issue (severity, description, details, and 1–10 screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues`.
+// Create Report a new issue (category, severity, description, an optional page url and up to 10 optional screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues` and to the reporter themselves.
 //
 // Any authenticated user. Rejected when the platform is at its open-issue cap, and — when screenshots are attached — when the caller trips the per-user file-upload throttle.
 func Create(__c *__client.Client, __form *__client.MultipartForm) (issue.CreateIssueResponse, error) {
@@ -25,15 +25,15 @@ func Create(__c *__client.Client, __form *__client.MultipartForm) (issue.CreateI
 }
 // Get Fetch a single issue by uid.
 //
-// Requires `ViewIssues`, which only platform staff hold.
+// Any authenticated user for an issue they reported; `ViewIssues`, which only platform staff hold, reaches any issue. An issue the caller may not read reads as not found.
 func Get(__c *__client.Client, issueUid string) (domain.Issue, error) {
 	__path := "/issue/{issue_uid}"
 	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
 	return __client.Request[domain.Issue](__c, "GET", __path, nil, nil)
 }
-// List List issues.
+// List List issues, newest first — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
 //
-// Requires `ViewIssues`, which only platform staff hold.
+// Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the result beyond the caller's own reports.
 func List(__c *__client.Client) ([]domain.Issue, error) {
 	__path := "/issue"
 	return __client.Request[[]domain.Issue](__c, "GET", __path, nil, nil)

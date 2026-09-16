@@ -13,7 +13,8 @@ type Issue struct {
 	Severity IssueSeverity `json:"severity"`
 	Status IssueStatus `json:"status"`
 	Description primitives.Text0_8000 `json:"description"`
-	Details IssueDetails `json:"details"`
+	// The page the reporter was on, when they chose to name one.
+	Url *primitives.Text0_2048 `json:"url"`
 	// The screenshots attached at report time, as hosted media.
 	Screenshots []primitives.Uid `json:"screenshots"`
 	ReportedBy primitives.Uid `json:"reported_by"`

@@ -8,8 +8,9 @@ import (
 )
 
 type CreateIssueForm struct {
+	Category domain.IssueCategory `json:"category"`
 	Severity domain.IssueSeverity `json:"severity"`
 	Description primitives.Text0_8000 `json:"description"`
-	Details domain.IssueDetails `json:"details"`
+	Url *primitives.Text0_2048 `json:"url"`
 	Screenshots [][]byte `json:"screenshots"`
 }
