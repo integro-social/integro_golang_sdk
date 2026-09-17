@@ -10,9 +10,8 @@ type Webhook struct {
 	Uid primitives.Uid `json:"uid"`
 	GroupUid primitives.Uid `json:"group_uid"`
 	Url string `json:"url"`
-	Enabled bool `json:"enabled"`
 	// Event kinds delivered to this subscription; `None` = everything.
-	Events *[]string `json:"events"`
+	Events *[]EventKind `json:"events"`
 	// Channels delivered to this subscription; `None` = everything.
 	Channels *[]Channel `json:"channels"`
 	CreatedAt primitives.Timestamp `json:"created_at"`

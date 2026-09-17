@@ -15,7 +15,7 @@ func List(__c *__client.Client, __query user_session.ListUserSessionsQuery) ([]u
 	__path := "/user-session"
 	return __client.Request[[]user_session.UserSessionRow](__c, "GET", __path, __query, nil)
 }
-// Login Authenticate with email and password, returning a session token or an MFA/enrollment challenge.
+// Login Authenticate with email and password, returning an MFA challenge, or an enrollment challenge when the user has no confirmed factor.
 //
 // Public — no authentication required; the caller proves identity with the supplied email and password. Rejected before the password is checked when the caller trips either the per-IP or the per-email login throttle.
 func Login(__c *__client.Client, __body user_session.UserSessionLoginRequest) (user_session.UserSessionLoginResponse, error) {

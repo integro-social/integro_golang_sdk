@@ -49,7 +49,7 @@ func Link(__c *__client.Client, ghlLocationUid string, __body ghl.LinkGhlRequest
 	__path = __strings.Replace(__path, "{ghl_location_uid}", __client.EncodePath(ghlLocationUid), 1)
 	return __client.Request[domain.GhlLocation](__c, "PUT", __path, nil, __body)
 }
-// List List the installed GoHighLevel locations, optionally filtered by group, each
+// List List the installed GoHighLevel locations, optionally filtered by groups, each
 // carrying the whatsapp account it bridges (`target_account_uid`, null while
 // unlinked) and whether its grant needs reconnecting.
 //

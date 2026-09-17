@@ -9,7 +9,7 @@ import (
 	domain "integro_sdk/types/domain"
 )
 
-// Count Count API keys, optionally filtered by group.
+// Count Count API keys, optionally filtered by groups.
 //
 // Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff.
 func Count(__c *__client.Client, __query api_key.ListApiKeysQuery) (uint64, error) {
@@ -45,7 +45,7 @@ func Get(__c *__client.Client, apiKeyUid string) (domain.ApiKey, error) {
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
 	return __client.Request[domain.ApiKey](__c, "GET", __path, nil, nil)
 }
-// List List API keys, optionally filtered by group.
+// List List API keys, optionally filtered by groups.
 //
 // Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff.
 func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]domain.ApiKey, error) {

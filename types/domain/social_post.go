@@ -19,7 +19,6 @@ type SocialPost struct {
 	Caption *string `json:"caption"`
 	// The hosted thumbnail (`media.serve`).
 	PictureUid *primitives.Uid `json:"picture_uid"`
-	PictureSource *string `json:"picture_source"`
 	Permalink *string `json:"permalink"`
 	PublishedAt *primitives.Timestamp `json:"published_at"`
 	// The platform's own count or the comments the hub holds, whichever is

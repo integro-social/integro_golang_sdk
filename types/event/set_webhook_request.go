@@ -11,12 +11,10 @@ type SetWebhookRequest struct {
 	// Required for users and platform keys; group-bound keys imply their group.
 	GroupUid *primitives.Uid `json:"group_uid"`
 	Url string `json:"url"`
-	// Event kinds (and/or family aliases: `message`, `presence`, `comment`,
-	// `post`, `conversation`, `account`, `review`) delivered to this
-	// subscription; omit for everything. Presence kinds are accepted but never
-	// delivered here — they are live-stream-only by construction, so a webhook
-	// filtered to presence alone receives nothing.
-	Events *[]string `json:"events"`
+	// Event kinds delivered to this subscription; omit for everything. The
+	// live-only kinds (the presence kinds), which reach only the event socket,
+	// are refused here.
+	Events *[]domain.EventKind `json:"events"`
 	// Channels delivered to this subscription; omit for everything.
 	Channels *[]domain.Channel `json:"channels"`
 }

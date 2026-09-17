@@ -4,8 +4,7 @@ package domain
 
 // Who produced an outbound message row — the attribution consumers (CRMs)
 // use to tell machine sends from human takeovers without correlation
-// heuristics. `None` on inbound rows and on rows stored before the field
-// existed.
+// heuristics. `None` on inbound rows.
 type MessageSentBy string
 
 const (

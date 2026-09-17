@@ -8,5 +8,4 @@ type PulseDiskInventoryRow struct {
 	MountPoint string `json:"mount_point"`
 	FsType string `json:"fs_type"`
 	TotalBytes uint64 `json:"total_bytes"`
-	Removed bool `json:"removed"`
 }

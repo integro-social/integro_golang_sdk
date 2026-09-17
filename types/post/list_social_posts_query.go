@@ -7,19 +7,19 @@ import (
 )
 
 type ListSocialPostsQuery struct {
-	GroupUid *primitives.Uid `json:"group_uid"`
-	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
+	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// The platform post of one hub post.
 	PostUid *primitives.Uid `json:"post_uid"`
 	// Only posts with at least one third-party comment the account has not answered.
 	UnansweredOnly bool `json:"unanswered_only"`
 	// Only posts published at or after this instant (ms).
 	Since *primitives.Timestamp `json:"since"`
-	// Only posts published before this instant (ms).
+	// Only posts published strictly before this instant (ms); also the page cursor.
 	Until *primitives.Timestamp `json:"until"`
 	// Caption search: a case-insensitive substring.
 	Q *string `json:"q"`
-	// Page cursor: only posts published strictly before this instant (ms).
-	Before *primitives.Timestamp `json:"before"`
 	Limit *primitives.Number1_200 `json:"limit"`
 }

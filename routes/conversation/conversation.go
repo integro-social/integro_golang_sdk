@@ -12,8 +12,9 @@ import (
 
 // Action Send a presence signal into a conversation: mark_seen, typing_on, or
 // typing_off. The payload is channel-tagged and the `channel` must match the
-// conversation's account; official whatsapp has no typing_off (its indicator
-// auto-dismisses), so that channel's shape cannot express one. Mark-seen
+// conversation's account; official whatsapp and the gateway channels
+// (facebook_alt, instagram_alt, whatsapp_alt) have no typing_off (their
+// indicator auto-dismisses), so their shape cannot express one. Mark-seen
 // receipts every inbound message still unread (the latest 50 on the
 // session-backed whatsapp channels, the latest one on official whatsapp) and
 // advances the conversation's `seen_up_to` watermark (`last_inbound_at >
@@ -92,8 +93,8 @@ func Delete(__c *__client.Client, conversationUid string) (struct{}, error) {
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// List List conversations, newest activity first, optionally filtered by group or
-// social account; `before_activity_at`+`before_uid` page older activity
+// List List conversations, newest activity first, optionally filtered by groups or
+// social accounts; `before_activity_at`+`before_uid` page older activity
 // (keyset cursor). Rows carry the denormalized chat-list summary (unread
 // badge + last-message preview). `q` narrows to conversations whose
 // participant (alias, name, username, phone) contains it — a term under 2

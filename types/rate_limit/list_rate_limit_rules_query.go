@@ -7,9 +7,9 @@ import (
 )
 
 type ListRateLimitRulesQuery struct {
-	// Narrow to the rules that reach one group: the shared buckets, the
-	// global defaults and that group's override and own tiers. Without it, platform staff get every
-	// rule and everyone else the rules reaching the groups where they may view
-	// limits.
-	GroupUid *primitives.Uid `json:"group_uid"`
+	// Narrow to the rules that reach these groups, each one the caller may see:
+	// the shared buckets, the global defaults and those groups' override and
+	// own tiers. Without it, platform staff get every rule and everyone else the
+	// rules reaching the groups where they may view limits.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
 }

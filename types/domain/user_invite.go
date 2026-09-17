@@ -16,7 +16,6 @@ type UserInvite struct {
 	GroupUid *primitives.Uid `json:"group_uid"`
 	Role *MembershipRole `json:"role"`
 	ExpiresAt primitives.Timestamp `json:"expires_at"`
-	AcceptedAt *primitives.Timestamp `json:"accepted_at"`
 	EmailStatus UserInviteEmailStatus `json:"email_status"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 }

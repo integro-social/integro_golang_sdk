@@ -8,8 +8,8 @@ import (
 )
 
 type ConversationInsightQuery struct {
-	// Narrow to one group; omit for everything the caller may see.
-	GroupUid *primitives.Uid `json:"group_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
 	// Narrow to these accounts; each must be in scope.
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// Narrow to these channels.

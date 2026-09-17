@@ -66,7 +66,7 @@ func Get(__c *__client.Client, campaignUid string) (campaign.CampaignDetail, err
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[campaign.CampaignDetail](__c, "GET", __path, nil, nil)
 }
-// List List campaigns, newest first, optionally one group's.
+// List List campaigns, newest first, optionally only some groups'.
 //
 // Requires `ViewCampaigns`; the list covers only campaigns of groups where the caller holds it.
 func List(__c *__client.Client, __query campaign.ListCampaignsQuery) ([]campaign.CampaignDetail, error) {

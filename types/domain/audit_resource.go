@@ -20,7 +20,6 @@ const (
 	AuditResourcePost AuditResource = "post"
 	AuditResourceWebhook AuditResource = "webhook"
 	AuditResourceComment AuditResource = "comment"
-	AuditResourceMention AuditResource = "mention"
 	AuditResourceMedia AuditResource = "media"
 	AuditResourceTemplate AuditResource = "template"
 	AuditResourceConversation AuditResource = "conversation"
@@ -30,5 +29,4 @@ const (
 	AuditResourceGhlLocation AuditResource = "ghl_location"
 	AuditResourceContactImport AuditResource = "contact_import"
 	AuditResourceCampaign AuditResource = "campaign"
-	AuditResourceUnknown AuditResource = "unknown"
 )

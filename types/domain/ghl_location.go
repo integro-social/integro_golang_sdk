@@ -18,7 +18,6 @@ type GhlLocation struct {
 	// GHL's agency (company) id; empty when the grant does not carry one.
 	CompanyId string `json:"company_id"`
 	Name string `json:"name"`
-	Scope *string `json:"scope"`
 	// The grant went stale (`invalid_grant` on refresh) and only a reconnect
 	// can revive it.
 	NeedsReauth bool `json:"needs_reauth"`

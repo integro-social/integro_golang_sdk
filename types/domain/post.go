@@ -11,7 +11,6 @@ type Post struct {
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
 	Content PostContent `json:"content"`
 	Status PostStatus `json:"status"`
-	Error *string `json:"error"`
 	// Hub-side schedule instant for `scheduled` posts.
 	ScheduledAt *primitives.Timestamp `json:"scheduled_at"`
 	// Instagram media container awaiting Meta-side processing.

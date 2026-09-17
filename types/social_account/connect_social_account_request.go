@@ -4,11 +4,10 @@ package social_account
 
 // Which login opens the grant: the hub's own Meta app (every page and linked
 // instagram account the admin grants, reviewed together) or the alternate
-// gateway's, one channel per grant while the hub's app awaits review. An
-// instagram grant also names its dialog: Instagram Login needs no Facebook
-// Page, Facebook Login needs the account linked to one. A login may name the
-// group's account it reconnects, so the grant lands on that account and
-// refreshes it in place; otherwise every selected account is registered
-// anew, however many times the same page or number is already connected —
-// each connection is its own account, sharing nothing with the others.
+// gateway's, one channel per grant while the hub's app awaits review. A login
+// may name the group's account it reconnects, so the grant lands on that
+// account and refreshes it in place; otherwise every selected account is
+// registered anew, however many times the same page or number is already
+// connected — each connection is its own account, sharing nothing with the
+// others.
 type ConnectSocialAccountRequest = interface{}

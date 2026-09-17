@@ -7,8 +7,10 @@ import (
 )
 
 type SocialPostSummaryQuery struct {
-	GroupUid *primitives.Uid `json:"group_uid"`
-	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
+	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// Only posts with at least one third-party comment the account has not answered.
 	UnansweredOnly bool `json:"unanswered_only"`
 	// Only posts published at or after this instant (ms).

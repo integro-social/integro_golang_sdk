@@ -30,8 +30,7 @@ type Message struct {
 	IdempotencyKey *string `json:"idempotency_key"`
 	// Who produced this outbound row: a machine client through the api, a hub
 	// operator, or a platform echo (paired phone / whatsapp web / meta
-	// business inbox, incl. history imports). `None` on inbound rows and rows
-	// stored before the field existed.
+	// business inbox, incl. history imports). `None` on inbound rows.
 	SentBy *MessageSentBy `json:"sent_by"`
 	// The api key / user uid behind `sent_by`, when it names one.
 	SentByUid *primitives.Uid `json:"sent_by_uid"`

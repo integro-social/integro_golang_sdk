@@ -10,5 +10,4 @@ type PulseNetworkInventoryRow struct {
 	Ipv6Addresses []string `json:"ipv6_addresses"`
 	LinkSpeedMbps *uint32 `json:"link_speed_mbps"`
 	IsPhysical bool `json:"is_physical"`
-	Removed bool `json:"removed"`
 }

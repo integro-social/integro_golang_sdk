@@ -3,8 +3,6 @@
 package insight
 
 type ConversationInsightResponse struct {
-	// Accounts the query covered after every filter.
-	Accounts int64 `json:"accounts"`
 	// One per period, oldest first, gaps included as zeros.
 	Buckets []ConversationBucket `json:"buckets"`
 	// The whole period folded once; distinct counts span the whole period.

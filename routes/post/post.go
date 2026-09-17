@@ -38,7 +38,7 @@ func Get(__c *__client.Client, postUid string) (domain.Post, error) {
 	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
 	return __client.Request[domain.Post](__c, "GET", __path, nil, nil)
 }
-// List List posts, newest first, optionally filtered by group or social account.
+// List List posts, newest first, optionally filtered by groups or social accounts.
 //
 // Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
 func List(__c *__client.Client, __query post.ListPostsQuery) ([]domain.Post, error) {

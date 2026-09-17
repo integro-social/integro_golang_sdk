@@ -2,13 +2,7 @@
 
 package domain
 
-import (
-	primitives "integro_sdk/types/primitives"
-)
-
 type ServerUptimeStats struct {
 	Count uint64 `json:"count"`
 	TotalUptimeMs uint64 `json:"total_uptime_ms"`
-	Since primitives.Timestamp `json:"since"`
-	Until primitives.Timestamp `json:"until"`
 }

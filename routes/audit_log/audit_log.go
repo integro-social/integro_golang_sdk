@@ -8,13 +8,6 @@ import (
 	domain "integro_sdk/types/domain"
 )
 
-// Count Count audit log entries matching the given filters and time window.
-//
-// Requires `ViewAuditLogs`; platform staff count every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
-func Count(__c *__client.Client, __query audit_log.AuditLogQuery) (uint64, error) {
-	__path := "/audit-log/count"
-	return __client.Request[uint64](__c, "GET", __path, __query, nil)
-}
 // List List audit log entries matching the given filters and time window.
 //
 // Requires `ViewAuditLogs`; platform staff read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.

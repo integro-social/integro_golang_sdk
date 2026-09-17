@@ -11,9 +11,9 @@ import (
 // Global Search groups, users, contacts and messages: up to `limit` hits of each requested kind, kinds in a fixed order, groups and users ranked, contacts and messages newest first. A preview — the entity lists page the full answers.
 //
 // Any authenticated user; groups and users cover the caller's own groups and the people sharing them (every group and user for platform staff); contacts and messages cover the accounts of every group where the caller holds `ViewMessages` (every account for platform staff, none for a caller holding it nowhere).
-func Global(__c *__client.Client, __query search.SearchQuery) ([]domain.SearchHit, error) {
+func Global(__c *__client.Client, __query search.SearchQuery) ([]domain.SearchHitKind, error) {
 	__path := "/search"
-	return __client.Request[[]domain.SearchHit](__c, "GET", __path, __query, nil)
+	return __client.Request[[]domain.SearchHitKind](__c, "GET", __path, __query, nil)
 }
 // Message Search message text, newest first; `before_id` pages older hits. `conversation_uid` searches inside one conversation; otherwise every conversation of the filtered accounts. Each hit carries a snippet split into plain and matched runs.
 //

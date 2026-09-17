@@ -15,8 +15,7 @@ func Create(__c *__client.Client, __body message.CreateTemplateRequest) (message
 	__path := "/whatsapp/template"
 	return __client.Request[message.CreateTemplateResponse](__c, "POST", __path, nil, __body)
 }
-// Delete Delete a whatsapp message template by name (all languages, or one specific
-// `hsm_id`).
+// Delete Delete a whatsapp message template by name, every language of it.
 //
 // Requires `ManageTemplates` in the account's group.
 func Delete(__c *__client.Client, __query message.DeleteTemplateQuery) (struct{}, error) {

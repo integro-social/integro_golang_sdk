@@ -64,7 +64,7 @@ func ConnectWhatsapp(__c *__client.Client, __body social_account.ConnectWhatsapp
 	__path := "/social-account/whatsapp"
 	return __client.Request[social_account.ConnectWhatsappResponse](__c, "POST", __path, nil, __body)
 }
-// Count Count connected social accounts, optionally filtered by group.
+// Count Count connected social accounts, optionally filtered by groups.
 //
 // Requires `ViewSocialAccounts`; the count covers only accounts of groups where the caller holds it.
 func Count(__c *__client.Client, __query social_account.ListSocialAccountsQuery) (uint64, error) {
@@ -126,7 +126,7 @@ func InsightsHistory(__c *__client.Client, socialAccountUid string, __query insi
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[insight.AccountInsightHistory](__c, "GET", __path, __query, nil)
 }
-// List List connected social accounts, optionally filtered by group, each with the
+// List List connected social accounts, optionally filtered by groups, each with the
 // live session status of its whatsapp session when applicable.
 //
 // Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.

@@ -51,7 +51,7 @@ func Like(__c *__client.Client, socialAccountUid string, commentUid string) (str
 	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
 // List Poll the unified comment feed: comments with `id` greater than `since_id`,
-// oldest first, optionally filtered by group, account, or post.
+// oldest first, optionally filtered by groups, accounts, or post.
 //
 // Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
 func List(__c *__client.Client, __query engagement.ListCommentsQuery) ([]domain.Comment, error) {

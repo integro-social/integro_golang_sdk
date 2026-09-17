@@ -7,8 +7,10 @@ import (
 )
 
 type ListCommentsQuery struct {
-	GroupUid *primitives.Uid `json:"group_uid"`
-	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
+	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// Filter to one post's comments (platform post/media id).
 	ExternalPostId *string `json:"external_post_id"`
 	// Poll cursor: only comments with `id` strictly greater are returned.

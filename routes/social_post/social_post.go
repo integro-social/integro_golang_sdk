@@ -32,7 +32,7 @@ func InsightsHistory(__c *__client.Client, socialPostUid string, __query insight
 // List List the posts that stand on the platforms, newest first: every post the
 // hub knows about an account, published through it or not, with the
 // platform's comment and like counts and how many third-party comments the
-// account has not answered. `before` pages backwards.
+// account has not answered. `until` pages backwards.
 //
 // Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
 func List(__c *__client.Client, __query post.ListSocialPostsQuery) ([]domain.SocialPost, error) {
@@ -43,7 +43,7 @@ func List(__c *__client.Client, __query post.ListSocialPostsQuery) ([]domain.Soc
 // comments and the ones still unanswered. The list's pages never add up to
 // these; this does.
 //
-// Requires `ViewPosts`; counts only posts of groups where the caller holds it, narrowed by `group_uid` / `social_account_uid` when given.
+// Requires `ViewPosts`; counts only posts of groups where the caller holds it, narrowed by the named groups and accounts when given.
 func Summary(__c *__client.Client, __query post.SocialPostSummaryQuery) (domain.SocialPostSummary, error) {
 	__path := "/social-post/summary"
 	return __client.Request[domain.SocialPostSummary](__c, "GET", __path, __query, nil)

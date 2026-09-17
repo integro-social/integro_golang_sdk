@@ -32,5 +32,4 @@ const (
 	AuditActionSetMemberRole AuditAction = "set_member_role"
 	AuditActionRemoveMember AuditAction = "remove_member"
 	AuditActionSetSuperAdmin AuditAction = "set_super_admin"
-	AuditActionUnknown AuditAction = "unknown"
 )

@@ -6,8 +6,7 @@ package domain
 // id (or the page/account id when the reaction came from the business side).
 type MessageReaction struct {
 	ReactorId string `json:"reactor_id"`
-	// Meta's reaction name (e.g. `love`).
-	Reaction *string `json:"reaction"`
-	// The unicode emoji, when Meta provides it.
+	// The unicode emoji; a Meta reaction name (e.g. `love`) is stored as its
+	// glyph. `None` when the platform sent neither a glyph nor a known name.
 	Emoji *string `json:"emoji"`
 }

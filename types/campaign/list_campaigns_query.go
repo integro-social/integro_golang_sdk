@@ -7,6 +7,7 @@ import (
 )
 
 type ListCampaignsQuery struct {
-	GroupUid *primitives.Uid `json:"group_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
 	Limit *primitives.Number1_200 `json:"limit"`
 }

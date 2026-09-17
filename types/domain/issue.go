@@ -7,7 +7,6 @@ import (
 )
 
 type Issue struct {
-	Id uint64 `json:"id"`
 	Uid primitives.Uid `json:"uid"`
 	Category IssueCategory `json:"category"`
 	Severity IssueSeverity `json:"severity"`

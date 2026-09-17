@@ -9,5 +9,4 @@ type PulseGpuInventoryRow struct {
 	Vendor string `json:"vendor"`
 	VramTotalBytes uint64 `json:"vram_total_bytes"`
 	PowerLimitWatts float32 `json:"power_limit_watts"`
-	Removed bool `json:"removed"`
 }

@@ -2,14 +2,8 @@
 
 package domain
 
-import (
-	primitives "integro_sdk/types/primitives"
-)
-
 type AuditLogStats struct {
 	Count uint64 `json:"count"`
 	SuccessCount uint64 `json:"success_count"`
 	FailureCount uint64 `json:"failure_count"`
-	Since *primitives.Timestamp `json:"since"`
-	Until *primitives.Timestamp `json:"until"`
 }

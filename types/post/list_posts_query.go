@@ -7,7 +7,9 @@ import (
 )
 
 type ListPostsQuery struct {
-	GroupUid *primitives.Uid `json:"group_uid"`
-	SocialAccountUid *primitives.Uid `json:"social_account_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
+	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	Limit *primitives.Number1_200 `json:"limit"`
 }

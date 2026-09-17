@@ -18,7 +18,7 @@ import (
 // message ever. Periods align to `utc_offset_minutes`; weeks start on
 // Monday.
 //
-// Requires `ViewMessages`; covers only accounts of groups where the caller holds it, narrowed by `group_uid`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
+// Requires `ViewMessages`; covers only accounts of groups where the caller holds it, narrowed by `group_uids`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
 func Conversation(__c *__client.Client, __body insight.ConversationInsightQuery) (insight.ConversationInsightResponse, error) {
 	__path := "/insight/conversation"
 	return __client.Request[insight.ConversationInsightResponse](__c, "POST", __path, nil, __body)
@@ -27,7 +27,7 @@ func Conversation(__c *__client.Client, __body insight.ConversationInsightQuery)
 // counted at their publication time; posts removed from the platform are
 // left out. Periods align to `utc_offset_minutes`; weeks start on Monday.
 //
-// Requires `ViewPosts`; covers only accounts of groups where the caller holds it, narrowed by `group_uid`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
+// Requires `ViewPosts`; covers only accounts of groups where the caller holds it, narrowed by `group_uids`, `social_account_uids` (each must be in scope) and `channels`. Hourly periods over at most 31 days, the others over at most 731 (400 beyond).
 func Posting(__c *__client.Client, __body insight.PostingInsightQuery) (insight.PostingInsightResponse, error) {
 	__path := "/insight/posting"
 	return __client.Request[insight.PostingInsightResponse](__c, "POST", __path, nil, __body)

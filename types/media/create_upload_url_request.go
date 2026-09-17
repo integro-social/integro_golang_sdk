@@ -10,5 +10,4 @@ type CreateUploadUrlRequest struct {
 	// Required for users and platform keys; group-bound keys imply their group.
 	GroupUid *primitives.Uid `json:"group_uid"`
 	Filename *string `json:"filename"`
-	ContentType *string `json:"content_type"`
 }

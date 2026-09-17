@@ -10,6 +10,4 @@ type DeleteTemplateQuery struct {
 	// Any whatsapp account of the WABA whose templates are managed.
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
 	Name string `json:"name"`
-	// Delete only this template id; omitted, every language of `name` goes.
-	HsmId *string `json:"hsm_id"`
 }

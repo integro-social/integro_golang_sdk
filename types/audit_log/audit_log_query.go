@@ -9,7 +9,8 @@ import (
 
 type AuditLogQuery struct {
 	domain.AuditLogWindow
-	GroupUid *primitives.Uid `json:"group_uid"`
+	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
+	GroupUids *[]primitives.Uid `json:"group_uids"`
 	UserUid *primitives.Uid `json:"user_uid"`
 	Action *domain.AuditAction `json:"action"`
 	Resource *domain.AuditResource `json:"resource"`

@@ -4,7 +4,7 @@ package domain
 
 // Every event the hub emits, in the exact shape delivered to its outbound
 // transports: the group webhook (as the POST body) and the WebSocket stream
-// (as one frame). The `event` tag names the kind. Transient kinds
-// (`is_transient`) reach the socket only — they never enter the replay ring
-// the webhook batcher reads.
+// (as one frame). The `event` tag names the kind ([`EventKind`]). The
+// live-only kinds (the presence kinds) reach the socket only — they never
+// enter the replay ring the webhook batcher reads.
 type HubEvent = interface{}

@@ -46,7 +46,7 @@ func Get(__c *__client.Client, importUid string) (contact_import.ContactImportDe
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
 	return __client.Request[contact_import.ContactImportDetail](__c, "GET", __path, nil, nil)
 }
-// List List imports, newest first, optionally one group's.
+// List List imports, newest first, optionally only some groups'.
 //
 // Requires `ImportContacts`; the list covers only imports of groups where the caller holds it.
 func List(__c *__client.Client, __query contact_import.ListImportsQuery) ([]contact_import.ContactImportDetail, error) {
