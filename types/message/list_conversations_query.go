@@ -15,7 +15,7 @@ type ListConversationsQuery struct {
 	// name, username or phone, as a substring. A term under 2 characters
 	// answers with no rows. Composes with the cursor; not with `uids`.
 	Q *primitives.Text0_8000 `json:"q"`
-	// Exact conversations to return (≤200), for decorating rows a CRM already
+	// Exact conversations to return (≤200), for decorating rows a consumer already
 	// holds by uid. Mutually exclusive with the keyset cursor; ordering follows
 	// activity like the plain list.
 	Uids *[]primitives.Uid `json:"uids"`

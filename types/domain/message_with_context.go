@@ -7,7 +7,7 @@ import (
 )
 
 // A message enriched with its channel/group context — the squashed shape
-// CRMs consume from both the polling feed and the webhook fan-out.
+// a consumer reads from both the polling feed and the webhook fan-out.
 type MessageWithContext struct {
 	Message
 	Channel Channel `json:"channel"`
