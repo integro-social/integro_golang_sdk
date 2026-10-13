@@ -70,6 +70,17 @@ func SetHandoffTag(__c *__client.Client, ghlLocationUid string, __body ghl.SetGh
 	__path = __strings.Replace(__path, "{ghl_location_uid}", __client.EncodePath(ghlLocationUid), 1)
 	return __client.Request[domain.GhlLocation](__c, "PUT", __path, nil, __body)
 }
+// SetMarkup Set whether the bridge renders the bracket markup GoHighLevel's agent
+// writes — `[b]texto[/b]` for bold, `[i]`, `[s]`, `[m]` and `[c]` likewise,
+// `[br]` for a blank line — into whatsapp formatting before sending. On by
+// default; off, the text goes out as it arrived.
+//
+// Requires `ConnectSocialAccounts` in the location's group.
+func SetMarkup(__c *__client.Client, ghlLocationUid string, __body ghl.SetGhlMarkupRequest) (domain.GhlLocation, error) {
+	__path := "/ghl/{ghl_location_uid}/markup"
+	__path = __strings.Replace(__path, "{ghl_location_uid}", __client.EncodePath(ghlLocationUid), 1)
+	return __client.Request[domain.GhlLocation](__c, "PUT", __path, nil, __body)
+}
 // Unlink Unbridge the location's whatsapp account, stopping the mirroring in both
 // directions. The location stays installed and can be pointed at another
 // account.
