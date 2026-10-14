@@ -10,14 +10,14 @@ import (
 
 // List List audit log entries matching the given filters and time window.
 //
-// Requires `ViewAuditLogs`; platform staff read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
+// Requires `ViewAuditLogs`; platform staff and platform API keys read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
 func List(__c *__client.Client, __query audit_log.AuditLogQuery) ([]domain.AuditLog, error) {
 	__path := "/audit-log"
 	return __client.Request[[]domain.AuditLog](__c, "GET", __path, __query, nil)
 }
 // Stats Aggregate audit log statistics for the given filters and time window.
 //
-// Requires `ViewAuditLogs`; platform staff aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is staff-only.
+// Requires `ViewAuditLogs`; platform staff and platform API keys aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
 func Stats(__c *__client.Client, __query audit_log.AuditLogQuery) (domain.AuditLogStats, error) {
 	__path := "/audit-log/stat"
 	return __client.Request[domain.AuditLogStats](__c, "GET", __path, __query, nil)

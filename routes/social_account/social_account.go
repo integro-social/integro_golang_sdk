@@ -199,7 +199,6 @@ func NativeStatus(__c *__client.Client, socialAccountUid string) (social_account
 }
 // RefreshProfile Re-read this account's name and picture from its platform now, rather than
 // waiting for the daily sweep. Answers `true` when something actually changed.
-//
 // Never touches the alias — that is yours, and a platform rename is exactly
 // what it is meant to survive.
 //

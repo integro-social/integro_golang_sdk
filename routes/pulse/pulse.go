@@ -11,28 +11,28 @@ import (
 
 // Current Return the most recent host metrics snapshot.
 //
-// Requires `ViewPulse`, which only platform staff hold.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func Current(__c *__client.Client) (pulse_sys.PulseSnapshot, error) {
 	__path := "/pulse/current"
 	return __client.Request[pulse_sys.PulseSnapshot](__c, "GET", __path, nil, nil)
 }
 // Inventory Return the disk, network, and GPU hardware inventory as of a point in time.
 //
-// Requires `ViewPulse`, which only platform staff hold.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func Inventory(__c *__client.Client, __query pulse.PulseInventoryQuery) (pulse.PulseInventoryResponse, error) {
 	__path := "/pulse/inventory"
 	return __client.Request[pulse.PulseInventoryResponse](__c, "GET", __path, __query, nil)
 }
 // Stream Stream live host metrics snapshots over server-sent events.
 //
-// Requires `ViewPulse`, which only platform staff hold; the stream is gated at connect.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold; the stream is gated at connect.
 func Stream(__c *__client.Client, __onEvent func(__json.RawMessage)) error {
 	__path := "/pulse/stream"
 	return __client.Sse(__c, __path, nil, __onEvent)
 }
 // SystemInfo Return static system information about the host running the backend.
 //
-// Requires `ViewPulse`, which only platform staff hold.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func SystemInfo(__c *__client.Client) (pulse_sys.PulseSystemInfo, error) {
 	__path := "/pulse/system-info"
 	return __client.Request[pulse_sys.PulseSystemInfo](__c, "GET", __path, nil, nil)

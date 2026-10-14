@@ -10,7 +10,7 @@ import (
 
 // List List the groups another user belongs to, each carrying the role that membership holds there.
 //
-// Requires `ViewUsers`, which only platform staff hold.
+// Requires `ViewUsers`, which only platform staff and platform API keys can hold.
 func List(__c *__client.Client, userUid string) ([]user.UserMembershipResponse, error) {
 	__path := "/user/{user_uid}/membership"
 	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)

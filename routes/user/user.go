@@ -26,7 +26,7 @@ func ChangePassword(__c *__client.Client, __body user.UserChangePasswordRequest)
 }
 // Count Count all users.
 //
-// Requires `ViewUsers`, which only platform staff hold.
+// Requires `ViewUsers`, which only platform staff and platform API keys can hold.
 func Count(__c *__client.Client) (uint64, error) {
 	__path := "/user/count"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
@@ -56,7 +56,7 @@ func Delete(__c *__client.Client, userUid string) (struct{}, error) {
 }
 // Get Get a single user by uid.
 //
-// Requires `ViewUsers`, which only platform staff hold.
+// Requires `ViewUsers`, which only platform staff and platform API keys can hold.
 func Get(__c *__client.Client, userUid string) (domain.User, error) {
 	__path := "/user/{user_uid}"
 	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
@@ -71,7 +71,7 @@ func GetSelf(__c *__client.Client) (user.UserSelfResponse, error) {
 }
 // List List all users.
 //
-// Requires `ViewUsers`, which only platform staff hold.
+// Requires `ViewUsers`, which only platform staff and platform API keys can hold.
 func List(__c *__client.Client) ([]domain.User, error) {
 	__path := "/user"
 	return __client.Request[[]domain.User](__c, "GET", __path, nil, nil)

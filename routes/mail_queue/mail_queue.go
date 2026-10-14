@@ -11,7 +11,7 @@ import (
 
 // List List queued emails, optionally filtered by delivery status.
 //
-// Requires `ManageEmailQueue`, which only platform staff hold.
+// Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
 func List(__c *__client.Client, __query mailing.EmailQueueListQuery) ([]domain.EmailQueueItem, error) {
 	__path := "/mail-queue"
 	return __client.Request[[]domain.EmailQueueItem](__c, "GET", __path, __query, nil)
@@ -21,7 +21,7 @@ func List(__c *__client.Client, __query mailing.EmailQueueListQuery) ([]domain.E
 // failed. An email already handed to the mail server is refused — it settles
 // on its own.
 //
-// Requires `ManageEmailQueue`, which only platform staff hold.
+// Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
 func Remove(__c *__client.Client, id string) (struct{}, error) {
 	__path := "/mail-queue/{id}"
 	__path = __strings.Replace(__path, "{id}", __client.EncodePath(id), 1)
@@ -30,7 +30,7 @@ func Remove(__c *__client.Client, id string) (struct{}, error) {
 // Retry Reset a failed queued email so the worker attempts delivery again. A
 // subscriber record goes back to pending-send.
 //
-// Requires `ManageEmailQueue`, which only platform staff hold.
+// Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
 func Retry(__c *__client.Client, id string) (struct{}, error) {
 	__path := "/mail-queue/{id}/retry"
 	__path = __strings.Replace(__path, "{id}", __client.EncodePath(id), 1)

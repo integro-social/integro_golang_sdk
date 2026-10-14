@@ -21,7 +21,7 @@ func Accept(__c *__client.Client, __body user_invite.UserInviteAcceptRequest) (u
 }
 // Count Count pending (unaccepted) user invitations.
 //
-// Requires `ViewInvites`; the count covers only invites into groups where the caller holds it, and platform invites only for platform staff.
+// Requires `ViewInvites`; the count covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
 func Count(__c *__client.Client) (uint64, error) {
 	__path := "/user-invite/count"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
@@ -43,7 +43,7 @@ func Join(__c *__client.Client, __body user_invite.UserInviteTokenRequest) (user
 }
 // List List pending (unaccepted) user invitations.
 //
-// Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff.
+// Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
 func List(__c *__client.Client) ([]domain.UserInvite, error) {
 	__path := "/user-invite"
 	return __client.Request[[]domain.UserInvite](__c, "GET", __path, nil, nil)

@@ -10,21 +10,21 @@ import (
 
 // GetLatest Get the most recent server uptime record.
 //
-// Requires `ViewPulse`, which only platform staff hold.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func GetLatest(__c *__client.Client) (*domain.ServerUptime, error) {
 	__path := "/uptime/latest"
 	return __client.Request[*domain.ServerUptime](__c, "GET", __path, nil, nil)
 }
 // GetStats Compute aggregate server uptime statistics within a time range.
 //
-// Requires `ViewPulse`, which only platform staff hold.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func GetStats(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) (domain.ServerUptimeStats, error) {
 	__path := "/uptime/stat"
 	return __client.Request[domain.ServerUptimeStats](__c, "GET", __path, __query, nil)
 }
 // List List server uptime records within a time range.
 //
-// Requires `ViewPulse`, which only platform staff hold.
+// Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func List(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) ([]domain.ServerUptime, error) {
 	__path := "/uptime"
 	return __client.Request[[]domain.ServerUptime](__c, "GET", __path, __query, nil)

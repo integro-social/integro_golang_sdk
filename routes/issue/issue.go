@@ -9,9 +9,9 @@ import (
 	issue "integro_sdk/types/issue"
 )
 
-// Count Count issues — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
+// Count Count issues — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
 //
-// Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the count beyond the caller's own reports.
+// Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the count beyond the caller's own reports.
 func Count(__c *__client.Client) (uint64, error) {
 	__path := "/issue/count"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
@@ -25,22 +25,22 @@ func Create(__c *__client.Client, __form *__client.MultipartForm) (issue.CreateI
 }
 // Get Fetch a single issue by uid.
 //
-// Any authenticated user for an issue they reported; `ViewIssues`, which only platform staff hold, reaches any issue. An issue the caller may not read reads as not found.
+// Any authenticated user for an issue they reported; `ViewIssues`, which only platform staff and platform API keys can hold, reaches any issue, and is the only way an API key reaches one. An issue the caller may not read reads as not found.
 func Get(__c *__client.Client, issueUid string) (domain.Issue, error) {
 	__path := "/issue/{issue_uid}"
 	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
 	return __client.Request[domain.Issue](__c, "GET", __path, nil, nil)
 }
-// List List issues, newest first — every issue for a caller holding `ViewIssues`, and only the caller's own reports for everyone else.
+// List List issues, newest first — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
 //
-// Any authenticated user; `ViewIssues`, which only platform staff hold, is what widens the result beyond the caller's own reports.
+// Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the result beyond the caller's own reports.
 func List(__c *__client.Client) ([]domain.Issue, error) {
 	__path := "/issue"
 	return __client.Request[[]domain.Issue](__c, "GET", __path, nil, nil)
 }
 // SetStatus Update the status of an issue.
 //
-// Requires `ManageIssues`, which only platform staff hold.
+// Requires `ManageIssues`, which only platform staff and platform API keys can hold.
 func SetStatus(__c *__client.Client, issueUid string, __body issue.SetIssueStatusRequest) (struct{}, error) {
 	__path := "/issue/{issue_uid}/status"
 	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)

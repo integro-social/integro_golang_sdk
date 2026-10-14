@@ -69,6 +69,8 @@ type SocialAccount struct {
 	// `None` leaves it unlimited. Only the session-backed whatsapp channels
 	// enforce it.
 	DailyConversationCap *primitives.Number1_100000 `json:"daily_conversation_cap"`
+	// The user who connected the account — for one an API key connected, the
+	// user who created that key.
 	ConnectedBy primitives.Uid `json:"connected_by"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 	UpdatedAt primitives.Timestamp `json:"updated_at"`

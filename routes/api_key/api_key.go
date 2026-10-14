@@ -11,7 +11,7 @@ import (
 
 // Count Count API keys, optionally filtered by groups.
 //
-// Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff.
+// Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
 func Count(__c *__client.Client, __query api_key.ListApiKeysQuery) (uint64, error) {
 	__path := "/api-key/count"
 	return __client.Request[uint64](__c, "GET", __path, __query, nil)
@@ -20,8 +20,9 @@ func Count(__c *__client.Client, __query api_key.ListApiKeysQuery) (uint64, erro
 // group) is the one that stands at platform scope — that comes from the
 // binding itself, so nothing is added to the grant set — and a group-bound key
 // may therefore carry no platform-scoped permission at all. Every granted
-// permission must be one the caller itself holds in the key's scope, and must
-// bring along whatever that permission requires.
+// permission must be one the caller itself holds in the key's scope, must
+// bring along whatever that permission requires, and must not be a
+// `roles_only` permission — those are held only through a role.
 //
 // Requires `CreateApiKeys` and `GrantApiKeyPermissions` in the named group, or both at platform scope when no group is named; every permission granted to the key must also be one the caller holds where the key lives.
 func Create(__c *__client.Client, __body api_key.CreateApiKeyRequest) (api_key.CreateApiKeyResponse, error) {
@@ -47,7 +48,7 @@ func Get(__c *__client.Client, apiKeyUid string) (domain.ApiKey, error) {
 }
 // List List API keys, optionally filtered by groups.
 //
-// Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff.
+// Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
 func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]domain.ApiKey, error) {
 	__path := "/api-key"
 	return __client.Request[[]domain.ApiKey](__c, "GET", __path, __query, nil)
@@ -79,7 +80,8 @@ func Update(__c *__client.Client, apiKeyUid string, __body api_key.UpdateApiKeyR
 // UpdatePermissions Replace the granted permission set of an API key. A platform-scoped
 // permission is refused on a group-bound key, which never stands at platform
 // scope; every granted permission must be one the caller itself holds in the
-// key's scope, and must bring along whatever that permission requires.
+// key's scope, must bring along whatever that permission requires, and must
+// not be a `roles_only` permission — those are held only through a role.
 //
 // Requires `GrantApiKeyPermissions` in the key's group, or at platform scope for a platform key; every permission granted must also be one the caller holds where the key lives.
 func UpdatePermissions(__c *__client.Client, apiKeyUid string, __body api_key.UpdateApiKeyPermissionsRequest) (struct{}, error) {
