@@ -2,6 +2,4 @@
 
 package meta
 
-// A button on a template definition. WhatsApp allows up to ten, and mixing
-// kinds is constrained by Meta's own rules (validated on submit).
 type WhatsappTemplateButton = interface{}

@@ -2,7 +2,6 @@
 
 package google
 
-// The merchant's public reply on a review.
 type ReviewReply struct {
 	Comment *string `json:"comment"`
 	UpdateTime *string `json:"updateTime"`

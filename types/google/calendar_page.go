@@ -2,7 +2,6 @@
 
 package google
 
-// One page of the account's calendar list.
 type CalendarPage struct {
 	Items []CalendarListEntry `json:"items"`
 	NextPageToken *string `json:"nextPageToken,omitempty"`

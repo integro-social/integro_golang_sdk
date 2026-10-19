@@ -2,11 +2,7 @@
 
 package google
 
-// A local post ("What's new" card on the profile). `topic_type` is
-// `STANDARD`, `EVENT`, `OFFER` or `ALERT`; `state` and `search_url` are
-// server-set.
 type LocalPost struct {
-	// Resource name, `accounts/{a}/locations/{l}/localPosts/{p}`.
 	Name *string `json:"name"`
 	LanguageCode *string `json:"languageCode"`
 	Summary *string `json:"summary"`

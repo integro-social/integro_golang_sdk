@@ -2,7 +2,6 @@
 
 package google
 
-// Event window for `EVENT`/`OFFER` posts.
 type LocalPostEvent struct {
 	Title *string `json:"title"`
 	Schedule *TimeInterval `json:"schedule"`

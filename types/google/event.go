@@ -2,8 +2,6 @@
 
 package google
 
-// A Google Calendar event (response shape). Most fields are optional because
-// Google omits them depending on event kind and the caller's access.
 type Event struct {
 	Id *string `json:"id"`
 	Status *string `json:"status"`

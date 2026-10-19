@@ -2,7 +2,6 @@
 
 package google
 
-// A dated exception to regular hours — closed, or different hours.
 type SpecialHourPeriod struct {
 	StartDate *Date `json:"startDate"`
 	EndDate *Date `json:"endDate"`

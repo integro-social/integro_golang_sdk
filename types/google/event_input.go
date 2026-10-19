@@ -2,8 +2,6 @@
 
 package google
 
-// Mutable event payload for insert/patch. Only set fields are sent — which
-// also means a PATCH can never *clear* a field.
 type EventInput struct {
 	Summary *string `json:"summary"`
 	Description *string `json:"description"`

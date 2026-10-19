@@ -2,10 +2,6 @@
 
 package meta
 
-// Conversation presence signals (Send API `sender_action` parameter).
-// WhatsApp rides its own read-receipt + typing-indicator call instead:
-// `mark_seen`/`typing_on` map onto it and there is no `typing_off`
-// (indicators auto-dismiss).
 type SenderAction string
 
 const (

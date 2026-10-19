@@ -2,7 +2,6 @@
 
 package google
 
-// Offer extras layered on an `OFFER` post's event window.
 type LocalPostOffer struct {
 	CouponCode *string `json:"couponCode"`
 	RedeemOnlineUrl *string `json:"redeemOnlineUrl"`

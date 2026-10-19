@@ -2,9 +2,7 @@
 
 package google
 
-// A business location, thinned to the fields the read mask requests.
 type Location struct {
-	// Resource name, `locations/{location_id}` — no account prefix on v1.
 	Name *string `json:"name"`
 	Title *string `json:"title"`
 	PhoneNumbers *PhoneNumbers `json:"phoneNumbers"`

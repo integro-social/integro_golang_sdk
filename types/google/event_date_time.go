@@ -2,8 +2,6 @@
 
 package google
 
-// A calendar event's start/end. Google uses `dateTime` (RFC3339) for timed
-// events and `date` (YYYY-MM-DD) for all-day events; `timeZone` is an IANA name.
 type EventDateTime struct {
 	DateTime *string `json:"dateTime"`
 	Date *string `json:"date"`

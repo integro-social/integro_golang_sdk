@@ -2,8 +2,6 @@
 
 package meta
 
-// Where a template sits in Meta's review pipeline. Only `approved` is
-// sendable.
 type WhatsappTemplateStatus string
 
 const (

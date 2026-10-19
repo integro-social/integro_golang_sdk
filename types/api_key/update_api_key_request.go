@@ -4,9 +4,10 @@ package api_key
 
 import (
 	axumy "integro_sdk/types/axumy"
+	primitives "integro_sdk/types/primitives"
 )
 
 type UpdateApiKeyRequest struct {
-	Name axumy.OptionalUpdate `json:"name"`
-	Enabled axumy.OptionalUpdate `json:"enabled"`
+	Name axumy.OptionalUpdate[primitives.Name] `json:"name"`
+	Enabled axumy.OptionalUpdate[bool] `json:"enabled"`
 }

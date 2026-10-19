@@ -2,10 +2,7 @@
 
 package google
 
-// A customer review. `star_rating` is `ONE`…`FIVE`; `comment` may carry a
-// `(Translated by Google)` block alongside the original text.
 type Review struct {
-	// Resource name, `accounts/{a}/locations/{l}/reviews/{r}`.
 	Name *string `json:"name"`
 	ReviewId *string `json:"reviewId"`
 	Reviewer *Reviewer `json:"reviewer"`

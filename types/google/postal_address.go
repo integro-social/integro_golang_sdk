@@ -2,10 +2,6 @@
 
 package google
 
-// Storefront address (`google.type.PostalAddress`). Every data-carrying field
-// is modelled: a PATCH masking `storefrontAddress` replaces the message
-// wholesale, so anything missing here would be cleared on the profile. Only
-// `revision` is omitted — Google pins it to 0.
 type PostalAddress struct {
 	RegionCode *string `json:"regionCode"`
 	LanguageCode *string `json:"languageCode"`

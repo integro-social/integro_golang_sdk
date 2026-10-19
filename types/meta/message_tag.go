@@ -2,9 +2,6 @@
 
 package meta
 
-// Messaging tags that lift the standard 24h response window (Send API `tag`
-// parameter). Only `HumanAgent` survives in 2026 (7-day window for human
-// replies; the app must hold the `human_agent` permission).
 type MessageTag string
 
 const (

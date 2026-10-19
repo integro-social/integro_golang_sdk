@@ -2,7 +2,4 @@
 
 package meta
 
-// A header's format and the payload that format carries. Media headers are
-// defined with an uploaded sample (a resumable-upload handle), not a URL —
-// the real media is supplied per send.
 type WhatsappTemplateHeader = interface{}

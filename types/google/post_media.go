@@ -2,8 +2,6 @@
 
 package google
 
-// Media attached to a post — on create, `media_format: PHOTO` plus a public
-// `source_url`; responses add the Google-hosted copy.
 type PostMedia struct {
 	Name *string `json:"name"`
 	MediaFormat *string `json:"mediaFormat"`

@@ -3,7 +3,6 @@
 package google
 
 type Answer struct {
-	// Resource name, `locations/{l}/questions/{q}/answers/{a}`.
 	Name *string `json:"name"`
 	Text *string `json:"text"`
 	Author *QandaAuthor `json:"author"`

@@ -2,8 +2,6 @@
 
 package google
 
-// Who wrote a question or answer. `author_type` distinguishes `MERCHANT`
-// (the business itself) from `REGULAR_USER`/`LOCAL_GUIDE`.
 type QandaAuthor struct {
 	DisplayName *string `json:"displayName"`
 	ProfilePhotoUri *string `json:"profilePhotoUri"`

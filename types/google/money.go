@@ -2,7 +2,6 @@
 
 package google
 
-// Price (proto `google.type.Money`): `units` is a stringified int64.
 type Money struct {
 	CurrencyCode *string `json:"currencyCode"`
 	Units *string `json:"units"`

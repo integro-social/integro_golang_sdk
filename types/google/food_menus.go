@@ -2,10 +2,7 @@
 
 package google
 
-// The location's structured menus — the category-specific dataset food
-// businesses get; `metadata.can_have_food_menus` says whether it applies.
 type FoodMenus struct {
-	// Resource name, `accounts/{a}/locations/{l}/foodMenus`.
 	Name *string `json:"name"`
 	Menus []Menu `json:"menus,omitempty"`
 }

@@ -4,8 +4,9 @@ package user
 
 import (
 	axumy "integro_sdk/types/axumy"
+	primitives "integro_sdk/types/primitives"
 )
 
 type UpdateUserSelfRequest struct {
-	Name axumy.OptionalUpdate `json:"name"`
+	Name axumy.OptionalUpdate[primitives.Name] `json:"name"`
 }

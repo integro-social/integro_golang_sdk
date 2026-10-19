@@ -4,8 +4,9 @@ package group
 
 import (
 	axumy "integro_sdk/types/axumy"
+	primitives "integro_sdk/types/primitives"
 )
 
 type UpdateGroupRequest struct {
-	Name axumy.OptionalUpdate `json:"name"`
+	Name axumy.OptionalUpdate[primitives.Name] `json:"name"`
 }

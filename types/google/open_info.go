@@ -2,7 +2,6 @@
 
 package google
 
-// Open/closed status: `OPEN`, `CLOSED_PERMANENTLY` or `CLOSED_TEMPORARILY`.
 type OpenInfo struct {
 	Status *string `json:"status"`
 }

@@ -2,8 +2,6 @@
 
 package meta
 
-// What the template is for. Meta prices and rate-limits by category, and a
-// template's category is fixed at approval.
 type WhatsappTemplateCategory string
 
 const (

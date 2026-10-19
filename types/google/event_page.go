@@ -2,8 +2,6 @@
 
 package google
 
-// One page of events. `next_page_token` present means there is more —
-// pass it back to continue.
 type EventPage struct {
 	Items []Event `json:"items"`
 	NextPageToken *string `json:"nextPageToken,omitempty"`

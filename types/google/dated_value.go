@@ -2,7 +2,6 @@
 
 package google
 
-// One day's value; int64 arrives as a string, absent means no data.
 type DatedValue struct {
 	Date *Date `json:"date"`
 	Value *string `json:"value"`

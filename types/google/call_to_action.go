@@ -2,8 +2,6 @@
 
 package google
 
-// Post button: `action_type` is `BOOK`, `ORDER`, `SHOP`, `LEARN_MORE`,
-// `SIGN_UP` or `CALL` (the latter needs no url).
 type CallToAction struct {
 	ActionType *string `json:"actionType"`
 	Url *string `json:"url"`

@@ -2,8 +2,6 @@
 
 package google
 
-// Calendar date (proto3 `google.type.Date`): zero-valued components are
-// omitted from the JSON, hence the defaults.
 type Date struct {
 	Year int32 `json:"year"`
 	Month uint32 `json:"month"`

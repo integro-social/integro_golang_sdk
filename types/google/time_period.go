@@ -2,8 +2,6 @@
 
 package google
 
-// One weekly open interval. Days are `MONDAY`…`SUNDAY`; a span crossing
-// midnight has `close_day` ≠ `open_day`.
 type TimePeriod struct {
 	OpenDay *string `json:"openDay"`
 	OpenTime *TimeOfDay `json:"openTime"`

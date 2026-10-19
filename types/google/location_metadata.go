@@ -2,8 +2,6 @@
 
 package google
 
-// Read-only facts Google derives about the location — links out to Maps and
-// the public review form, and which surfaces apply (food menus).
 type LocationMetadata struct {
 	PlaceId *string `json:"placeId"`
 	MapsUri *string `json:"mapsUri"`

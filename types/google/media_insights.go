@@ -2,7 +2,6 @@
 
 package google
 
-// View count comes back as a stringified int64.
 type MediaInsights struct {
 	ViewCount *string `json:"viewCount"`
 }

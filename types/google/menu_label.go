@@ -2,7 +2,6 @@
 
 package google
 
-// Localized display text used across menus, sections and items.
 type MenuLabel struct {
 	DisplayName *string `json:"displayName"`
 	Description *string `json:"description"`

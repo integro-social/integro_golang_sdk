@@ -2,7 +2,6 @@
 
 package google
 
-// One metric's day-by-day series, flattened from Google's nested envelope.
 type DailyMetricSeries struct {
 	DailyMetric string `json:"dailyMetric"`
 	DatedValues []DatedValue `json:"datedValues"`

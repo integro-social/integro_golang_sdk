@@ -2,8 +2,6 @@
 
 package google
 
-// A business category. `name` is the stable id (`categories/gcid:…`) and is
-// what a PATCH must send; `display_name` is localized.
 type Category struct {
 	Name *string `json:"name"`
 	DisplayName *string `json:"displayName"`

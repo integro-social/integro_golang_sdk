@@ -2,7 +2,6 @@
 
 package google
 
-// Time of day (proto3 `google.type.TimeOfDay`): midnight serializes as `{}`.
 type TimeOfDay struct {
 	Hours uint32 `json:"hours"`
 	Minutes uint32 `json:"minutes"`

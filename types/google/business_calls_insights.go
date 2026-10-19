@@ -2,8 +2,6 @@
 
 package google
 
-// Call History insights for a location — only populated where the merchant
-// enabled Call History on the profile.
 type BusinessCallsInsights struct {
 	Name *string `json:"name"`
 	MetricType *string `json:"metricType"`

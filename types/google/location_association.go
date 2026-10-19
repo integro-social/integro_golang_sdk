@@ -2,9 +2,6 @@
 
 package google
 
-// Where a media item shows on the profile: `category` is `COVER`, `PROFILE`,
-// `LOGO`, `EXTERIOR`, `INTERIOR`, `PRODUCT`, `AT_WORK`, `FOOD_AND_DRINK`,
-// `MENU`, `COMMON_AREA`, `ROOMS`, `TEAMS` or `ADDITIONAL`.
 type LocationAssociation struct {
 	Category *string `json:"category"`
 }

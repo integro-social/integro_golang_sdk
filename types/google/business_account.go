@@ -2,10 +2,7 @@
 
 package google
 
-// A Business Profile account (`accounts/{id}`) — personal, location group or
-// organization. The account is the v4 path root for reviews/posts/media.
 type BusinessAccount struct {
-	// Resource name, `accounts/{account_id}`.
 	Name string `json:"name"`
 	AccountName *string `json:"accountName"`
 	AccountType *string `json:"type"`

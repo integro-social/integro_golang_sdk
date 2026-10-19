@@ -2,10 +2,7 @@
 
 package google
 
-// A photo/video on the profile. On create, send `media_format: PHOTO` (or
-// `VIDEO`), `location_association` and a publicly fetchable `source_url`.
 type MediaItem struct {
-	// Resource name, `accounts/{a}/locations/{l}/media/{m}`.
 	Name *string `json:"name"`
 	MediaFormat *string `json:"mediaFormat"`
 	LocationAssociation *LocationAssociation `json:"locationAssociation"`

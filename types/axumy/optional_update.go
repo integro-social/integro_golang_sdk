@@ -2,4 +2,4 @@
 
 package axumy
 
-type OptionalUpdate = interface{}
+type OptionalUpdate[T any] interface{}

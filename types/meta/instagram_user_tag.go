@@ -2,8 +2,6 @@
 
 package meta
 
-// A user tagged on a photo. `x`/`y` are relative positions (0.0–1.0) from
-// the top-left corner.
 type InstagramUserTag struct {
 	Username string `json:"username"`
 	X float64 `json:"x"`
