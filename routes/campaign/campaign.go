@@ -7,6 +7,7 @@ import (
 	__strings "strings"
 	campaign "integro_sdk/types/campaign"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 )
 
 // AddRecipients Append an audience to the end of the queue — the same sources as a
@@ -40,6 +41,13 @@ func Cancel(__c *__client.Client, campaignUid string) (campaign.CampaignDetail, 
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[campaign.CampaignDetail](__c, "POST", __path, nil, nil)
 }
+// Count How many campaigns stand in each status, optionally only some groups' — the totals a paged list cannot show.
+//
+// Requires `ViewCampaigns`; the counts cover only campaigns of groups where the caller holds it.
+func Count(__c *__client.Client, __query campaign.CountCampaignsQuery) (domain.CampaignStatusCounts, error) {
+	__path := "/campaign/count"
+	return __client.Request[domain.CampaignStatusCounts](__c, "GET", __path, __query, nil)
+}
 // Create Create a draft campaign in a group. Its accounts are the group's native
 // whatsapp accounts; nothing sends until templates,
 // accounts and an audience exist and `start` passes the preflight.
@@ -66,10 +74,17 @@ func Get(__c *__client.Client, campaignUid string) (campaign.CampaignDetail, err
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[campaign.CampaignDetail](__c, "GET", __path, nil, nil)
 }
-// List List campaigns, newest first, optionally only some groups'.
+// List List campaigns one page at a time, newest first unless `order` says otherwise, optionally only some groups', one status or a search.
 //
 // Requires `ViewCampaigns`; the list covers only campaigns of groups where the caller holds it.
-func List(__c *__client.Client, __query campaign.ListCampaignsQuery) ([]campaign.CampaignDetail, error) {
+func List(__c *__client.Client, __query campaign.ListCampaignsQuery) (primitives.Page[campaign.CampaignDetail], error) {
+	__path := "/v2/campaign"
+	return __client.Request[primitives.Page[campaign.CampaignDetail]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List campaigns, newest first, optionally only some groups' — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `campaign.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewCampaigns`; the list covers only campaigns of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query campaign.LegacyListCampaignsQuery) ([]campaign.CampaignDetail, error) {
 	__path := "/campaign"
 	return __client.Request[[]campaign.CampaignDetail](__c, "GET", __path, __query, nil)
 }
@@ -91,10 +106,18 @@ func Preflight(__c *__client.Client, campaignUid string) (campaign.PreflightRepo
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[campaign.PreflightReport](__c, "GET", __path, nil, nil)
 }
-// Recipients A page of the recipient ledger in drip order, optionally one status.
+// Recipients The recipient ledger one page at a time, in drip order unless `order` says otherwise, optionally one status or a search.
 //
 // Requires `ViewCampaigns` in the campaign's group.
-func Recipients(__c *__client.Client, campaignUid string, __query campaign.ListRecipientsQuery) ([]domain.CampaignRecipient, error) {
+func Recipients(__c *__client.Client, campaignUid string, __query campaign.ListRecipientsQuery) (primitives.Page[domain.CampaignRecipient], error) {
+	__path := "/v2/campaign/{campaign_uid}/recipient"
+	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
+	return __client.Request[primitives.Page[domain.CampaignRecipient]](__c, "GET", __path, __query, nil)
+}
+// RecipientsLegacy A page of the recipient ledger in drip order, optionally one status, `after_id` paging forward — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `campaign.recipients` instead, and this route goes away in a future major.
+//
+// Requires `ViewCampaigns` in the campaign's group.
+func RecipientsLegacy(__c *__client.Client, campaignUid string, __query campaign.LegacyListRecipientsQuery) ([]domain.CampaignRecipient, error) {
 	__path := "/campaign/{campaign_uid}/recipient"
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[[]domain.CampaignRecipient](__c, "GET", __path, __query, nil)

@@ -92,14 +92,21 @@ func Forward(__c *__client.Client, conversationUid string, messageUid string, __
 	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
 	return __client.Request[[]message.ForwardOutcome](__c, "POST", __path, nil, __body)
 }
-// List Poll the unified message feed across channels: messages with `id` greater
-// than `since_id`, oldest first, optionally filtered by groups or accounts.
-// `uids` instead returns exactly those messages (≤200, order unspecified),
-// for resolving rows the caller already holds by uid; not combinable with
-// `since_id`.
+// List Poll the unified message feed across channels one page at a time: messages with `id` greater
+// than `since_id`, oldest first, optionally filtered by groups or accounts; `next` sent back as
+// `cursor` continues the same walk. `uids` instead returns exactly those messages (≤200, order
+// unspecified), for resolving rows the caller already holds by uid; not combinable with
+// `since_id` or `cursor`.
 //
 // Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
-func List(__c *__client.Client, __query message.ListMessagesQuery) ([]domain.MessageWithContext, error) {
+func List(__c *__client.Client, __query message.ListMessagesQuery) (primitives.Page[domain.MessageWithContext], error) {
+	__path := "/v2/message"
+	return __client.Request[primitives.Page[domain.MessageWithContext]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy Poll the unified message feed across channels, messages with `id` greater than `since_id` oldest first, or exactly `uids` — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `message.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewMessages`; the feed covers only messages of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query message.LegacyListMessagesQuery) ([]domain.MessageWithContext, error) {
 	__path := "/message"
 	return __client.Request[[]domain.MessageWithContext](__c, "GET", __path, __query, nil)
 }

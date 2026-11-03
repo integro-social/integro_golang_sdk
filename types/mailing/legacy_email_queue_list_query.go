@@ -7,7 +7,7 @@ import (
 	primitives "integro_sdk/types/primitives"
 )
 
-type EmailQueueListQuery struct {
+type LegacyEmailQueueListQuery struct {
 	Status *domain.EmailQueueStatus `json:"status"`
-	Limit *primitives.Number1_500 `json:"limit"`
+	Limit *primitives.Number1_200 `json:"limit"`
 }

@@ -3,6 +3,7 @@
 package rate_limit
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
@@ -12,4 +13,17 @@ type ListRateLimitRulesQuery struct {
 	// own tiers. Without it, platform staff get every rule and everyone else the
 	// rules reaching the groups where they may view limits.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Only rules whose target belongs to this family.
+	Category *domain.RateLimitCategory `json:"category"`
+	// Only rules that treat an attempt over the budget this way.
+	Behavior *domain.RateLimitBehavior `json:"behavior"`
+	// Only rules sitting in this tier.
+	Tier *domain.RateLimitTier `json:"tier"`
+	// Narrow to rules whose target code (`http`, `action:<action>`, `channel_pacing:<channel>`, …), tier code or group name matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	Order *domain.RateLimitRuleOrder `json:"order"`
+	// The previous page's `next`, sent back with the same filters and `order`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

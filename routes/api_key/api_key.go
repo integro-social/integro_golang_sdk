@@ -7,12 +7,13 @@ import (
 	__strings "strings"
 	api_key "integro_sdk/types/api_key"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 )
 
-// Count Count API keys, optionally filtered by groups.
+// Count Count API keys, optionally narrowed by groups and by enabled and revoked state.
 //
 // Requires `ViewApiKeys`; the count covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
-func Count(__c *__client.Client, __query api_key.ListApiKeysQuery) (uint64, error) {
+func Count(__c *__client.Client, __query api_key.CountApiKeysQuery) (uint64, error) {
 	__path := "/api-key/count"
 	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
@@ -46,10 +47,17 @@ func Get(__c *__client.Client, apiKeyUid string) (domain.ApiKey, error) {
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
 	return __client.Request[domain.ApiKey](__c, "GET", __path, nil, nil)
 }
-// List List API keys, optionally filtered by groups.
+// List List API keys one page at a time, newest first unless `order` says otherwise, optionally narrowed by groups, enabled and revoked state, and name.
 //
 // Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
-func List(__c *__client.Client, __query api_key.ListApiKeysQuery) ([]domain.ApiKey, error) {
+func List(__c *__client.Client, __query api_key.ListApiKeysQuery) (primitives.Page[domain.ApiKey], error) {
+	__path := "/v2/api-key"
+	return __client.Request[primitives.Page[domain.ApiKey]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List API keys, optionally filtered by groups, the whole list at once as before 12.0.0 — transitional, kept for consumers built against 11.x; new consumers page `apiKey.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewApiKeys`; the list covers only keys of groups where the caller holds it, and platform keys only for platform staff and platform API keys.
+func ListLegacy(__c *__client.Client, __query api_key.LegacyListApiKeysQuery) ([]domain.ApiKey, error) {
 	__path := "/api-key"
 	return __client.Request[[]domain.ApiKey](__c, "GET", __path, __query, nil)
 }

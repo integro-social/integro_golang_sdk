@@ -7,6 +7,7 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	ghl "integro_sdk/types/ghl"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Callback GoHighLevel OAuth redirect target: consumes the state, exchanges the code
@@ -26,6 +27,14 @@ func Callback(__c *__client.Client, __query ghl.GhlCallbackQuery) (struct{}, err
 func Connect(__c *__client.Client, __body ghl.ConnectGhlRequest) (ghl.ConnectGhlResponse, error) {
 	__path := "/ghl/connect"
 	return __client.Request[ghl.ConnectGhlResponse](__c, "POST", __path, nil, __body)
+}
+// Count Count the GoHighLevel locations the caller can see: all of them, those
+// bridging no account yet and those whose grant needs reconnecting.
+//
+// Requires `ViewSocialAccounts`; the counts cover only locations of groups where the caller holds it.
+func Count(__c *__client.Client, __query ghl.CountGhlQuery) (domain.GhlLocationCounts, error) {
+	__path := "/ghl/count"
+	return __client.Request[domain.GhlLocationCounts](__c, "GET", __path, __query, nil)
 }
 // Disconnect Disconnect the location, deleting its stored grant and its binding.
 // Reinstalling the app from GoHighLevel is what brings it back.
@@ -49,12 +58,20 @@ func Link(__c *__client.Client, ghlLocationUid string, __body ghl.LinkGhlRequest
 	__path = __strings.Replace(__path, "{ghl_location_uid}", __client.EncodePath(ghlLocationUid), 1)
 	return __client.Request[domain.GhlLocation](__c, "PUT", __path, nil, __body)
 }
-// List List the installed GoHighLevel locations, optionally filtered by groups, each
-// carrying the whatsapp account it bridges (`target_account_uid`, null while
-// unlinked) and whether its grant needs reconnecting.
+// List List the installed GoHighLevel locations one page at a time, most recently
+// connected first unless `order` says otherwise, optionally filtered by groups,
+// each carrying the whatsapp account it bridges (`target_account_uid`, null
+// while unlinked) and whether its grant needs reconnecting.
 //
 // Requires `ViewSocialAccounts`; the list covers only locations of groups where the caller holds it.
-func List(__c *__client.Client, __query ghl.ListGhlQuery) ([]domain.GhlLocation, error) {
+func List(__c *__client.Client, __query ghl.ListGhlQuery) (primitives.Page[domain.GhlLocation], error) {
+	__path := "/v2/ghl"
+	return __client.Request[primitives.Page[domain.GhlLocation]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List the installed GoHighLevel locations, optionally filtered by groups, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `ghl.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewSocialAccounts`; the list covers only locations of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query ghl.LegacyListGhlQuery) ([]domain.GhlLocation, error) {
 	__path := "/ghl"
 	return __client.Request[[]domain.GhlLocation](__c, "GET", __path, __query, nil)
 }

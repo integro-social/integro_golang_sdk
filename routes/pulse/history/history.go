@@ -8,28 +8,28 @@ import (
 	pulse "integro_sdk/types/pulse"
 )
 
-// Disk List historical disk metrics within a time window.
+// Disk List historical disk metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
 //
 // Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func Disk(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]domain.PulseDiskMetricRow, error) {
 	__path := "/pulse/history/disk"
 	return __client.Request[[]domain.PulseDiskMetricRow](__c, "GET", __path, __query, nil)
 }
-// Gpu List historical GPU metrics within a time window.
+// Gpu List historical GPU metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
 //
 // Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func Gpu(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]domain.PulseGpuMetricRow, error) {
 	__path := "/pulse/history/gpu"
 	return __client.Request[[]domain.PulseGpuMetricRow](__c, "GET", __path, __query, nil)
 }
-// Host List historical host metrics within a time window.
+// Host List historical host metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
 //
 // Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func Host(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]domain.PulseHostMetricRow, error) {
 	__path := "/pulse/history/host"
 	return __client.Request[[]domain.PulseHostMetricRow](__c, "GET", __path, __query, nil)
 }
-// Network List historical network metrics within a time window.
+// Network List historical network metrics within a time window; a window holding more than 20 000 points is rejected rather than cut short.
 //
 // Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func Network(__c *__client.Client, __query pulse.PulseHistoryQuery) ([]domain.PulseNetworkMetricRow, error) {

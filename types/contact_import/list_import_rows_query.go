@@ -8,8 +8,12 @@ import (
 )
 
 type ListImportRowsQuery struct {
+	// Only rows with this verdict.
 	Verdict *domain.ContactImportRowVerdict `json:"verdict"`
-	// Keyset cursor: only rows with `id` strictly greater are returned.
-	AfterId *uint64 `json:"after_id"`
-	Limit *primitives.Number1_500 `json:"limit"`
+	// Narrow to rows whose name, phone or detail match — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	// The previous page's `next`, sent back with the same filters; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

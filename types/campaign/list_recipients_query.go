@@ -8,8 +8,13 @@ import (
 )
 
 type ListRecipientsQuery struct {
+	// Only recipients in this status.
 	Status *domain.CampaignRecipientStatus `json:"status"`
-	// Keyset cursor: only rows with `id` strictly greater are returned.
-	AfterId *uint64 `json:"after_id"`
-	Limit *primitives.Number1_500 `json:"limit"`
+	// Narrow to recipients whose name (their own or their conversation's) or phone match — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	Order *domain.CampaignRecipientOrder `json:"order"`
+	// The previous page's `next`, sent back with the same filters and `order`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

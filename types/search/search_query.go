@@ -8,7 +8,7 @@ import (
 )
 
 type SearchQuery struct {
-	Q primitives.Text0_8000 `json:"q"`
+	Q primitives.Text0_200 `json:"q"`
 	// Hits per kind (1..=50, default 10) — a preview cap, not a page.
 	Limit *primitives.Number1_50 `json:"limit"`
 	// Only these kinds; absent or empty means every kind.

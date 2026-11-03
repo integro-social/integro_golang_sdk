@@ -7,7 +7,8 @@ import (
 )
 
 type ConversationCallsQuery struct {
-	// Scrollback cursor: only calls with `id` strictly smaller are returned.
-	BeforeId *uint64 `json:"before_id"`
+	// The previous page's `next`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
 	Limit *primitives.Number1_200 `json:"limit"`
 }

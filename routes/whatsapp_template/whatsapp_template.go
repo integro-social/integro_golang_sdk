@@ -5,8 +5,16 @@ package whatsapp_template
 import (
 	__client "integro_sdk"
 	message "integro_sdk/types/message"
+	primitives "integro_sdk/types/primitives"
 )
 
+// Count How many templates the WABA holds: the total, and the approved, pending and rejected ones.
+//
+// Requires `ViewTemplates` in the account's group.
+func Count(__c *__client.Client, __query message.CountTemplatesQuery) (message.TemplateCountsResponse, error) {
+	__path := "/whatsapp/template/count"
+	return __client.Request[message.TemplateCountsResponse](__c, "GET", __path, __query, nil)
+}
 // Create Submit a whatsapp message template for Meta's review; once APPROVED it is
 // sendable as `template` content.
 //
@@ -22,11 +30,19 @@ func Delete(__c *__client.Client, __query message.DeleteTemplateQuery) (struct{}
 	__path := "/whatsapp/template"
 	return __client.Request[struct{}](__c, "DELETE", __path, __query, nil)
 }
-// List List the WABA's whatsapp message templates, all statuses (only APPROVED
-// ones are sendable); whatsapp and whatsapp_alt accounts alike.
+// List List the WABA's whatsapp message templates one page at a time, by name then language, every review
+// status unless `status` narrows it (only `approved` ones are sendable); whatsapp and whatsapp_alt
+// accounts alike.
 //
 // Requires `ViewTemplates` in the account's group.
-func List(__c *__client.Client, __query message.ListTemplatesQuery) ([]message.TemplateResponse, error) {
+func List(__c *__client.Client, __query message.ListTemplatesQuery) (primitives.Page[message.TemplateResponse], error) {
+	__path := "/v2/whatsapp/template"
+	return __client.Request[primitives.Page[message.TemplateResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List the WABA's whatsapp message templates, all statuses and all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `whatsappTemplate.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewTemplates` in the account's group.
+func ListLegacy(__c *__client.Client, __query message.LegacyListTemplatesQuery) ([]message.TemplateResponse, error) {
 	__path := "/whatsapp/template"
 	return __client.Request[[]message.TemplateResponse](__c, "GET", __path, __query, nil)
 }

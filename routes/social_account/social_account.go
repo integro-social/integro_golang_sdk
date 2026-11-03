@@ -7,6 +7,7 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	insight "integro_sdk/types/insight"
+	primitives "integro_sdk/types/primitives"
 	social_account "integro_sdk/types/social_account"
 )
 
@@ -67,7 +68,7 @@ func ConnectWhatsapp(__c *__client.Client, __body social_account.ConnectWhatsapp
 // Count Count connected social accounts, optionally filtered by groups.
 //
 // Requires `ViewSocialAccounts`; the count covers only accounts of groups where the caller holds it.
-func Count(__c *__client.Client, __query social_account.ListSocialAccountsQuery) (uint64, error) {
+func Count(__c *__client.Client, __query social_account.CountSocialAccountsQuery) (uint64, error) {
 	__path := "/social-account/count"
 	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
@@ -126,11 +127,18 @@ func InsightsHistory(__c *__client.Client, socialAccountUid string, __query insi
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[insight.AccountInsightHistory](__c, "GET", __path, __query, nil)
 }
-// List List connected social accounts, optionally filtered by groups, each with the
+// List List connected social accounts one page at a time, optionally filtered and searched, each with the
 // live session status of its whatsapp session when applicable.
 //
 // Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.
-func List(__c *__client.Client, __query social_account.ListSocialAccountsQuery) ([]social_account.SocialAccountResponse, error) {
+func List(__c *__client.Client, __query social_account.ListSocialAccountsQuery) (primitives.Page[social_account.SocialAccountResponse], error) {
+	__path := "/v2/social-account"
+	return __client.Request[primitives.Page[social_account.SocialAccountResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List connected social accounts, optionally filtered by groups, all at once, each with the live session status of its whatsapp session when applicable — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `socialAccount.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewSocialAccounts`; the list covers only accounts of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query social_account.LegacyListSocialAccountsQuery) ([]social_account.SocialAccountResponse, error) {
 	__path := "/social-account"
 	return __client.Request[[]social_account.SocialAccountResponse](__c, "GET", __path, __query, nil)
 }
@@ -280,4 +288,12 @@ func SetPresence(__c *__client.Client, socialAccountUid string, __body social_ac
 func StartNativePairing(__c *__client.Client, __body social_account.ConnectNativeRequest) (social_account.StartNativePairingResponse, error) {
 	__path := "/social-account/native"
 	return __client.Request[social_account.StartNativePairingResponse](__c, "POST", __path, nil, __body)
+}
+// Summary Summarize connected social accounts, optionally narrowed by groups and by permissions the caller holds: how many
+// each provider has and how many need attention — session down, grant to renew, session incident, switched off.
+//
+// Requires `ViewSocialAccounts`; the summary covers only accounts of groups where the caller holds it.
+func Summary(__c *__client.Client, __query social_account.SummarizeSocialAccountsQuery) (social_account.SocialAccountSummary, error) {
+	__path := "/social-account/summary"
+	return __client.Request[social_account.SocialAccountSummary](__c, "GET", __path, __query, nil)
 }

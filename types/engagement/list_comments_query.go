@@ -13,7 +13,10 @@ type ListCommentsQuery struct {
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// Filter to one post's comments (platform post/media id).
 	ExternalPostId *string `json:"external_post_id"`
-	// Poll cursor: only comments with `id` strictly greater are returned.
+	// Poll anchor: only comments with `id` strictly greater than a comment the consumer already holds; `0` or omitted for every comment.
 	SinceId uint64 `json:"since_id"`
-	Limit *primitives.Number1_500 `json:"limit"`
+	// The previous page's `next`, sent back with the same filters; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

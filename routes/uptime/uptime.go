@@ -22,7 +22,7 @@ func GetStats(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) (doma
 	__path := "/uptime/stat"
 	return __client.Request[domain.ServerUptimeStats](__c, "GET", __path, __query, nil)
 }
-// List List server uptime records within a time range.
+// List List server uptime records within a time range; a range holding more than 20 000 records is rejected rather than cut short.
 //
 // Requires `ViewPulse`, which only platform staff and platform API keys can hold.
 func List(__c *__client.Client, __query uptime.ServerUptimeRangeQuery) ([]domain.ServerUptime, error) {

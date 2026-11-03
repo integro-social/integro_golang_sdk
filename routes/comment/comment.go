@@ -7,6 +7,7 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	engagement "integro_sdk/types/engagement"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Create Comment on a post/media as the account named in the path (top-level
@@ -50,11 +51,18 @@ func Like(__c *__client.Client, socialAccountUid string, commentUid string) (str
 	__path = __strings.Replace(__path, "{comment_uid}", __client.EncodePath(commentUid), 1)
 	return __client.Request[struct{}](__c, "POST", __path, nil, nil)
 }
-// List Poll the unified comment feed: comments with `id` greater than `since_id`,
-// oldest first, optionally filtered by groups, accounts, or post.
+// List Poll the unified comment feed one page at a time: comments with `id` greater than `since_id`,
+// oldest first, optionally filtered by groups, accounts, or post; `next` sent back as `cursor` continues the same walk.
 //
 // Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
-func List(__c *__client.Client, __query engagement.ListCommentsQuery) ([]domain.Comment, error) {
+func List(__c *__client.Client, __query engagement.ListCommentsQuery) (primitives.Page[domain.Comment], error) {
+	__path := "/v2/comment"
+	return __client.Request[primitives.Page[domain.Comment]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy Poll the unified comment feed, comments with `id` greater than `since_id` oldest first, optionally filtered by groups, accounts or post — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `comment.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewComments`; the feed covers only comments of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query engagement.LegacyListCommentsQuery) ([]domain.Comment, error) {
 	__path := "/comment"
 	return __client.Request[[]domain.Comment](__c, "GET", __path, __query, nil)
 }

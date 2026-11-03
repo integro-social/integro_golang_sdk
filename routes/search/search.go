@@ -5,6 +5,7 @@ package search
 import (
 	__client "integro_sdk"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 	search "integro_sdk/types/search"
 )
 
@@ -15,10 +16,17 @@ func Global(__c *__client.Client, __query search.SearchQuery) ([]domain.SearchHi
 	__path := "/search"
 	return __client.Request[[]domain.SearchHitKind](__c, "GET", __path, __query, nil)
 }
-// Message Search message text, newest first; `before_id` pages older hits. `conversation_uid` searches inside one conversation; otherwise every conversation of the filtered accounts. Each hit carries a snippet split into plain and matched runs.
+// Message Search message text one page at a time, newest first; `next` sent back as `cursor` reads older hits. `conversation_uid` searches inside one conversation; otherwise every conversation of the filtered accounts. Each hit carries a snippet split into plain and matched runs.
 //
 // Requires `ViewMessages`; the hits cover only messages of groups where the caller holds it, and a conversation outside them reads as not found.
-func Message(__c *__client.Client, __query search.MessageSearchQuery) ([]domain.MessageSearchHit, error) {
+func Message(__c *__client.Client, __query search.MessageSearchQuery) (primitives.Page[domain.MessageSearchHit], error) {
+	__path := "/v2/search/message"
+	return __client.Request[primitives.Page[domain.MessageSearchHit]](__c, "GET", __path, __query, nil)
+}
+// MessageLegacy Search message text, newest first, `before_id` paging older hits — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `search.message` instead, and this route goes away in a future major.
+//
+// Requires `ViewMessages`; the hits cover only messages of groups where the caller holds it, and a conversation outside them reads as not found.
+func MessageLegacy(__c *__client.Client, __query search.LegacyMessageSearchQuery) ([]domain.MessageSearchHit, error) {
 	__path := "/search/message"
 	return __client.Request[[]domain.MessageSearchHit](__c, "GET", __path, __query, nil)
 }

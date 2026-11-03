@@ -16,7 +16,7 @@ func Delete(__c *__client.Client, kind string) (struct{}, error) {
 	__path = __strings.Replace(__path, "{kind}", __client.EncodePath(kind), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// List List the caller's own enrolled MFA factors.
+// List List the caller's own enrolled MFA factors — at most one per factor kind, so the list is whole.
 //
 // Authenticated user acting on their own factors; no permission required.
 func List(__c *__client.Client) ([]user_mfa.UserMfaFactorRow, error) {

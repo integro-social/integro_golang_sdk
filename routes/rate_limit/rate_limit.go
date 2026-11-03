@@ -5,9 +5,19 @@ package rate_limit
 import (
 	__client "integro_sdk"
 	__strings "strings"
+	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 	rate_limit "integro_sdk/types/rate_limit"
 )
 
+// Count Count the rate-limit rules the caller may see per behavior, over the same
+// scope the list covers.
+//
+// Requires `ViewRateLimits`.
+func Count(__c *__client.Client, __query rate_limit.CountRateLimitRulesQuery) (domain.RateLimitBehaviorCounts, error) {
+	__path := "/rate-limit/count"
+	return __client.Request[domain.RateLimitBehaviorCounts](__c, "GET", __path, __query, nil)
+}
 // Create Create a rate-limit rule in a tier: one bucket shared by the whole
 // platform, the per-caller global default, a staff override for one group,
 // or a group's own (tighter) limit.
@@ -35,10 +45,18 @@ func Get(__c *__client.Client, ruleUid string) (rate_limit.RateLimitRuleResponse
 	__path = __strings.Replace(__path, "{rule_uid}", __client.EncodePath(ruleUid), 1)
 	return __client.Request[rate_limit.RateLimitRuleResponse](__c, "GET", __path, nil, nil)
 }
-// List List rate-limit rules across every tier the caller may see.
+// List List rate-limit rules across every tier the caller may see, one page at
+// a time, by kind then tier unless `order` says otherwise.
 //
 // Requires `ViewRateLimits`.
-func List(__c *__client.Client, __query rate_limit.ListRateLimitRulesQuery) ([]rate_limit.RateLimitRuleResponse, error) {
+func List(__c *__client.Client, __query rate_limit.ListRateLimitRulesQuery) (primitives.Page[rate_limit.RateLimitRuleResponse], error) {
+	__path := "/v2/rate-limit"
+	return __client.Request[primitives.Page[rate_limit.RateLimitRuleResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List rate-limit rules across every tier the caller may see, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `rateLimit.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewRateLimits`.
+func ListLegacy(__c *__client.Client, __query rate_limit.LegacyListRateLimitRulesQuery) ([]rate_limit.RateLimitRuleResponse, error) {
 	__path := "/rate-limit"
 	return __client.Request[[]rate_limit.RateLimitRuleResponse](__c, "GET", __path, __query, nil)
 }

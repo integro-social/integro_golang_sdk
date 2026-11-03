@@ -8,15 +8,18 @@ import (
 )
 
 type ConversationMessagesQuery struct {
-	// Scrollback cursor: only messages with `id` strictly smaller are returned.
+	// Anchor: only messages with `id` strictly smaller than a message the consumer already holds.
 	BeforeId *uint64 `json:"before_id"`
-	// Forward cursor: the oldest `limit` messages with `id` strictly greater,
-	// returned newest-first — each page continues upward from the last.
-	// Exclusive with `before_id`.
+	// Anchor: only messages with `id` strictly greater than a message the consumer already holds. Its presence turns the walk
+	// upward — each page is the oldest `limit` messages above the anchor, still newest first on the wire.
 	AfterId *uint64 `json:"after_id"`
-	Limit *primitives.Number1_200 `json:"limit"`
 	// Only messages of these content kinds. A media gallery pages
 	// `image, video, gif, sticker, audio, file` without loading the text
 	// between them; absent or empty means every kind.
 	Kinds *[]domain.MessageContentKind `json:"kinds"`
+	// The previous page's `next`, sent back with the same anchors and `kinds`; it continues older without `after_id`, newer with it.
+	// Omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

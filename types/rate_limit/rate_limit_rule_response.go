@@ -13,6 +13,10 @@ type RateLimitRuleResponse struct {
 	Uid primitives.Uid `json:"uid"`
 	Scope domain.RateLimitScope `json:"scope"`
 	Rule domain.RateLimitRuleKind `json:"rule"`
+	// The family the rule's target belongs to.
+	Category domain.RateLimitCategory `json:"category"`
+	// What happens to an attempt over the budget.
+	Behavior domain.RateLimitBehavior `json:"behavior"`
 	// What the rule counts against, one counter per distinct value of each.
 	// An attempt draws from every bucket listed that applies to it and is
 	// refused when any runs dry.

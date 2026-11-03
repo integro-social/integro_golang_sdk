@@ -6,6 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	group "integro_sdk/types/group"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Add Add an existing user to the group with a role.
@@ -16,10 +17,26 @@ func Add(__c *__client.Client, groupUid string, __body group.AddGroupMemberReque
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
 	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
-// List List the group's members, each carrying the identity fields that name the person behind the membership.
+// Count Count the group's members, under the same `role` and `q` filters the list takes; every member when none is given.
 //
 // Requires `ViewMembers` in the group itself.
-func List(__c *__client.Client, groupUid string) ([]group.GroupMemberResponse, error) {
+func Count(__c *__client.Client, groupUid string, __query group.CountGroupMembersQuery) (uint64, error) {
+	__path := "/group/{group_uid}/member/count"
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
+}
+// List List the group's members one page at a time — administrators first, then by name, unless `order` says otherwise — each carrying the identity fields that name the person behind the membership.
+//
+// Requires `ViewMembers` in the group itself.
+func List(__c *__client.Client, groupUid string, __query group.ListGroupMembersQuery) (primitives.Page[group.GroupMemberResponse], error) {
+	__path := "/v2/group/{group_uid}/member"
+	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
+	return __client.Request[primitives.Page[group.GroupMemberResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List the group's members, each carrying the identity fields that name the person behind the membership, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `groupMember.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewMembers` in the group itself.
+func ListLegacy(__c *__client.Client, groupUid string) ([]group.GroupMemberResponse, error) {
 	__path := "/group/{group_uid}/member"
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
 	return __client.Request[[]group.GroupMemberResponse](__c, "GET", __path, nil, nil)

@@ -7,14 +7,15 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	issue "integro_sdk/types/issue"
+	primitives "integro_sdk/types/primitives"
 )
 
-// Count Count issues — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
+// Count Count issues, narrowed by `status` and `category` when given — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
 //
 // Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the count beyond the caller's own reports.
-func Count(__c *__client.Client) (uint64, error) {
+func Count(__c *__client.Client, __query issue.CountIssuesQuery) (uint64, error) {
 	__path := "/issue/count"
-	return __client.Request[uint64](__c, "GET", __path, nil, nil)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Create Report a new issue (category, severity, description, an optional page url and up to 10 optional screenshots) recorded under the caller's own user. The screenshots become hosted media named by `Issue.screenshots`, served by `media.serve` to platform staff holding `ViewIssues` and to the reporter themselves.
 //
@@ -31,10 +32,17 @@ func Get(__c *__client.Client, issueUid string) (domain.Issue, error) {
 	__path = __strings.Replace(__path, "{issue_uid}", __client.EncodePath(issueUid), 1)
 	return __client.Request[domain.Issue](__c, "GET", __path, nil, nil)
 }
-// List List issues, newest first — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
+// List List issues one page at a time, newest first unless `order` says otherwise — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key.
 //
 // Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the result beyond the caller's own reports.
-func List(__c *__client.Client) ([]domain.Issue, error) {
+func List(__c *__client.Client, __query issue.ListIssuesQuery) (primitives.Page[domain.Issue], error) {
+	__path := "/v2/issue"
+	return __client.Request[primitives.Page[domain.Issue]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List issues, newest first, all at once — every issue for a caller holding `ViewIssues`, only the caller's own reports for any other user, and none for any other API key; the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `issue.list` instead, and this route goes away in a future major.
+//
+// Any authenticated caller; `ViewIssues`, which only platform staff and platform API keys can hold, is what widens the result beyond the caller's own reports.
+func ListLegacy(__c *__client.Client) ([]domain.Issue, error) {
 	__path := "/issue"
 	return __client.Request[[]domain.Issue](__c, "GET", __path, nil, nil)
 }

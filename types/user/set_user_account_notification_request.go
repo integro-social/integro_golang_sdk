@@ -9,6 +9,7 @@ import (
 // A change to the caller's own notification choices, applied to every listed
 // account at once; a `null` choice stays as it is.
 type SetUserAccountNotificationRequest struct {
+	// The accounts to change, at most 200 per request.
 	SocialAccountUids []primitives.Uid `json:"social_account_uids"`
 	// New messages on these accounts ring the message sound.
 	MessageSound *bool `json:"message_sound"`

@@ -3,11 +3,22 @@
 package contact_import
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 type ListImportsQuery struct {
 	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Only imports in this status.
+	Status *domain.ContactImportStatus `json:"status"`
+	// Narrow to imports whose name, filename or group name match — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	// Exact imports to return (≤200), for labelling rows a consumer already holds by uid. Not combinable with `q` or `cursor`.
+	Uids *[]primitives.Uid `json:"uids"`
+	Order *domain.ContactImportOrder `json:"order"`
+	// The previous page's `next`, sent back with the same filters and `order`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
 	Limit *primitives.Number1_200 `json:"limit"`
 }

@@ -13,7 +13,7 @@ type InsightQueryRequest struct {
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	// Narrow to these accounts; every one must belong to the declared channel.
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
-	// Inclusive range over snapshot days (unix ms); defaults to the last 30 days.
+	// Inclusive range over snapshot days (unix ms), at most 731 days; defaults to the last 30 days.
 	Since *primitives.Timestamp `json:"since"`
 	Until *primitives.Timestamp `json:"until"`
 	Granularity domain.Granularity `json:"granularity"`

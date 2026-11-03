@@ -5,13 +5,21 @@ package user_account_notification
 import (
 	__client "integro_sdk"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 	user "integro_sdk/types/user"
 )
 
-// List List the caller's own notification choices per social account. An account without an entry rings both the message sound and the call alert.
+// List List the caller's own notification choices per social account one page at a time, or exactly those on the accounts named by `social_account_uids`. An account without an entry rings both the message sound and the call alert.
 //
 // Authenticated user acting on their own account.
-func List(__c *__client.Client) ([]domain.UserAccountNotification, error) {
+func List(__c *__client.Client, __query user.ListUserAccountNotificationsQuery) (primitives.Page[domain.UserAccountNotification], error) {
+	__path := "/v2/user/me/account-notification"
+	return __client.Request[primitives.Page[domain.UserAccountNotification]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List the caller's own notification choices per social account, all at once; an account without an entry rings both the message sound and the call alert — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `userAccountNotification.list` instead, and this route goes away in a future major.
+//
+// Authenticated user acting on their own account.
+func ListLegacy(__c *__client.Client) ([]domain.UserAccountNotification, error) {
 	__path := "/user/me/account-notification"
 	return __client.Request[[]domain.UserAccountNotification](__c, "GET", __path, nil, nil)
 }

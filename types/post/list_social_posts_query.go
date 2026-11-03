@@ -17,9 +17,12 @@ type ListSocialPostsQuery struct {
 	UnansweredOnly bool `json:"unanswered_only"`
 	// Only posts published at or after this instant (ms).
 	Since *primitives.Timestamp `json:"since"`
-	// Only posts published strictly before this instant (ms); also the page cursor.
+	// Only posts published strictly before this instant (ms).
 	Until *primitives.Timestamp `json:"until"`
-	// Caption search: a case-insensitive substring.
-	Q *string `json:"q"`
+	// Narrow to posts whose caption matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	// The previous page's `next`, sent back with the same filters; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
 	Limit *primitives.Number1_200 `json:"limit"`
 }

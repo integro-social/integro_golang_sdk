@@ -5,13 +5,22 @@ package user_membership
 import (
 	__client "integro_sdk"
 	__strings "strings"
+	primitives "integro_sdk/types/primitives"
 	user "integro_sdk/types/user"
 )
 
-// List List the groups another user belongs to, each carrying the role that membership holds there.
+// List List the groups another user belongs to one page at a time, oldest membership first, or exactly their memberships in the groups named by `group_uids`, each carrying the role that membership holds there.
 //
 // Requires `ViewUsers`, which only platform staff and platform API keys can hold.
-func List(__c *__client.Client, userUid string) ([]user.UserMembershipResponse, error) {
+func List(__c *__client.Client, userUid string, __query user.ListUserMembershipsQuery) (primitives.Page[user.UserMembershipResponse], error) {
+	__path := "/v2/user/{user_uid}/membership"
+	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
+	return __client.Request[primitives.Page[user.UserMembershipResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List the groups another user belongs to, each carrying the role that membership holds there, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `userMembership.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewUsers`, which only platform staff and platform API keys can hold.
+func ListLegacy(__c *__client.Client, userUid string) ([]user.UserMembershipResponse, error) {
 	__path := "/user/{user_uid}/membership"
 	__path = __strings.Replace(__path, "{user_uid}", __client.EncodePath(userUid), 1)
 	return __client.Request[[]user.UserMembershipResponse](__c, "GET", __path, nil, nil)

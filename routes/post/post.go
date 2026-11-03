@@ -7,6 +7,7 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	post "integro_sdk/types/post"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Create Publish (or schedule) a post through a social account; the channel-tagged
@@ -38,10 +39,17 @@ func Get(__c *__client.Client, postUid string) (domain.Post, error) {
 	__path = __strings.Replace(__path, "{post_uid}", __client.EncodePath(postUid), 1)
 	return __client.Request[domain.Post](__c, "GET", __path, nil, nil)
 }
-// List List posts, newest first, optionally filtered by groups or social accounts.
+// List List posts one page at a time, newest first, optionally filtered by groups, social accounts or statuses.
 //
 // Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
-func List(__c *__client.Client, __query post.ListPostsQuery) ([]domain.Post, error) {
+func List(__c *__client.Client, __query post.ListPostsQuery) (primitives.Page[domain.Post], error) {
+	__path := "/v2/post"
+	return __client.Request[primitives.Page[domain.Post]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List posts, newest first, optionally filtered by groups or social accounts — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `post.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query post.LegacyListPostsQuery) ([]domain.Post, error) {
 	__path := "/post"
 	return __client.Request[[]domain.Post](__c, "GET", __path, __query, nil)
 }

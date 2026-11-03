@@ -3,6 +3,7 @@
 package post
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
@@ -11,5 +12,10 @@ type ListPostsQuery struct {
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
+	// Only posts in one of these statuses; omit for every status.
+	Statuses *[]domain.PostStatus `json:"statuses"`
+	// The previous page's `next`, sent back with the same filters; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
 	Limit *primitives.Number1_200 `json:"limit"`
 }

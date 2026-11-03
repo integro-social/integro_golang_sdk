@@ -6,6 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 	user "integro_sdk/types/user"
 )
 
@@ -24,12 +25,12 @@ func ChangePassword(__c *__client.Client, __body user.UserChangePasswordRequest)
 	__path := "/user/me/password"
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
-// Count Count all users.
+// Count Count users, under the same `enabled`, `outside_group_uid` and `q` filters the list takes; every user when none is given.
 //
 // Requires `ViewUsers`, which only platform staff and platform API keys can hold.
-func Count(__c *__client.Client) (uint64, error) {
+func Count(__c *__client.Client, __query user.CountUsersQuery) (uint64, error) {
 	__path := "/user/count"
-	return __client.Request[uint64](__c, "GET", __path, nil, nil)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Create Create a user, who starts out belonging to no group.
 //
@@ -69,10 +70,17 @@ func GetSelf(__c *__client.Client) (user.UserSelfResponse, error) {
 	__path := "/user/me"
 	return __client.Request[user.UserSelfResponse](__c, "GET", __path, nil, nil)
 }
-// List List all users.
+// List List users one page at a time, by name unless `order` says otherwise; `uids` answers exactly the named users instead, for labelling rows held by uid.
 //
 // Requires `ViewUsers`, which only platform staff and platform API keys can hold.
-func List(__c *__client.Client) ([]domain.User, error) {
+func List(__c *__client.Client, __query user.ListUsersQuery) (primitives.Page[domain.User], error) {
+	__path := "/v2/user"
+	return __client.Request[primitives.Page[domain.User]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List all users at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `user.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewUsers`, which only platform staff and platform API keys can hold.
+func ListLegacy(__c *__client.Client) ([]domain.User, error) {
 	__path := "/user"
 	return __client.Request[[]domain.User](__c, "GET", __path, nil, nil)
 }

@@ -6,6 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	group "integro_sdk/types/group"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Count Count groups.
@@ -38,10 +39,17 @@ func Get(__c *__client.Client, groupUid string, __query group.GroupQuery) (group
 	__path = __strings.Replace(__path, "{group_uid}", __client.EncodePath(groupUid), 1)
 	return __client.Request[group.GroupResponse](__c, "GET", __path, __query, nil)
 }
-// List List groups, optionally enriched with per-group counts.
+// List List groups one page at a time, optionally enriched with per-group counts.
 //
 // Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
-func List(__c *__client.Client, __query group.GroupQuery) ([]group.GroupResponse, error) {
+func List(__c *__client.Client, __query group.ListGroupsQuery) (primitives.Page[group.GroupResponse], error) {
+	__path := "/v2/group"
+	return __client.Request[primitives.Page[group.GroupResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List groups, optionally enriched with per-group counts, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `group.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewGroups`; the list covers only groups where the caller holds it, and each count is filled only for those where it also holds that count's own permission — `ViewApiKeys` for `api_key_count`, `ViewMembers` for `member_count`, `ViewSocialAccounts` for `social_account_count` — `null` everywhere else.
+func ListLegacy(__c *__client.Client, __query group.LegacyGroupQuery) ([]group.GroupResponse, error) {
 	__path := "/group"
 	return __client.Request[[]group.GroupResponse](__c, "GET", __path, __query, nil)
 }

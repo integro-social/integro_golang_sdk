@@ -8,6 +8,7 @@ import (
 	domain "integro_sdk/types/domain"
 	insight "integro_sdk/types/insight"
 	post "integro_sdk/types/post"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Get Fetch one platform post by uid.
@@ -29,13 +30,21 @@ func InsightsHistory(__c *__client.Client, socialPostUid string, __query insight
 	__path = __strings.Replace(__path, "{social_post_uid}", __client.EncodePath(socialPostUid), 1)
 	return __client.Request[insight.SocialPostInsightHistory](__c, "GET", __path, __query, nil)
 }
-// List List the posts that stand on the platforms, newest first: every post the
-// hub knows about an account, published through it or not, with the
-// platform's comment and like counts and how many third-party comments the
-// account has not answered. `until` pages backwards.
+// List List the posts that stand on the platforms one page at a time, newest
+// first: every post the hub knows about an account, published through it or
+// not, with the platform's comment and like counts and how many third-party
+// comments the account has not answered. `since`/`until` bound the
+// publication window.
 //
 // Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
-func List(__c *__client.Client, __query post.ListSocialPostsQuery) ([]domain.SocialPost, error) {
+func List(__c *__client.Client, __query post.ListSocialPostsQuery) (primitives.Page[domain.SocialPost], error) {
+	__path := "/v2/social-post"
+	return __client.Request[primitives.Page[domain.SocialPost]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List the posts that stand on the platforms, newest first, `until` paging backwards — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `socialPost.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewPosts`; the list covers only posts of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query post.LegacyListSocialPostsQuery) ([]domain.SocialPost, error) {
 	__path := "/social-post"
 	return __client.Request[[]domain.SocialPost](__c, "GET", __path, __query, nil)
 }

@@ -3,10 +3,24 @@
 package api_key
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 type ListApiKeysQuery struct {
 	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Only enabled (`true`) or only switched-off (`false`) keys.
+	Enabled *bool `json:"enabled"`
+	// Only revoked (`true`) or only not-revoked (`false`) keys.
+	Revoked *bool `json:"revoked"`
+	// Narrow to keys whose name matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	// Exact keys to return (≤200), for labelling rows a consumer already holds by uid. Not combinable with `q` or `cursor`.
+	Uids *[]primitives.Uid `json:"uids"`
+	Order *domain.ApiKeyOrder `json:"order"`
+	// The previous page's `next`, sent back with the same filters and `order`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

@@ -7,6 +7,7 @@ import (
 	__strings "strings"
 	contact_import "integro_sdk/types/contact_import"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Cancel Cancel the import: every still-queued row becomes `skipped`. Terminal;
@@ -17,6 +18,13 @@ func Cancel(__c *__client.Client, importUid string) (contact_import.ContactImpor
 	__path := "/contact-import/{import_uid}/cancel"
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
 	return __client.Request[contact_import.ContactImportDetail](__c, "POST", __path, nil, nil)
+}
+// Count How many imports stand in each status, optionally only some groups' — the totals a paged list cannot show.
+//
+// Requires `ImportContacts`; the counts cover only imports of groups where the caller holds it.
+func Count(__c *__client.Client, __query contact_import.CountImportsQuery) (domain.ContactImportStatusCounts, error) {
+	__path := "/contact-import/count"
+	return __client.Request[domain.ContactImportStatusCounts](__c, "GET", __path, __query, nil)
 }
 // Delete Delete an import and its rows. Refused while loading — pause or cancel
 // first. Conversations already created stay.
@@ -46,10 +54,17 @@ func Get(__c *__client.Client, importUid string) (contact_import.ContactImportDe
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
 	return __client.Request[contact_import.ContactImportDetail](__c, "GET", __path, nil, nil)
 }
-// List List imports, newest first, optionally only some groups'.
+// List List imports one page at a time, newest first unless `order` says otherwise, optionally only some groups', one status or a search.
 //
 // Requires `ImportContacts`; the list covers only imports of groups where the caller holds it.
-func List(__c *__client.Client, __query contact_import.ListImportsQuery) ([]contact_import.ContactImportDetail, error) {
+func List(__c *__client.Client, __query contact_import.ListImportsQuery) (primitives.Page[contact_import.ContactImportDetail], error) {
+	__path := "/v2/contact-import"
+	return __client.Request[primitives.Page[contact_import.ContactImportDetail]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List imports, newest first, optionally only some groups' — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `contactImport.list` instead, and this route goes away in a future major.
+//
+// Requires `ImportContacts`; the list covers only imports of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query contact_import.LegacyListImportsQuery) ([]contact_import.ContactImportDetail, error) {
 	__path := "/contact-import"
 	return __client.Request[[]contact_import.ContactImportDetail](__c, "GET", __path, __query, nil)
 }
@@ -90,11 +105,19 @@ func Resume(__c *__client.Client, importUid string) (contact_import.ContactImpor
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
 	return __client.Request[contact_import.ContactImportDetail](__c, "POST", __path, nil, nil)
 }
-// Rows A page of the import's rows in file order, optionally one verdict only —
-// the fix table and the verdict drill-downs.
+// Rows The import's rows one page at a time, in file order, optionally one verdict
+// only or a search — the fix table and the verdict drill-downs.
 //
 // Requires `ImportContacts` in the import's group.
-func Rows(__c *__client.Client, importUid string, __query contact_import.ListImportRowsQuery) ([]domain.ContactImportRow, error) {
+func Rows(__c *__client.Client, importUid string, __query contact_import.ListImportRowsQuery) (primitives.Page[domain.ContactImportRow], error) {
+	__path := "/v2/contact-import/{import_uid}/row"
+	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
+	return __client.Request[primitives.Page[domain.ContactImportRow]](__c, "GET", __path, __query, nil)
+}
+// RowsLegacy A page of the import's rows in file order, optionally one verdict only, `after_id` paging forward — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `contactImport.rows` instead, and this route goes away in a future major.
+//
+// Requires `ImportContacts` in the import's group.
+func RowsLegacy(__c *__client.Client, importUid string, __query contact_import.LegacyListImportRowsQuery) ([]domain.ContactImportRow, error) {
 	__path := "/contact-import/{import_uid}/row"
 	__path = __strings.Replace(__path, "{import_uid}", __client.EncodePath(importUid), 1)
 	return __client.Request[[]domain.ContactImportRow](__c, "GET", __path, __query, nil)

@@ -11,12 +11,14 @@ type ListMessagesQuery struct {
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
-	// Poll cursor: only messages with `id` strictly greater are returned;
+	// Poll anchor: only messages with `id` strictly greater than a message the consumer already holds;
 	// omit for every message. Not combinable with `uids`.
 	SinceId *uint64 `json:"since_id"`
-	// Exact messages to return (≤200), for resolving rows a client already
-	// holds by uid — the reply targets a loaded page quotes but does not
-	// contain. Not combinable with `since_id`.
+	// Exact messages to return (≤200), for resolving rows a consumer already holds by uid — the reply targets a loaded page
+	// quotes but does not contain. Not combinable with `since_id` or `cursor`.
 	Uids *[]primitives.Uid `json:"uids"`
-	Limit *primitives.Number1_500 `json:"limit"`
+	// The previous page's `next`, sent back with the same filters and `since_id`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

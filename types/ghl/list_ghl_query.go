@@ -3,10 +3,18 @@
 package ghl
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 type ListGhlQuery struct {
 	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Narrow to locations whose name or location_id matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	Order *domain.GhlLocationOrder `json:"order"`
+	// The previous page's `next`, sent back with the same filters and `order`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

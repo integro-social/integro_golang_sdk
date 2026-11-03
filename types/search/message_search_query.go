@@ -7,14 +7,16 @@ import (
 )
 
 type MessageSearchQuery struct {
-	Q primitives.Text0_8000 `json:"q"`
 	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// Search inside this conversation only.
 	ConversationUid *primitives.Uid `json:"conversation_uid"`
-	// Keyset cursor: only hits with `id` strictly smaller are returned.
-	BeforeId *uint64 `json:"before_id"`
-	Limit *primitives.Number1_100 `json:"limit"`
+	// The words to find in message text, each matched as a word prefix; a term under 2 characters answers with no hits.
+	Q primitives.Text0_200 `json:"q"`
+	// The previous page's `next`, sent back with the same filters and `q`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

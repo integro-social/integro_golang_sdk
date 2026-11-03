@@ -7,12 +7,28 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	mailing "integro_sdk/types/mailing"
+	primitives "integro_sdk/types/primitives"
 )
 
-// List List queued emails, optionally filtered by delivery status.
+// Count Count every queued email per delivery status.
 //
 // Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
-func List(__c *__client.Client, __query mailing.EmailQueueListQuery) ([]domain.EmailQueueItem, error) {
+func Count(__c *__client.Client) (domain.EmailQueueStatusCounts, error) {
+	__path := "/mail-queue/count"
+	return __client.Request[domain.EmailQueueStatusCounts](__c, "GET", __path, nil, nil)
+}
+// List List queued emails one page at a time, most recently enqueued first,
+// optionally filtered by delivery status, template and text.
+//
+// Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
+func List(__c *__client.Client, __query mailing.ListEmailQueueQuery) (primitives.Page[domain.EmailQueueItem], error) {
+	__path := "/v2/mail-queue"
+	return __client.Request[primitives.Page[domain.EmailQueueItem]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List queued emails, optionally filtered by delivery status, the latest `limit` — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `mailQueue.list` instead, and this route goes away in a future major.
+//
+// Requires `ManageEmailQueue`, which only platform staff and platform API keys can hold.
+func ListLegacy(__c *__client.Client, __query mailing.LegacyEmailQueueListQuery) ([]domain.EmailQueueItem, error) {
 	__path := "/mail-queue"
 	return __client.Request[[]domain.EmailQueueItem](__c, "GET", __path, __query, nil)
 }

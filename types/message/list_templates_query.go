@@ -3,10 +3,21 @@
 package message
 
 import (
+	meta "integro_sdk/types/meta"
 	primitives "integro_sdk/types/primitives"
 )
 
 type ListTemplatesQuery struct {
 	// Any whatsapp account of the WABA whose templates are managed.
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
+	// Only templates in this review status.
+	Status *meta.WhatsappTemplateStatus `json:"status"`
+	// Only templates that carry `{{…}}` variables (`true`) or none (`false`) — one without variables is sendable as it stands.
+	HasVariables *bool `json:"has_variables"`
+	// Narrow to templates whose name, language or category matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	// The previous page's `next`, sent back with the same filters; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

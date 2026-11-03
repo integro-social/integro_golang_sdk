@@ -17,6 +17,6 @@ type SocialPostSummaryQuery struct {
 	Since *primitives.Timestamp `json:"since"`
 	// Only posts published before this instant (ms).
 	Until *primitives.Timestamp `json:"until"`
-	// Caption search: a case-insensitive substring.
-	Q *string `json:"q"`
+	// Narrow to posts whose caption matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
 }

@@ -6,6 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	campaign "integro_sdk/types/campaign"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Add Append a template to the wheel. Draft, paused and done only.
@@ -25,10 +26,18 @@ func Delete(__c *__client.Client, campaignUid string, templateUid string) (struc
 	__path = __strings.Replace(__path, "{template_uid}", __client.EncodePath(templateUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// List The template wheel, in rotation order.
+// List The template wheel one page at a time, in rotation order.
 //
 // Requires `ViewCampaigns` in the campaign's group.
-func List(__c *__client.Client, campaignUid string) ([]campaign.CampaignTemplateResponse, error) {
+func List(__c *__client.Client, campaignUid string, __query campaign.ListCampaignTemplatesQuery) (primitives.Page[campaign.CampaignTemplateResponse], error) {
+	__path := "/v2/campaign/{campaign_uid}/template"
+	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
+	return __client.Request[primitives.Page[campaign.CampaignTemplateResponse]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy The template wheel, in rotation order, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `campaignTemplate.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewCampaigns` in the campaign's group.
+func ListLegacy(__c *__client.Client, campaignUid string) ([]campaign.CampaignTemplateResponse, error) {
 	__path := "/campaign/{campaign_uid}/template"
 	__path = __strings.Replace(__path, "{campaign_uid}", __client.EncodePath(campaignUid), 1)
 	return __client.Request[[]campaign.CampaignTemplateResponse](__c, "GET", __path, nil, nil)

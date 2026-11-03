@@ -7,12 +7,17 @@ import (
 	primitives "integro_sdk/types/primitives"
 )
 
-type AuditLogQuery struct {
-	domain.AuditLogWindow
+type AuditLogStatsQuery struct {
 	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	UserUid *primitives.Uid `json:"user_uid"`
 	Action *domain.AuditAction `json:"action"`
 	Resource *domain.AuditResource `json:"resource"`
 	ResourceUid *string `json:"resource_uid"`
+	// Only entries recorded at or after this instant.
+	Since *primitives.Timestamp `json:"since"`
+	// Only entries recorded before this instant.
+	Until *primitives.Timestamp `json:"until"`
+	// Narrow to entries whose resource uid, details or address matches — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
 }

@@ -3,6 +3,7 @@
 package message
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
@@ -11,18 +12,15 @@ type ListConversationsQuery struct {
 	GroupUids *[]primitives.Uid `json:"group_uids"`
 	// Narrow to these accounts, each one in scope; naming any account overrides the groups.
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
-	// Narrow to conversations whose participant matches — alias, platform
-	// name, username or phone, as a substring. A term under 2 characters
-	// answers with no rows. Composes with the cursor; not with `uids`.
-	Q *primitives.Text0_8000 `json:"q"`
-	// Exact conversations to return (≤200), for decorating rows a consumer already
-	// holds by uid. Mutually exclusive with the keyset cursor; ordering follows
-	// activity like the plain list.
+	// Only conversations of accounts in groups where the caller holds every one of these permissions.
+	Held *[]domain.UserPermission `json:"held"`
+	// Narrow to conversations whose participant matches — alias, platform name, username or phone, case-insensitive, as a substring.
+	// A term under 2 characters answers with no rows.
+	Q *primitives.Text0_200 `json:"q"`
+	// Exact conversations to return (≤200), for labelling rows a consumer already holds by uid. Not combinable with `q` or `cursor`.
 	Uids *[]primitives.Uid `json:"uids"`
-	// Keyset cursor: the previous page's last `(last_message_at, uid)` pair.
-	// Both halves together or neither — the list reorders under live traffic,
-	// so offsets would skip rows.
-	BeforeActivityAt *int64 `json:"before_activity_at"`
-	BeforeUid *primitives.Uid `json:"before_uid"`
+	// The previous page's `next`, sent back with the same filters; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
 	Limit *primitives.Number1_200 `json:"limit"`
 }

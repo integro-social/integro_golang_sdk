@@ -8,6 +8,7 @@ import (
 	call "integro_sdk/types/call"
 	domain "integro_sdk/types/domain"
 	message "integro_sdk/types/message"
+	primitives "integro_sdk/types/primitives"
 )
 
 // Action Send a presence signal into a conversation: mark_seen, typing_on, or
@@ -47,10 +48,18 @@ func Avatar(__c *__client.Client, conversationUid string) (message.ConversationA
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[message.ConversationAvatar](__c, "GET", __path, nil, nil)
 }
-// Calls List a conversation's calls, newest first; `before_id` pages older history.
+// Calls List a conversation's calls one page at a time, newest first; `next` sent back as `cursor` reads older history.
 //
 // Requires `ViewMessages` in the conversation's group.
-func Calls(__c *__client.Client, conversationUid string, __query call.ConversationCallsQuery) ([]domain.Call, error) {
+func Calls(__c *__client.Client, conversationUid string, __query call.ConversationCallsQuery) (primitives.Page[domain.Call], error) {
+	__path := "/v2/conversation/{conversation_uid}/call"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[primitives.Page[domain.Call]](__c, "GET", __path, __query, nil)
+}
+// CallsLegacy List a conversation's calls, newest first, `before_id` paging older history — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `conversation.calls` instead, and this route goes away in a future major.
+//
+// Requires `ViewMessages` in the conversation's group.
+func CallsLegacy(__c *__client.Client, conversationUid string, __query call.LegacyConversationCallsQuery) ([]domain.Call, error) {
 	__path := "/conversation/{conversation_uid}/call"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[[]domain.Call](__c, "GET", __path, __query, nil)
@@ -93,15 +102,21 @@ func Delete(__c *__client.Client, conversationUid string) (struct{}, error) {
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// List List conversations, newest activity first, optionally filtered by groups or
-// social accounts; `before_activity_at`+`before_uid` page older activity
-// (keyset cursor). Rows carry the denormalized chat-list summary (unread
-// badge + last-message preview). `q` narrows to conversations whose
-// participant (alias, name, username, phone) contains it — a term under 2
-// characters answers with no rows; not combinable with `uids`.
+// List List conversations one page at a time, newest activity first, optionally filtered by groups or
+// social accounts; `next` sent back as `cursor` reads older activity. Rows carry the denormalized
+// chat-list summary (unread badge + last-message preview). `q` narrows to conversations whose
+// participant (alias, name, username, phone) contains it — a term under 2 characters answers with
+// no rows. `uids` instead returns exactly those conversations (≤200), not combinable with `q` or `cursor`.
 //
 // Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
-func List(__c *__client.Client, __query message.ListConversationsQuery) ([]domain.Conversation, error) {
+func List(__c *__client.Client, __query message.ListConversationsQuery) (primitives.Page[domain.Conversation], error) {
+	__path := "/v2/conversation"
+	return __client.Request[primitives.Page[domain.Conversation]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List conversations, newest activity first, optionally filtered by groups or social accounts, `before_activity_at`+`before_uid` paging older activity — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `conversation.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewMessages`; the list covers only conversations of groups where the caller holds it.
+func ListLegacy(__c *__client.Client, __query message.LegacyListConversationsQuery) ([]domain.Conversation, error) {
 	__path := "/conversation"
 	return __client.Request[[]domain.Conversation](__c, "GET", __path, __query, nil)
 }
@@ -114,13 +129,22 @@ func MessageCount(__c *__client.Client, conversationUid string, __query message.
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
-// Messages List a conversation's messages, newest first; `before_id` pages older
-// history. `after_id` pages newer history from an anchored message: each
-// page is the oldest `limit` rows above the cursor, still newest-first on
-// the wire (never both cursors).
+// Messages List a conversation's messages one page at a time, newest first. `before_id` and `after_id` anchor the
+// page on a message the caller already holds — strictly older, strictly newer, or both for the span between.
+// Without `after_id` the walk runs older from the newest match; with it the walk runs newer, each page
+// the oldest `limit` messages above the anchor, still newest first on the wire. `next` sent back as
+// `cursor` continues that same walk.
 //
 // Requires `ViewMessages` in the conversation's group.
-func Messages(__c *__client.Client, conversationUid string, __query message.ConversationMessagesQuery) ([]domain.Message, error) {
+func Messages(__c *__client.Client, conversationUid string, __query message.ConversationMessagesQuery) (primitives.Page[domain.Message], error) {
+	__path := "/v2/conversation/{conversation_uid}/message"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[primitives.Page[domain.Message]](__c, "GET", __path, __query, nil)
+}
+// MessagesLegacy List a conversation's messages, newest first, `before_id` paging older history and `after_id` newer — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `conversation.messages` instead, and this route goes away in a future major.
+//
+// Requires `ViewMessages` in the conversation's group.
+func MessagesLegacy(__c *__client.Client, conversationUid string, __query message.LegacyConversationMessagesQuery) ([]domain.Message, error) {
 	__path := "/conversation/{conversation_uid}/message"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[[]domain.Message](__c, "GET", __path, __query, nil)

@@ -6,19 +6,27 @@ import (
 	__client "integro_sdk"
 	audit_log "integro_sdk/types/audit_log"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 )
 
-// List List audit log entries matching the given filters and time window.
+// List List audit log entries matching the given filters one page at a time, most recent first.
 //
 // Requires `ViewAuditLogs`; platform staff and platform API keys read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
-func List(__c *__client.Client, __query audit_log.AuditLogQuery) ([]domain.AuditLog, error) {
+func List(__c *__client.Client, __query audit_log.ListAuditLogsQuery) (primitives.Page[domain.AuditLog], error) {
+	__path := "/v2/audit-log"
+	return __client.Request[primitives.Page[domain.AuditLog]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List audit log entries matching the given filters and time window, every entry of a range at once (up to 10 000) or the latest `count` — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `auditLog.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewAuditLogs`; platform staff and platform API keys read every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
+func ListLegacy(__c *__client.Client, __query audit_log.LegacyAuditLogQuery) ([]domain.AuditLog, error) {
 	__path := "/audit-log"
 	return __client.Request[[]domain.AuditLog](__c, "GET", __path, __query, nil)
 }
-// Stats Aggregate audit log statistics for the given filters and time window.
+// Stats Aggregate audit log statistics over every entry matching the given filters, not just one page of them.
 //
 // Requires `ViewAuditLogs`; platform staff and platform API keys aggregate every entry, any other holder only entries stamped with a group where they hold it — an entry carrying no group is theirs alone.
-func Stats(__c *__client.Client, __query audit_log.AuditLogQuery) (domain.AuditLogStats, error) {
+func Stats(__c *__client.Client, __query audit_log.AuditLogStatsQuery) (domain.AuditLogStats, error) {
 	__path := "/audit-log/stat"
 	return __client.Request[domain.AuditLogStats](__c, "GET", __path, __query, nil)
 }

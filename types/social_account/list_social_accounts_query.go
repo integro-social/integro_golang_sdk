@@ -3,10 +3,34 @@
 package social_account
 
 import (
+	domain "integro_sdk/types/domain"
 	primitives "integro_sdk/types/primitives"
 )
 
 type ListSocialAccountsQuery struct {
 	// Narrow to these groups, each one the caller may see; omit for everything the caller may see.
 	GroupUids *[]primitives.Uid `json:"group_uids"`
+	// Only accounts of these providers; omit or leave empty for every provider.
+	Providers *[]domain.Provider `json:"providers"`
+	// Only accounts on a messaging channel (`true`) or only the others (`false`).
+	Messaging *bool `json:"messaging"`
+	// Only enabled (`true`) or only disabled (`false`) accounts.
+	Enabled *bool `json:"enabled"`
+	// Only accounts whose stored grant died and must be reconnected (`true`) or whose grant stands (`false`).
+	NeedsReauth *bool `json:"needs_reauth"`
+	// Only accounts carrying a session incident (`true`) or none (`false`).
+	Incident *bool `json:"incident"`
+	// Only accounts whose live session status is one of these; an account without a session never matches. Omit or leave empty for every account.
+	Sessions *[]SessionStatus `json:"sessions"`
+	// Only accounts of groups where the caller holds every one of these permissions.
+	Held *[]domain.UserPermission `json:"held"`
+	// Narrow to accounts whose name, alias or username match — case- and accent-insensitive, the whole phrase or every word.
+	Q *primitives.Text0_200 `json:"q"`
+	// Exact accounts to return (≤200), for labelling rows a consumer already holds by uid. Not combinable with `q` or `cursor`.
+	Uids *[]primitives.Uid `json:"uids"`
+	Order *domain.SocialAccountOrder `json:"order"`
+	// The previous page's `next`, sent back with the same filters and `order`; omit for the first page.
+	Cursor *primitives.Cursor `json:"cursor"`
+	// Page size (1..=200, default 50).
+	Limit *primitives.Number1_200 `json:"limit"`
 }

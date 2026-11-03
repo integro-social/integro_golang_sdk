@@ -6,6 +6,7 @@ import (
 	__client "integro_sdk"
 	__strings "strings"
 	domain "integro_sdk/types/domain"
+	primitives "integro_sdk/types/primitives"
 	user_invite "integro_sdk/types/user_invite"
 )
 
@@ -19,12 +20,12 @@ func Accept(__c *__client.Client, __body user_invite.UserInviteAcceptRequest) (u
 	__path := "/user-invite/accept"
 	return __client.Request[user_invite.UserInviteAcceptResponse](__c, "POST", __path, nil, __body)
 }
-// Count Count pending (unaccepted) user invitations.
+// Count Count pending (unaccepted) user invitations, under the same `email_failed` and `expired` filters the list takes.
 //
 // Requires `ViewInvites`; the count covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
-func Count(__c *__client.Client) (uint64, error) {
+func Count(__c *__client.Client, __query user_invite.CountUserInvitesQuery) (uint64, error) {
 	__path := "/user-invite/count"
-	return __client.Request[uint64](__c, "GET", __path, nil, nil)
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
 }
 // Detail The group an invitation offers, with the role and who sent it.
 //
@@ -41,10 +42,17 @@ func Join(__c *__client.Client, __body user_invite.UserInviteTokenRequest) (user
 	__path := "/user-invite/join"
 	return __client.Request[user_invite.UserInviteJoinResponse](__c, "POST", __path, nil, __body)
 }
-// List List pending (unaccepted) user invitations.
+// List List pending (unaccepted) user invitations one page at a time, newest first unless `order` says otherwise.
 //
 // Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
-func List(__c *__client.Client) ([]domain.UserInvite, error) {
+func List(__c *__client.Client, __query user_invite.ListUserInvitesQuery) (primitives.Page[domain.UserInvite], error) {
+	__path := "/v2/user-invite"
+	return __client.Request[primitives.Page[domain.UserInvite]](__c, "GET", __path, __query, nil)
+}
+// ListLegacy List pending (unaccepted) user invitations, all at once — the pre-12.0.0 form, transitional for consumers built against 11.x; new consumers page `userInvite.list` instead, and this route goes away in a future major.
+//
+// Requires `ViewInvites`; the list covers only invites into groups where the caller holds it, and platform invites only for platform staff and platform API keys.
+func ListLegacy(__c *__client.Client) ([]domain.UserInvite, error) {
 	__path := "/user-invite"
 	return __client.Request[[]domain.UserInvite](__c, "GET", __path, nil, nil)
 }
