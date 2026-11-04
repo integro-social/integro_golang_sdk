@@ -7,7 +7,8 @@ import (
 )
 
 type SetGroupPhotoRequest struct {
-	// A hosted image uploaded through `media.upload`; the platform keeps a
-	// jpeg rendition of it.
+	// An image, hosted through `media.upload` or remote. The hub centre-crops
+	// it to a square and re-encodes it as a 640×640 JPEG, the only shape the
+	// platform accepts; an image it cannot decode answers 400.
 	Media domain.MediaRef `json:"media"`
 }

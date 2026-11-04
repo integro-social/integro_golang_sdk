@@ -240,8 +240,9 @@ func SetGroupParticipantRole(__c *__client.Client, conversationUid string, parti
 	__path = __strings.Replace(__path, "{participant_id}", __client.EncodePath(participantId), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
-// SetGroupPhoto Set a group's picture from a hosted image; the conversation's avatar
-// follows once the platform serves the new picture.
+// SetGroupPhoto Set a group's picture from an image, centre-cropped to a square and
+// re-encoded as a 640×640 JPEG; the conversation's avatar follows once the
+// platform serves the new picture.
 //
 // Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409), and the platform refuses it when the group is locked and the account is not an admin (424).
 func SetGroupPhoto(__c *__client.Client, conversationUid string, __body message.SetGroupPhotoRequest) (domain.Conversation, error) {
