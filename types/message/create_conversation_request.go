@@ -2,7 +2,7 @@
 
 package message
 
-// Channel-tagged conversation creation — whatsapp_native verifies the
+// Channel-tagged conversation creation — whatsapp_unofficial verifies the
 // number on the platform and opens the thread silently; whatsapp and
 // whatsapp_alt open it by sending an approved template, the only content
 // those channels accept before the recipient writes. No other channel's

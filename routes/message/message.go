@@ -50,7 +50,7 @@ func Cancel(__c *__client.Client, conversationUid string, messageUid string) ([]
 	return __client.Request[[]primitives.Uid](__c, "POST", __path, nil, nil)
 }
 // Delete Revoke an own sent message for everyone ("apagar para todos") —
-// whatsapp_native only; the row stays with `deleted_at` set.
+// whatsapp_unofficial only; the row stays with `deleted_at` set.
 //
 // Requires `ManageMessages` in the conversation's group.
 func Delete(__c *__client.Client, conversationUid string, messageUid string) (struct{}, error) {
@@ -61,7 +61,7 @@ func Delete(__c *__client.Client, conversationUid string, messageUid string) (st
 }
 // Edit Edit an own sent message's text (or media caption) on the platform. The
 // payload is channel-tagged and must match the message's channel — only
-// whatsapp_native exposes an edit call, so no other channel's shape
+// whatsapp_unofficial exposes an edit call, so no other channel's shape
 // deserializes; the platform enforces its ~15 minute edit window.
 //
 // Requires `ManageMessages` in the conversation's group.
@@ -110,6 +110,20 @@ func ListLegacy(__c *__client.Client, __query message.LegacyListMessagesQuery) (
 	__path := "/message"
 	return __client.Request[[]domain.MessageWithContext](__c, "GET", __path, __query, nil)
 }
+// Pin Pin a message in the chat for everyone, for a day, a week or a month: the
+// row carries `pinned_at` and `pinned_until` from then on, and the thread's
+// pinned banner shows it. Pinning works in groups and in one-to-one chats
+// on whatsapp_unofficial only; every other channel is refused (400). The
+// platform refuses it in a group where only admins may post and the account
+// is not one (424).
+//
+// Requires `SendMessages` in the conversation's group.
+func Pin(__c *__client.Client, conversationUid string, messageUid string, __body message.PinMessageRequest) (domain.Message, error) {
+	__path := "/conversation/{conversation_uid}/message/{message_uid}/pin"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[domain.Message](__c, "PUT", __path, nil, __body)
+}
 // React React to a message through the platform. The payload is channel-tagged
 // and must match the message's channel; Instagram takes Meta's reaction
 // name, every other channel the emoji itself.
@@ -148,6 +162,16 @@ func Send(__c *__client.Client, conversationUid string, __body message.SendMessa
 	__path := "/conversation/{conversation_uid}/message"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[domain.MessageWithContext](__c, "POST", __path, nil, __body)
+}
+// Unpin Unpin a message for everyone; the row drops `pinned_at`. whatsapp_unofficial
+// only (400 elsewhere).
+//
+// Requires `SendMessages` in the conversation's group.
+func Unpin(__c *__client.Client, conversationUid string, messageUid string) (domain.Message, error) {
+	__path := "/conversation/{conversation_uid}/message/{message_uid}/pin"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{message_uid}", __client.EncodePath(messageUid), 1)
+	return __client.Request[domain.Message](__c, "DELETE", __path, nil, nil)
 }
 // Unreact Remove the account's reaction from a message (Instagram, the WhatsApp
 // flavors and the alt channels — Messenger has no reaction API).

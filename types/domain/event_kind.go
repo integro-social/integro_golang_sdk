@@ -32,5 +32,4 @@ const (
 	EventKindCallEnded EventKind = "call_ended"
 	EventKindAccountUpdated EventKind = "account_updated"
 	EventKindAccountRemoved EventKind = "account_removed"
-	EventKindReviewReceived EventKind = "review_received"
 )

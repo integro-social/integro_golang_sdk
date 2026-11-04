@@ -2,6 +2,6 @@
 
 package call
 
-// Channel-tagged call placement — only whatsapp_native carries calls, so no
+// Channel-tagged call placement — only whatsapp_unofficial carries calls, so no
 // other channel's shape deserializes.
 type PlaceCallRequest = interface{}

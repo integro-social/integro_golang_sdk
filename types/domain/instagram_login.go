@@ -2,7 +2,7 @@
 
 package domain
 
-// Which dialog opens an Instagram grant on the alternate channel.
+// Which dialog opens an Instagram grant.
 type InstagramLogin string
 
 const (

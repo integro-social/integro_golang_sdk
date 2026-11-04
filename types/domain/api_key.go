@@ -15,6 +15,8 @@ type ApiKey struct {
 	CreatedBy primitives.Uid `json:"created_by"`
 	RevokedAt *primitives.Timestamp `json:"revoked_at"`
 	RevokedBy *primitives.Uid `json:"revoked_by"`
+	// When the key last authenticated a request, to the flush interval; `None` until its first call.
+	LastUsedAt *primitives.Timestamp `json:"last_used_at"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 	UpdatedAt primitives.Timestamp `json:"updated_at"`
 }

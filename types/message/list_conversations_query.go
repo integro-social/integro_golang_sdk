@@ -14,6 +14,8 @@ type ListConversationsQuery struct {
 	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
 	// Only conversations of accounts in groups where the caller holds every one of these permissions.
 	Held *[]domain.UserPermission `json:"held"`
+	// Only conversations of these kinds — `direct` people, `group` whatsapp groups; absent or empty means both.
+	Kinds *[]domain.ConversationKind `json:"kinds"`
 	// Narrow to conversations whose participant matches — alias, platform name, username or phone, case-insensitive, as a substring.
 	// A term under 2 characters answers with no rows.
 	Q *primitives.Text0_200 `json:"q"`

@@ -17,6 +17,8 @@ type ConversationMessagesQuery struct {
 	// `image, video, gif, sticker, audio, file` without loading the text
 	// between them; absent or empty means every kind.
 	Kinds *[]domain.MessageContentKind `json:"kinds"`
+	// Only messages pinned in the chat — what a thread's pinned banner shows.
+	Pinned *bool `json:"pinned"`
 	// The previous page's `next`, sent back with the same anchors and `kinds`; it continues older without `after_id`, newer with it.
 	// Omit for the first page.
 	Cursor *primitives.Cursor `json:"cursor"`

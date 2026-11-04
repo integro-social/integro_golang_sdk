@@ -10,8 +10,11 @@ type Conversation struct {
 	Uid primitives.Uid `json:"uid"`
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
 	// Platform participant id (PSID / IGSID / whatsapp wa_id) — scoped to the
-	// account.
+	// account. A group is keyed by the group's platform id.
 	ParticipantId string `json:"participant_id"`
+	// A group names itself through the same fields a person does:
+	// `participant_name` is the subject, `participant_avatar` the group picture.
+	Kind ConversationKind `json:"kind"`
 	// Best-effort profile fetched from Meta on first contact.
 	ParticipantName *string `json:"participant_name"`
 	ParticipantUsername *string `json:"participant_username"`
@@ -41,6 +44,9 @@ type Conversation struct {
 	// Sender attribution of the previewed message (outbound only) — lets list
 	// consumers detect human takeovers without fetching messages.
 	LastMessageSentBy *MessageSentBy `json:"last_message_sent_by"`
+	// In a group, the member who sent the previewed message — a chat list line
+	// prefixes the preview with it.
+	LastMessageSenderName *string `json:"last_message_sender_name"`
 	// The ad the conversation last arrived from (click-to-whatsapp) — the
 	// newest message-level referral, rolled up here like the last_message_*
 	// columns so a chat list answers "where did this come from" directly.

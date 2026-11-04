@@ -7,9 +7,8 @@ type ProviderCounts struct {
 	Facebook uint64 `json:"facebook"`
 	Instagram uint64 `json:"instagram"`
 	Whatsapp uint64 `json:"whatsapp"`
-	WhatsappNative uint64 `json:"whatsapp_native"`
+	WhatsappUnofficial uint64 `json:"whatsapp_unofficial"`
 	FacebookAlt uint64 `json:"facebook_alt"`
 	InstagramAlt uint64 `json:"instagram_alt"`
 	WhatsappAlt uint64 `json:"whatsapp_alt"`
-	Google uint64 `json:"google"`
 }

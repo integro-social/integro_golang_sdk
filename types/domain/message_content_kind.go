@@ -27,4 +27,5 @@ const (
 	MessageContentKindPostback MessageContentKind = "postback"
 	MessageContentKindUnavailable MessageContentKind = "unavailable"
 	MessageContentKindUnsupported MessageContentKind = "unsupported"
+	MessageContentKindGroupNotice MessageContentKind = "group_notice"
 )

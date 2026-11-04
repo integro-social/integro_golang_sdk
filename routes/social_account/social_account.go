@@ -23,7 +23,8 @@ func Callback(__c *__client.Client, __query social_account.ConnectCallbackQuery)
 	return __client.Request[struct{}](__c, "GET", __path, __query, nil)
 }
 // Connect Start a login flow for a group, returning the dialog URL: the hub's own
-// Meta app (`meta`) or the alternate gateway's for one alt channel. The
+// Meta app (`facebook`, `instagram`) or the alternate gateway's for one alt
+// channel. The
 // callback stashes the granted accounts for review;
 // `socialAccount.connectConfirm` is what registers the selection. A login
 // naming `social_account_uid` reconnects that account in place; any other

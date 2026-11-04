@@ -13,7 +13,7 @@ const (
 	ChannelFacebook Channel = "facebook"
 	ChannelInstagram Channel = "instagram"
 	ChannelWhatsapp Channel = "whatsapp"
-	ChannelWhatsappNative Channel = "whatsapp_native"
+	ChannelWhatsappUnofficial Channel = "whatsapp_unofficial"
 	ChannelFacebookAlt Channel = "facebook_alt"
 	ChannelInstagramAlt Channel = "instagram_alt"
 	ChannelWhatsappAlt Channel = "whatsapp_alt"

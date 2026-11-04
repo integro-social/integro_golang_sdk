@@ -9,9 +9,9 @@ import (
 type SocialAccount struct {
 	Uid primitives.Uid `json:"uid"`
 	GroupUid primitives.Uid `json:"group_uid"`
-	// The account's kind — the registry's axis. Messaging providers project
-	// onto a [`Channel`] via [`Self::channel`]; non-messaging ones (calendar)
-	// onto none.
+	// The account's kind — the registry's axis; it projects onto the
+	// [`Channel`] its conversations, messages and posts carry via
+	// [`Self::channel`].
 	Provider Provider `json:"provider"`
 	// Platform identity webhooks address: page id (facebook), ig user id
 	// (instagram), or the provider's stable subject. Not unique: every
@@ -37,12 +37,10 @@ type SocialAccount struct {
 	// platform. `None` means never — which the refresh sweep treats as due now.
 	ProfileRefreshedAt *primitives.Timestamp `json:"profile_refreshed_at"`
 	Username *string `json:"username"`
-	// OAuth-refresh providers only: scopes actually granted on the last connect.
-	Scope *string `json:"scope"`
 	// The stored grant died (revoked or expired) — the account must be
-	// reconnected; cleared by a reconnect. Set for the OAuth-refresh providers
-	// when a refresh is rejected, and for the page-grant providers when the
-	// connect review probes a token and finds it dead.
+	// reconnected; cleared by a reconnect. Set when a connect review probes a
+	// page token and finds it dead, and when the gateway reports the account
+	// needs reconnecting.
 	NeedsReauth bool `json:"needs_reauth"`
 	Enabled bool `json:"enabled"`
 	// How the account announces itself online; only the native whatsapp

@@ -9,4 +9,6 @@ import (
 type ConversationMessageCountQuery struct {
 	// Only messages of these content kinds — the same narrowing as the list.
 	Kinds *[]domain.MessageContentKind `json:"kinds"`
+	// Only pinned messages — the same narrowing as the list.
+	Pinned *bool `json:"pinned"`
 }

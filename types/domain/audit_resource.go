@@ -23,10 +23,10 @@ const (
 	AuditResourceMedia AuditResource = "media"
 	AuditResourceTemplate AuditResource = "template"
 	AuditResourceConversation AuditResource = "conversation"
-	AuditResourceGoogleAccount AuditResource = "google_account"
 	AuditResourceUserGroup AuditResource = "user_group"
 	AuditResourceCall AuditResource = "call"
 	AuditResourceGhlLocation AuditResource = "ghl_location"
 	AuditResourceContactImport AuditResource = "contact_import"
 	AuditResourceCampaign AuditResource = "campaign"
+	AuditResourcePairingLink AuditResource = "pairing_link"
 )

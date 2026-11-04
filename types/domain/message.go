@@ -13,6 +13,12 @@ type Message struct {
 	ConversationUid primitives.Uid `json:"conversation_uid"`
 	SocialAccountUid primitives.Uid `json:"social_account_uid"`
 	ParticipantId string `json:"participant_id"`
+	// In a group, the member who sent an inbound message — a phone, or a
+	// `…@lid` the platform never resolved. `None` on direct conversations and
+	// on outbound rows.
+	SenderId *string `json:"sender_id"`
+	// The sender's push name as the platform reported it with the message.
+	SenderName *string `json:"sender_name"`
 	Direction MessageDirection `json:"direction"`
 	Content MessageContent `json:"content"`
 	Reactions []MessageReaction `json:"reactions"`
@@ -43,6 +49,14 @@ type Message struct {
 	EditedAt *primitives.Timestamp `json:"edited_at"`
 	// Set when the message was revoked on the platform; the row stays.
 	DeletedAt *primitives.Timestamp `json:"deleted_at"`
+	// Set while the message is pinned in the chat; cleared when it is
+	// unpinned.
+	PinnedAt *primitives.Timestamp `json:"pinned_at"`
+	// When the pin lapses on its own, as the pinner chose; the row still
+	// reads as pinned until an unpin arrives.
+	PinnedUntil *primitives.Timestamp `json:"pinned_until"`
+	// Who pinned it: a member's id, or the account's own.
+	PinnedBy *string `json:"pinned_by"`
 	SentAt primitives.Timestamp `json:"sent_at"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 }

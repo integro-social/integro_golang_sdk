@@ -27,6 +27,16 @@ func Action(__c *__client.Client, conversationUid string, __body message.Convers
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[struct{}](__c, "POST", __path, nil, __body)
 }
+// AddGroupParticipants Add people to a group by phone. Each phone is answered on its own: in the
+// group, invited instead (their privacy refuses direct adds), or failed
+// with the platform's status; one refusal never blocks the others.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409), and the platform refuses the whole request when only admins may add and the account is not one (424).
+func AddGroupParticipants(__c *__client.Client, conversationUid string, __body message.AddGroupParticipantsRequest) ([]message.GroupParticipantOutcome, error) {
+	__path := "/conversation/{conversation_uid}/group/participant"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[[]message.GroupParticipantOutcome](__c, "POST", __path, nil, __body)
+}
 // Alias Set or clear the operator's label for the contact. Independent of the
 // platform-fetched participant name, which profile refreshes keep updating;
 // clearing the alias falls back to it.
@@ -76,7 +86,7 @@ func Clear(__c *__client.Client, conversationUid string) (domain.Conversation, e
 }
 // Create Open (or return) a conversation with a phone number — a channel-tagged
 // request whose declared channel must match the account's. On
-// whatsapp_native a number the account already talks to returns its
+// whatsapp_unofficial a number the account already talks to returns its
 // conversation with no platform lookup at all; a new one is checked first
 // (an unrecognized number or failed check creates nothing), the platform's
 // canonical id keys the conversation, and the initial profile (name,
@@ -92,6 +102,18 @@ func Create(__c *__client.Client, __body message.CreateConversationRequest) (dom
 	__path := "/conversation"
 	return __client.Request[domain.Conversation](__c, "POST", __path, nil, __body)
 }
+// CreateGroup Open a whatsapp group on a whatsapp_unofficial account: the platform
+// creates it with the named phones as members and the hub keeps it as a
+// conversation of kind `group` — the subject as its participant name, the
+// members behind `conversation.group`. A phone not on whatsapp, or whose
+// privacy refuses being added, is left out. Every other channel is refused
+// (400).
+//
+// Requires `ManageWhatsappGroups` in the account's group.
+func CreateGroup(__c *__client.Client, __body message.CreateGroupConversationRequest) (domain.Conversation, error) {
+	__path := "/conversation/group"
+	return __client.Request[domain.Conversation](__c, "POST", __path, nil, __body)
+}
 // Delete Delete the conversation and its whole stored history from the hub.
 // Nothing is deleted on the platform: a later inbound message from the same
 // participant opens a fresh conversation.
@@ -101,6 +123,37 @@ func Delete(__c *__client.Client, conversationUid string) (struct{}, error) {
 	__path := "/conversation/{conversation_uid}"
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
+}
+// Group A group's detail: description, settings, whether the account is still a
+// member and with what standing, and every member with their role and the
+// direct conversation the account has with them. The snapshot is taken from
+// the platform again when older than 10 minutes and the account's session
+// is up; otherwise the stored one answers. A direct conversation is refused
+// (400).
+//
+// Requires `ViewMessages` in the conversation's group.
+func Group(__c *__client.Client, conversationUid string) (message.WhatsappGroupDetail, error) {
+	__path := "/conversation/{conversation_uid}/group"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.WhatsappGroupDetail](__c, "GET", __path, nil, nil)
+}
+// GroupInviteLink The group's invite link, as it stands.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409) and an admin on the platform (424 otherwise).
+func GroupInviteLink(__c *__client.Client, conversationUid string) (message.GroupInviteLink, error) {
+	__path := "/conversation/{conversation_uid}/group/invite"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.GroupInviteLink](__c, "GET", __path, nil, nil)
+}
+// LeaveGroup Leave a group. The conversation and its history stay on the hub, read-only
+// from then on; `conversation.delete` is what removes them. There is no
+// deleting a group on the platform: admins remove everyone else and leave.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409).
+func LeaveGroup(__c *__client.Client, conversationUid string) (message.WhatsappGroupDetail, error) {
+	__path := "/conversation/{conversation_uid}/group/leave"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.WhatsappGroupDetail](__c, "POST", __path, nil, nil)
 }
 // List List conversations one page at a time, newest activity first, optionally filtered by groups or
 // social accounts; `next` sent back as `cursor` reads older activity. Rows carry the denormalized
@@ -159,6 +212,43 @@ func Read(__c *__client.Client, conversationUid string) (domain.Conversation, er
 	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
 	return __client.Request[domain.Conversation](__c, "PUT", __path, nil, nil)
 }
+// RemoveGroupParticipant Remove a member from a group. A participant the hub does not list in the
+// group reads as not found.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409) and an admin on the platform (424 otherwise).
+func RemoveGroupParticipant(__c *__client.Client, conversationUid string, participantId string) (struct{}, error) {
+	__path := "/conversation/{conversation_uid}/group/participant/{participant_id}"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{participant_id}", __client.EncodePath(participantId), 1)
+	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
+}
+// ResetGroupInviteLink Revoke the group's invite link and issue a new one; the old link stops
+// admitting anyone.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409) and an admin on the platform (424 otherwise).
+func ResetGroupInviteLink(__c *__client.Client, conversationUid string) (message.GroupInviteLink, error) {
+	__path := "/conversation/{conversation_uid}/group/invite/reset"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.GroupInviteLink](__c, "POST", __path, nil, nil)
+}
+// SetGroupParticipantRole Make a member an admin, or take admin standing away from one.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409) and an admin on the platform (424 otherwise).
+func SetGroupParticipantRole(__c *__client.Client, conversationUid string, participantId string, __body message.SetGroupParticipantRoleRequest) (struct{}, error) {
+	__path := "/conversation/{conversation_uid}/group/participant/{participant_id}/role"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	__path = __strings.Replace(__path, "{participant_id}", __client.EncodePath(participantId), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
+}
+// SetGroupPhoto Set a group's picture from a hosted image; the conversation's avatar
+// follows once the platform serves the new picture.
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409), and the platform refuses it when the group is locked and the account is not an admin (424).
+func SetGroupPhoto(__c *__client.Client, conversationUid string, __body message.SetGroupPhotoRequest) (domain.Conversation, error) {
+	__path := "/conversation/{conversation_uid}/group/photo"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[domain.Conversation](__c, "PUT", __path, nil, __body)
+}
 // UnreadCount How many conversations hold unread messages, across every group where the
 // caller holds `ViewMessages` — the inbox badge.
 //
@@ -166,4 +256,15 @@ func Read(__c *__client.Client, conversationUid string) (domain.Conversation, er
 func UnreadCount(__c *__client.Client) (uint64, error) {
 	__path := "/conversation/unread"
 	return __client.Request[uint64](__c, "GET", __path, nil, nil)
+}
+// UpdateGroup Change a group's name, description or settings on the platform; absent
+// fields stay. The platform decides what the account may change — a locked
+// group takes name and description from admins only, the settings always
+// — and refuses the rest (424).
+//
+// Requires `ManageWhatsappGroups` in the conversation's group; the account must still be a member (409 otherwise).
+func UpdateGroup(__c *__client.Client, conversationUid string, __body message.UpdateGroupConversationRequest) (message.WhatsappGroupDetail, error) {
+	__path := "/conversation/{conversation_uid}/group"
+	__path = __strings.Replace(__path, "{conversation_uid}", __client.EncodePath(conversationUid), 1)
+	return __client.Request[message.WhatsappGroupDetail](__c, "PUT", __path, nil, __body)
 }

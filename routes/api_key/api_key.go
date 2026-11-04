@@ -97,3 +97,11 @@ func UpdatePermissions(__c *__client.Client, apiKeyUid string, __body api_key.Up
 	__path = __strings.Replace(__path, "{api_key_uid}", __client.EncodePath(apiKeyUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
+// Usage Requests per UTC day for up to 200 keys over a range of at most 20 000 key-days (default: the last 14 days), one entry per key the
+// caller may see and one day per day the key authenticated at least one request. Counts land within about ten seconds of the request.
+//
+// Requires `ViewApiKeys`; a key of a group where the caller lacks it, or a platform key for a caller without platform standing, is left out.
+func Usage(__c *__client.Client, __query api_key.ApiKeyUsageQuery) ([]api_key.ApiKeyUsage, error) {
+	__path := "/api-key/usage"
+	return __client.Request[[]api_key.ApiKeyUsage](__c, "GET", __path, __query, nil)
+}

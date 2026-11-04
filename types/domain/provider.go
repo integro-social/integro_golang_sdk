@@ -4,9 +4,8 @@ package domain
 
 // Every kind of account the hub connects — the account registry's axis.
 // Distinct from [`Channel`], which is the *messaging-domain* discriminator
-// carried by conversations, messages, and posts: every messaging provider
-// projects onto a channel, while non-messaging providers (calendar) have
-// none — so messaging payloads can never name them.
+// carried by conversations, messages, and posts: every provider projects
+// onto the channel its traffic is tagged with.
 //
 // Adding an integration = a variant here + its connect flow + its
 // capability module; the registry (table, CRUD, listing UI) is shared.
@@ -16,9 +15,8 @@ const (
 	ProviderFacebook Provider = "facebook"
 	ProviderInstagram Provider = "instagram"
 	ProviderWhatsapp Provider = "whatsapp"
-	ProviderWhatsappNative Provider = "whatsapp_native"
+	ProviderWhatsappUnofficial Provider = "whatsapp_unofficial"
 	ProviderFacebookAlt Provider = "facebook_alt"
 	ProviderInstagramAlt Provider = "instagram_alt"
 	ProviderWhatsappAlt Provider = "whatsapp_alt"
-	ProviderGoogle Provider = "google"
 )
