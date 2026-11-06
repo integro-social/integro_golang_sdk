@@ -9,11 +9,29 @@ import (
 type Webhook struct {
 	Uid primitives.Uid `json:"uid"`
 	GroupUid primitives.Uid `json:"group_uid"`
+	Name primitives.Name `json:"name"`
 	Url string `json:"url"`
+	// A paused webhook receives nothing, and the events of the paused window are never delivered.
+	Enabled bool `json:"enabled"`
 	// Event kinds delivered to this subscription; `None` = everything.
 	Events *[]EventKind `json:"events"`
 	// Channels delivered to this subscription; `None` = everything.
 	Channels *[]Channel `json:"channels"`
+	// Accounts delivered to this subscription, all of the webhook's group; `None` = every account of the group, including
+	// accounts connected later. An account deleted or moved to another group stops matching.
+	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
+	// Extra headers sent with every delivery.
+	Headers []WebhookHeader `json:"headers"`
+	// The accountable user who created it — for an API key, the key's creator; `None` for a webhook created before 14.0.0 or
+	// whose creator was deleted.
+	CreatedBy *primitives.Uid `json:"created_by"`
+	// When a delivery (a batch or a heartbeat) was last accepted with a 2xx, to within about ten seconds; `None` until the first.
+	LastDeliveredAt *primitives.Timestamp `json:"last_delivered_at"`
+	// When a delivery last failed, to within about ten seconds; `None` until the first. The webhook is failing while this is
+	// later than `last_delivered_at`.
+	LastFailedAt *primitives.Timestamp `json:"last_failed_at"`
+	// Why the delivery at `last_failed_at` failed.
+	LastFailure *WebhookFailure `json:"last_failure"`
 	CreatedAt primitives.Timestamp `json:"created_at"`
 	UpdatedAt primitives.Timestamp `json:"updated_at"`
 }

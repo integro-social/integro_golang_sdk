@@ -6,9 +6,9 @@ import (
 	primitives "integro_sdk/types/primitives"
 )
 
-type SetWebhookResponse struct {
+type CreateWebhookResponse struct {
 	Uid primitives.Uid `json:"uid"`
-	// HMAC secret for `X-Integro-Signature` — shown only here; rotated on every
-	// reconfiguration.
+	// HMAC secret for `X-Integro-Signature` — shown only here and when the
+	// secret is rotated.
 	Secret string `json:"secret"`
 }

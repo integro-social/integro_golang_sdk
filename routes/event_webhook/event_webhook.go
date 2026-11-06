@@ -7,9 +7,30 @@ import (
 	__strings "strings"
 	domain "integro_sdk/types/domain"
 	event "integro_sdk/types/event"
+	primitives "integro_sdk/types/primitives"
 )
 
-// Delete Remove the group's outbound webhook, dropping its pending deliveries.
+// Count Count outbound webhooks, optionally narrowed by groups and by active or paused state.
+//
+// Requires `ViewWebhook`; the count covers only webhooks of groups where the caller holds it.
+func Count(__c *__client.Client, __query event.CountWebhooksQuery) (uint64, error) {
+	__path := "/event/webhook/count"
+	return __client.Request[uint64](__c, "GET", __path, __query, nil)
+}
+// Create Create an outbound webhook in a group: the group's events, narrowed by the
+// optional kind, channel and account filters, are POSTed to the URL in batches
+// signed with the returned secret; a group may hold any number of webhooks,
+// each delivering independently. Deliveries start with the events after the
+// webhook is created. The URL must reach a public internet address —
+// loopback, private, link-local and other internal addresses are refused, at
+// creation and on every delivery — and redirects are never followed.
+//
+// Requires `ManageWebhook` in the target group; group-scoped API keys create in their own group, others must name it.
+func Create(__c *__client.Client, __body event.CreateWebhookRequest) (event.CreateWebhookResponse, error) {
+	__path := "/event/webhook"
+	return __client.Request[event.CreateWebhookResponse](__c, "POST", __path, nil, __body)
+}
+// Delete Remove an outbound webhook, dropping its pending deliveries.
 //
 // Requires `ManageWebhook` in the webhook's group.
 func Delete(__c *__client.Client, webhookUid string) (struct{}, error) {
@@ -17,20 +38,52 @@ func Delete(__c *__client.Client, webhookUid string) (struct{}, error) {
 	__path = __strings.Replace(__path, "{webhook_uid}", __client.EncodePath(webhookUid), 1)
 	return __client.Request[struct{}](__c, "DELETE", __path, nil, nil)
 }
-// Get Fetch the group's outbound webhook configuration (the secret is never
-// returned here).
+// Get Fetch one outbound webhook's configuration (the secret is never returned
+// here).
 //
-// Requires `ViewWebhook` in the target group; group-scoped API keys read their own group, others must name it.
-func Get(__c *__client.Client, __query event.GetWebhookQuery) (*domain.Webhook, error) {
-	__path := "/event/webhook"
-	return __client.Request[*domain.Webhook](__c, "GET", __path, __query, nil)
+// Requires `ViewWebhook` in the webhook's group.
+func Get(__c *__client.Client, webhookUid string) (domain.Webhook, error) {
+	__path := "/event/webhook/{webhook_uid}"
+	__path = __strings.Replace(__path, "{webhook_uid}", __client.EncodePath(webhookUid), 1)
+	return __client.Request[domain.Webhook](__c, "GET", __path, nil, nil)
 }
-// Set Configure (create or replace) the group's outbound webhook: the group's
-// events (optionally narrowed by kind/channel filters) are POSTed to the
-// URL in signed batches.
+// List List outbound webhooks one page at a time, newest first unless `order` says otherwise, optionally narrowed by groups, active
+// or paused state, and name, url or group name. The secret is never returned here.
 //
-// Requires `ManageWebhook` in the target group; group-scoped API keys configure their own group, others must name it.
-func Set(__c *__client.Client, __body event.SetWebhookRequest) (event.SetWebhookResponse, error) {
-	__path := "/event/webhook"
-	return __client.Request[event.SetWebhookResponse](__c, "PUT", __path, nil, __body)
+// Requires `ViewWebhook`; the list covers only webhooks of groups where the caller holds it.
+func List(__c *__client.Client, __query event.ListWebhooksQuery) (primitives.Page[domain.Webhook], error) {
+	__path := "/v2/event/webhook"
+	return __client.Request[primitives.Page[domain.Webhook]](__c, "GET", __path, __query, nil)
+}
+// Rotate Rotate an outbound webhook's signing secret, returning the new one: the
+// previous secret stops signing at once, so deliveries in flight may arrive
+// under either.
+//
+// Requires `ManageWebhook` in the webhook's group.
+func Rotate(__c *__client.Client, webhookUid string) (event.RotateWebhookResponse, error) {
+	__path := "/event/webhook/{webhook_uid}/rotate"
+	__path = __strings.Replace(__path, "{webhook_uid}", __client.EncodePath(webhookUid), 1)
+	return __client.Request[event.RotateWebhookResponse](__c, "POST", __path, nil, nil)
+}
+// Test Send an outbound webhook an empty signed batch now — the shape of the
+// heartbeat its receiver already gets every 30 seconds — and report how the
+// receiver answered. Works on a paused webhook too, and the outcome counts
+// toward `last_delivered_at` / `last_failed_at` like any delivery.
+//
+// Requires `ManageWebhook` in the webhook's group.
+func Test(__c *__client.Client, webhookUid string) (event.WebhookTestOutcome, error) {
+	__path := "/event/webhook/{webhook_uid}/test"
+	__path = __strings.Replace(__path, "{webhook_uid}", __client.EncodePath(webhookUid), 1)
+	return __client.Request[event.WebhookTestOutcome](__c, "POST", __path, nil, nil)
+}
+// Update Update an outbound webhook's name, URL, pause state, filters or headers;
+// fields sent as `skip` keep their value. The secret is unchanged — rotate
+// it with `eventWebhook.rotate`. A changed URL must reach a public internet
+// address, and a paused webhook drops the events of its paused window.
+//
+// Requires `ManageWebhook` in the webhook's group.
+func Update(__c *__client.Client, webhookUid string, __body event.UpdateWebhookRequest) (struct{}, error) {
+	__path := "/event/webhook/{webhook_uid}"
+	__path = __strings.Replace(__path, "{webhook_uid}", __client.EncodePath(webhookUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }

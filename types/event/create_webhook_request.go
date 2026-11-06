@@ -7,9 +7,11 @@ import (
 	primitives "integro_sdk/types/primitives"
 )
 
-type SetWebhookRequest struct {
+type CreateWebhookRequest struct {
 	// Required for users and platform keys; group-bound keys imply their group.
 	GroupUid *primitives.Uid `json:"group_uid"`
+	Name primitives.Name `json:"name"`
+	// Where the batches are POSTed; must reach a public internet address.
 	Url string `json:"url"`
 	// Event kinds delivered to this subscription; omit for everything. The
 	// live-only kinds (the presence kinds), which reach only the event socket,
@@ -17,4 +19,10 @@ type SetWebhookRequest struct {
 	Events *[]domain.EventKind `json:"events"`
 	// Channels delivered to this subscription; omit for everything.
 	Channels *[]domain.Channel `json:"channels"`
+	// Accounts delivered to this subscription (≤200), all of the webhook's
+	// group; omit for every account of the group, including accounts connected
+	// later.
+	SocialAccountUids *[]primitives.Uid `json:"social_account_uids"`
+	// Extra headers sent with every delivery (≤10); omit for none.
+	Headers *[]domain.WebhookHeader `json:"headers"`
 }
