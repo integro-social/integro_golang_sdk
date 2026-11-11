@@ -22,7 +22,7 @@ func Backfill(__c *__client.Client, __body message.BackfillRequest) (message.Bac
 	__path := "/message/backfill"
 	return __client.Request[message.BackfillResponse](__c, "POST", __path, nil, __body)
 }
-// Cancel Cancel a queued (`pending`) message before it reaches the platform, and
+// Cancel Cancel a queued (`pending` or `held`) message before it reaches the platform, and
 // with it **every message queued after it in the same conversation** —
 // cancels cascade forward because a conversation's queued messages are one
 // ordered thought: dropping one mid-sequence would deliver the rest out of
@@ -80,8 +80,9 @@ func Edit(__c *__client.Client, conversationUid string, messageUid string, __bod
 // (a whatsapp photo into an instagram thread); a gif lands as a plain video
 // anywhere but native whatsapp. Targets are answered one by one and
 // independently: a target the caller cannot send in, whose channel cannot
-// express the content, or whose 24h window has lapsed comes back `rejected`
-// while the rest still queue. At most five targets per call.
+// express the content, whose 24h window has lapsed, or whose account blocks
+// a contact who never wrote comes back `rejected` while the rest still queue
+// (or are held, as with a send). At most five targets per call.
 //
 // Requires `ViewMessages` in the source conversation's group, and
 // `SendMessages` in each target's — a target failing that is `rejected`, not
@@ -151,6 +152,13 @@ func React(__c *__client.Client, conversationUid string, messageUid string, __bo
 // send-pacing rule when one exists — and only then does it become `sent`
 // (`message_sent`) or `failed` (`message_failed`). A pending message can be
 // called off with `message.cancel` until it goes out.
+//
+// A conversation whose contact never wrote follows the account's
+// `cold_contact` policy: `block` refuses the send (409); `hold` stores it as
+// `held`, off the queue until the contact's first message, then re-announces
+// it as `pending` via `message_queued` and sends in order. At most the
+// policy's `limit` sends wait per conversation; the oldest is canceled
+// (`message_canceled`) to make room.
 //
 // An `idempotency_key` makes the send retry-safe: the same key never
 // duplicates history — a failed row is re-queued in place (same `uid`,

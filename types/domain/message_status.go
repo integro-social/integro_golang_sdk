@@ -7,6 +7,7 @@ type MessageStatus string
 const (
 	MessageStatusReceived MessageStatus = "received"
 	MessageStatusPending MessageStatus = "pending"
+	MessageStatusHeld MessageStatus = "held"
 	MessageStatusSent MessageStatus = "sent"
 	MessageStatusDelivered MessageStatus = "delivered"
 	MessageStatusRead MessageStatus = "read"

@@ -228,6 +228,22 @@ func SetAlias(__c *__client.Client, socialAccountUid string, __body social_accou
 	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
 	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
 }
+// SetColdContact Set how the account treats a contact who never wrote to it: `allow` sends
+// and looks up as usual; `block` refuses sends to such a contact and never
+// checks, profiles or watches one; `hold` does the same lookups-wise but keeps
+// the sends as `held` (at most `limit` per contact, the oldest canceled to make
+// room) until the contact's first message, then sends them in order. A change
+// reaches what has not gone out yet: `allow` queues every held send at once,
+// `block` cancels held sends and queued sends to such contacts, and `hold`
+// holds those queued sends and trims each contact to the new limit. Only the
+// session-backed whatsapp channels enforce it; other channels are refused.
+//
+// Requires `UpdateSocialAccounts` in the account's group.
+func SetColdContact(__c *__client.Client, socialAccountUid string, __body social_account.SetSocialAccountColdContactRequest) (struct{}, error) {
+	__path := "/social-account/{social_account_uid}/cold-contact"
+	__path = __strings.Replace(__path, "{social_account_uid}", __client.EncodePath(socialAccountUid), 1)
+	return __client.Request[struct{}](__c, "PUT", __path, nil, __body)
+}
 // SetConversationCap Cap how many conversations the hub may open on this account in any 24
 // hours, whoever asks for them (inbox, api key, campaign, import, GoHighLevel),
 // or lift the cap with `null`. Only the session-backed whatsapp channels enforce

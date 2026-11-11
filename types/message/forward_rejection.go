@@ -11,5 +11,6 @@ const (
 	ForwardRejectionAccountDisabled ForwardRejection = "account_disabled"
 	ForwardRejectionUnsupportedContent ForwardRejection = "unsupported_content"
 	ForwardRejectionWindowExpired ForwardRejection = "window_expired"
+	ForwardRejectionColdContact ForwardRejection = "cold_contact"
 	ForwardRejectionFailed ForwardRejection = "failed"
 )

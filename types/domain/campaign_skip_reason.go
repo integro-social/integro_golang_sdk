@@ -11,4 +11,5 @@ const (
 	CampaignSkipReasonInCooldown CampaignSkipReason = "in_cooldown"
 	CampaignSkipReasonMissingVariable CampaignSkipReason = "missing_variable"
 	CampaignSkipReasonCampaignEnded CampaignSkipReason = "campaign_ended"
+	CampaignSkipReasonColdContact CampaignSkipReason = "cold_contact"
 )
